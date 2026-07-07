@@ -15,6 +15,10 @@ import DetentionCenter from './pages/DetentionCenter.jsx'
 import VehicleDetail from './pages/VehicleDetail.jsx'
 import AttorneyProfile from './pages/AttorneyProfile.jsx'
 import Subscription from './pages/Subscription.jsx'
+import AllDrivers from './pages/AllDrivers.jsx'
+import CaseTracker from './pages/CaseTracker.jsx'
+import SosIncidents from './pages/SosIncidents.jsx'
+import Analytics from './pages/Analytics.jsx'
 
 export default function App() {
   return (
@@ -37,6 +41,10 @@ export default function App() {
             <Route path="/fleets" element={<Fleets />} />
             <Route path="/users" element={<Users />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/all-drivers" element={<AllDrivers />} />
+            <Route path="/case-tracker" element={<CaseTracker />} />
+            <Route path="/sos-incidents" element={<SosIncidents />} />
+            <Route path="/analytics" element={<Analytics />} />
 
             {/* Fleet Owner only */}
             <Route path="/my-fleet" element={<MyFleet />} />
