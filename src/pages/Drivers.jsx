@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { useAuth } from '../auth/AuthContext.jsx'
 import { driverDirectory } from '../data/mockData.js'
 import Icon from '../components/Icon.jsx'
 import NewDriverModal from '../components/NewDriverModal.jsx'
+
+const PAGE_SIZE = 4
 
 const LICENSE_STYLES = {
   valid: 'bg-green-500/15 text-green-600 dark:text-green-400',
@@ -114,10 +115,16 @@ function DriverDetailPanel({ driver, onClose }) {
 }
 
 export default function Drivers() {
-  useAuth()
   const [selectedId, setSelectedId] = useState(driverDirectory[0]?.id ?? null)
   const [modalOpen, setModalOpen] = useState(false)
+  const [page, setPage] = useState(1)
   const selected = driverDirectory.find((d) => d.id === selectedId) ?? null
+
+  const pageCount = Math.max(1, Math.ceil(driverDirectory.length / PAGE_SIZE))
+  const pageRows = driverDirectory.slice(
+    (page - 1) * PAGE_SIZE,
+    page * PAGE_SIZE
+  )
 
   return (
     <div className="flex flex-col gap-5">
@@ -138,76 +145,121 @@ export default function Drivers() {
         </button>
       </div>
 
-      <div className="grid items-start gap-5 lg:grid-cols-3">
-        <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white lg:col-span-2 dark:border-zinc-800 dark:bg-zinc-900">
-          <table className="w-full min-w-[520px] border-collapse text-sm">
-            <thead>
-              <tr>
-                <th className="px-5 pb-3 pt-4 text-left text-xs font-semibold uppercase tracking-wide text-zinc-400">
-                  Driver Name
-                </th>
-                <th className="px-5 pb-3 pt-4 text-left text-xs font-semibold uppercase tracking-wide text-zinc-400">
-                  License Status
-                </th>
-                <th className="px-5 pb-3 pt-4 text-left text-xs font-semibold uppercase tracking-wide text-zinc-400">
-                  Risk Level
-                </th>
-                <th className="px-5 pb-3 pt-4 text-left text-xs font-semibold uppercase tracking-wide text-zinc-400">
-                  Total Dispatches
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {driverDirectory.map((d) => (
-                <tr
-                  key={d.id}
-                  onClick={() => setSelectedId(d.id)}
+      <div className="grid items-stretch gap-5 lg:grid-cols-3">
+        <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white lg:col-span-2 dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="flex-1 overflow-x-auto">
+            <table className="w-full min-w-[520px] border-collapse text-sm">
+              <thead>
+                <tr>
+                  <th className="px-5 pb-3 pt-4 text-left text-xs font-semibold uppercase tracking-wide text-zinc-400">
+                    Driver Name
+                  </th>
+                  <th className="px-5 pb-3 pt-4 text-left text-xs font-semibold uppercase tracking-wide text-zinc-400">
+                    License Status
+                  </th>
+                  <th className="px-5 pb-3 pt-4 text-left text-xs font-semibold uppercase tracking-wide text-zinc-400">
+                    Risk Level
+                  </th>
+                  <th className="px-5 pb-3 pt-4 text-left text-xs font-semibold uppercase tracking-wide text-zinc-400">
+                    Total Dispatches
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {pageRows.map((d) => (
+                  <tr
+                    key={d.id}
+                    onClick={() => setSelectedId(d.id)}
+                    className={
+                      'cursor-pointer border-t border-zinc-100 transition-colors dark:border-zinc-800 ' +
+                      (selectedId === d.id
+                        ? 'bg-brand/5'
+                        : 'hover:bg-zinc-50 dark:hover:bg-zinc-800/60')
+                    }
+                  >
+                    <td className="px-5 py-3">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={d.photo}
+                          alt={d.name}
+                          className="h-10 w-10 flex-shrink-0 rounded-full object-cover"
+                        />
+                        <div>
+                          <p className="font-semibold text-zinc-900 dark:text-zinc-50">
+                            {d.name}
+                          </p>
+                          <p className="text-xs text-zinc-400">
+                            ID: {d.employeeId}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-5 py-3">
+                      <span
+                        className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${LICENSE_STYLES[d.licenseStatus]}`}
+                      >
+                        {LICENSE_LABELS[d.licenseStatus]}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3">
+                      <span className="flex items-center gap-1.5 text-zinc-700 dark:text-zinc-200">
+                        <span
+                          className={`h-2 w-2 rounded-full ${RISK_STYLES[d.riskLevel]}`}
+                        />
+                        {RISK_LABELS[d.riskLevel]}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3 font-medium text-zinc-900 dark:text-zinc-50">
+                      {d.dispatches.toLocaleString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* pagination */}
+          <div className="flex items-center justify-between border-t border-zinc-100 px-5 py-3 dark:border-zinc-800">
+            <p className="text-xs text-zinc-400">
+              Showing {(page - 1) * PAGE_SIZE + 1}–
+              {Math.min(page * PAGE_SIZE, driverDirectory.length)} of{' '}
+              {driverDirectory.length}
+            </p>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className="grid h-7 w-7 place-items-center rounded-lg text-zinc-500 transition hover:bg-zinc-100 disabled:opacity-30 disabled:hover:bg-transparent dark:text-zinc-400 dark:hover:bg-zinc-800"
+              >
+                <Icon
+                  name="chevronRight"
+                  size={14}
+                  className="rotate-180"
+                />
+              </button>
+              {Array.from({ length: pageCount }, (_, i) => i + 1).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setPage(p)}
                   className={
-                    'cursor-pointer border-t border-zinc-100 transition-colors dark:border-zinc-800 ' +
-                    (selectedId === d.id
-                      ? 'bg-brand/5'
-                      : 'hover:bg-zinc-50 dark:hover:bg-zinc-800/60')
+                    'grid h-7 w-7 place-items-center rounded-lg text-xs font-semibold transition ' +
+                    (p === page
+                      ? 'bg-brand text-white'
+                      : 'text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800')
                   }
                 >
-                  <td className="px-5 py-3">
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={d.photo}
-                        alt={d.name}
-                        className="h-10 w-10 flex-shrink-0 rounded-full object-cover"
-                      />
-                      <div>
-                        <p className="font-semibold text-zinc-900 dark:text-zinc-50">
-                          {d.name}
-                        </p>
-                        <p className="text-xs text-zinc-400">
-                          ID: {d.employeeId}
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-5 py-3">
-                    <span
-                      className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${LICENSE_STYLES[d.licenseStatus]}`}
-                    >
-                      {LICENSE_LABELS[d.licenseStatus]}
-                    </span>
-                  </td>
-                  <td className="px-5 py-3">
-                    <span className="flex items-center gap-1.5 text-zinc-700 dark:text-zinc-200">
-                      <span
-                        className={`h-2 w-2 rounded-full ${RISK_STYLES[d.riskLevel]}`}
-                      />
-                      {RISK_LABELS[d.riskLevel]}
-                    </span>
-                  </td>
-                  <td className="px-5 py-3 font-medium text-zinc-900 dark:text-zinc-50">
-                    {d.dispatches.toLocaleString()}
-                  </td>
-                </tr>
+                  {p}
+                </button>
               ))}
-            </tbody>
-          </table>
+              <button
+                onClick={() => setPage((p) => Math.min(pageCount, p + 1))}
+                disabled={page === pageCount}
+                className="grid h-7 w-7 place-items-center rounded-lg text-zinc-500 transition hover:bg-zinc-100 disabled:opacity-30 disabled:hover:bg-transparent dark:text-zinc-400 dark:hover:bg-zinc-800"
+              >
+                <Icon name="chevronRight" size={14} />
+              </button>
+            </div>
+          </div>
         </div>
 
         {selected && (

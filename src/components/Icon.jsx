@@ -34,6 +34,12 @@ const PATHS = {
   userPlus: 'M15 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M8 11a4 4 0 100-8 4 4 0 000 8zM19 8v6M22 11h-6',
   file: 'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8zM14 2v6h6',
   upload: 'M12 3v12M7 8l5-5 5 5M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2',
+  minus: 'M5 12h14',
+  layers: 'M12 2L2 8l10 6 10-6-10-6zM2 16l10 6 10-6M2 12l10 6 10-6',
+  compass: 'M12 22a10 10 0 100-20 10 10 0 000 20zM15 9l-2 6-6 2 2-6 6-2z',
+  arrowLeft: 'M19 12H5M12 19l-7-7 7-7',
+  sync: 'M3 12a9 9 0 0114.9-6.7L21 8M21 3v5h-5M21 12a9 9 0 01-14.9 6.7L3 16M3 21v-5h5',
+  drone: 'M12 8v8M8 12h8M6 6l2 2M18 6l-2 2M6 18l2-2M18 18l-2-2M6 6a2 2 0 100-4 2 2 0 000 4zM18 6a2 2 0 100-4 2 2 0 000 4zM6 22a2 2 0 100-4 2 2 0 000 4zM18 22a2 2 0 100-4 2 2 0 000 4z',
 }
 
 export default function Icon({ name, size = 18, className }) {
