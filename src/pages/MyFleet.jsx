@@ -301,7 +301,7 @@ export default function MyFleet() {
   const selected = activeUnits.find((u) => u.id === selectedId) ?? null
 
   return (
-    <div className="grid items-stretch gap-5 lg:h-[620px] lg:grid-cols-3">
+    <div className="grid items-stretch gap-5 lg:h-[calc(100vh-6rem)] lg:grid-cols-3">
       <ActiveUnitsPanel
         tab={tab}
         setTab={setTab}
