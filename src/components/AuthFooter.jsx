@@ -1,4 +1,4 @@
-// Shared footer for the login / register auth pages.
+// Footer for the login page.
 export default function AuthFooter() {
   return (
     <footer className="border-t border-zinc-200 bg-white/50">

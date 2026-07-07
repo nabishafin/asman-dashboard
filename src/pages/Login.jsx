@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext.jsx'
 import Icon from '../components/Icon.jsx'
 import AuthFooter from '../components/AuthFooter.jsx'
@@ -11,6 +11,7 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [remember, setRemember] = useState(false)
   const [error, setError] = useState('')
+  const [selectedRole, setSelectedRole] = useState(null)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -20,7 +21,8 @@ export default function Login() {
     else setError(res.error)
   }
 
-  const demo = (em, pw) => {
+  const demo = (role, em, pw) => {
+    setSelectedRole(role)
     setEmail(em)
     setPassword(pw)
     setError('')
@@ -132,27 +134,28 @@ export default function Login() {
               Sign In <Icon name="arrow" size={18} />
             </button>
 
-            <p className="mt-6 text-center text-sm text-zinc-500">
-              New to ASMAN?{' '}
-              <Link to="/register" className="font-semibold text-brand hover:underline">
-                Create an Account
-              </Link>
-            </p>
-
-            <div className="mt-5 border-t border-zinc-100 pt-4 text-center text-xs text-zinc-400">
-              Demo —{' '}
+            <div className="mt-6 flex gap-2 border-t border-zinc-100 pt-4">
               <button
                 type="button"
-                onClick={() => demo('admin@asman.com', 'admin123')}
-                className="font-medium text-brand hover:underline"
+                onClick={() => demo('super_admin', 'admin@asman.com', 'admin123')}
+                className={
+                  'flex-1 rounded-lg border py-2 text-xs font-semibold transition ' +
+                  (selectedRole === 'super_admin'
+                    ? 'border-brand bg-brand/10 text-brand'
+                    : 'border-zinc-200 text-zinc-600 hover:border-brand/40 hover:text-brand')
+                }
               >
                 Super Admin
-              </button>{' '}
-              ·{' '}
+              </button>
               <button
                 type="button"
-                onClick={() => demo('owner@asman.com', 'owner123')}
-                className="font-medium text-brand hover:underline"
+                onClick={() => demo('fleet_owner', 'owner@asman.com', 'owner123')}
+                className={
+                  'flex-1 rounded-lg border py-2 text-xs font-semibold transition ' +
+                  (selectedRole === 'fleet_owner'
+                    ? 'border-brand bg-brand/10 text-brand'
+                    : 'border-zinc-200 text-zinc-600 hover:border-brand/40 hover:text-brand')
+                }
               >
                 Fleet Owner
               </button>

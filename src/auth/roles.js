@@ -24,6 +24,7 @@ export const NAV_BY_ROLE = {
     { path: '/drivers', label: 'Drivers', icon: 'users' },
     { path: '/my-fleet', label: 'Fleet', icon: 'truck' },
     { path: '/attorneys', label: 'Attorneys', icon: 'briefcase' },
+    { path: '/subscription', label: 'Subscription', icon: 'box' },
     { path: '/settings', label: 'Settings', icon: 'cog' },
   ],
 }
@@ -42,4 +43,11 @@ export const ROUTE_ACCESS = {
   '/my-fleet/vehicle/u402': [ROLES.FLEET_OWNER],
   '/my-fleet/vehicle/u119': [ROLES.FLEET_OWNER],
   '/my-fleet/vehicle/u284': [ROLES.FLEET_OWNER],
+  '/attorneys/at1': [ROLES.FLEET_OWNER],
+  '/attorneys/at2': [ROLES.FLEET_OWNER],
+  '/attorneys/at3': [ROLES.FLEET_OWNER],
+  '/attorneys/at4': [ROLES.FLEET_OWNER],
+  '/attorneys/at5': [ROLES.FLEET_OWNER],
+  '/attorneys/at6': [ROLES.FLEET_OWNER],
+  '/subscription': [ROLES.FLEET_OWNER],
 }

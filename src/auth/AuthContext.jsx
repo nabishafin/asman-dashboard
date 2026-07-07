@@ -53,33 +53,29 @@ export function AuthProvider({ children }) {
     return { ok: true }
   }
 
-  const register = ({ name, email, password, org }) => {
+  // Provisioned by a Super Admin from the Users page — does not sign the
+  // admin out or switch the current session to the new account.
+  const createFleetOwner = ({ name, email, password, fleetId }) => {
     const cleanEmail = email.trim().toLowerCase()
     if (MOCK_USERS.some((u) => u.email === cleanEmail)) {
       return { ok: false, error: 'An account with this email already exists' }
     }
-    // New sign-ups become Fleet Owners tied to a demo fleet so the
-    // dashboard has data to show. (Mock only — no real backend.)
     const newUser = {
       id: `u${MOCK_USERS.length + 1}`,
       name: name.trim(),
       email: cleanEmail,
       password,
-      org: org?.trim() || null,
       role: ROLES.FLEET_OWNER,
-      fleetId: 'f1',
+      fleetId,
     }
     MOCK_USERS.push(newUser)
-    const safeUser = { ...newUser }
-    delete safeUser.password
-    setUser(safeUser)
-    return { ok: true }
+    return { ok: true, user: newUser }
   }
 
   const logout = () => setUser(null)
 
   const value = useMemo(
-    () => ({ user, login, register, logout, isAuthenticated: !!user }),
+    () => ({ user, login, createFleetOwner, logout, isAuthenticated: !!user }),
     [user]
   )
 

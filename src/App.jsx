@@ -3,7 +3,6 @@ import { AuthProvider } from './auth/AuthContext.jsx'
 import RequireAuth from './components/RequireAuth.jsx'
 import Layout from './components/Layout.jsx'
 import Login from './pages/Login.jsx'
-import Register from './pages/Register.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Fleets from './pages/Fleets.jsx'
 import Users from './pages/Users.jsx'
@@ -14,6 +13,8 @@ import Drivers from './pages/Drivers.jsx'
 import Attorneys from './pages/Attorneys.jsx'
 import DetentionCenter from './pages/DetentionCenter.jsx'
 import VehicleDetail from './pages/VehicleDetail.jsx'
+import AttorneyProfile from './pages/AttorneyProfile.jsx'
+import Subscription from './pages/Subscription.jsx'
 
 export default function App() {
   return (
@@ -21,7 +22,6 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
 
           <Route
             element={
@@ -43,8 +43,10 @@ export default function App() {
             <Route path="/vehicles" element={<Vehicles />} />
             <Route path="/drivers" element={<Drivers />} />
             <Route path="/attorneys" element={<Attorneys />} />
+            <Route path="/attorneys/:attorneyId" element={<AttorneyProfile />} />
             <Route path="/facility/dc-4" element={<DetentionCenter />} />
             <Route path="/my-fleet/vehicle/:unitId" element={<VehicleDetail />} />
+            <Route path="/subscription" element={<Subscription />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />
