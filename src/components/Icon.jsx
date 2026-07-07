@@ -1,0 +1,57 @@
+// Minimal inline-SVG icon set used by the sidebar and cards.
+const PATHS = {
+  grid: 'M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z',
+  truck: 'M1 3h13v10H1zM14 6h4l3 3v4h-7zM5.5 18a2 2 0 100-4 2 2 0 000 4zM17.5 18a2 2 0 100-4 2 2 0 000 4z',
+  car: 'M3 11l2-5h10l2 5M2 11h18v5H2zM6 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM16 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3z',
+  users: 'M16 20v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 10a3 3 0 100-6 3 3 0 000 6zM22 20v-2a4 4 0 00-3-3.87M16 4.13A4 4 0 0116 12',
+  cog: 'M12 15a3 3 0 100-6 3 3 0 000 6zM19 12a7 7 0 00-.1-1l2-1.6-2-3.4-2.4 1a7 7 0 00-1.7-1L14.4 2h-4l-.4 3a7 7 0 00-1.7 1l-2.4-1-2 3.4 2 1.6a7 7 0 000 2l-2 1.6 2 3.4 2.4-1a7 7 0 001.7 1l.4 3h4l.4-3a7 7 0 001.7-1l2.4 1 2-3.4-2-1.6a7 7 0 00.1-1z',
+  logout: 'M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9',
+  shield: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z',
+  mail: 'M2 5h20v14H2zM2 6l10 7L22 6',
+  lock: 'M5 11h14v10H5zM8 11V7a4 4 0 018 0v4',
+  user: 'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z',
+  building: 'M4 21V3h12v18M16 8h4v13M8 7h2M8 11h2M8 15h2',
+  bolt: 'M13 2L4 14h7l-1 8 9-12h-7l1-8z',
+  arrow: 'M5 12h14M13 6l6 6-6 6',
+  send: 'M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z',
+  clock: 'M12 22a10 10 0 100-20 10 10 0 000 20zM12 7v5l3 2',
+  folder: 'M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z',
+  warning: 'M12 2L2 20h20L12 2zM12 9v5M12 18h.01',
+  plus: 'M12 5v14M5 12h14',
+  bell: 'M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0',
+  star: 'M12 2l3 7 7 .5-5.5 4.5 2 7L12 17l-6.5 4 2-7L2 9.5 9 9z',
+  briefcase: 'M4 7h16v13H4zM9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M4 12h16',
+  pin: 'M12 21s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12zM12 9a2 2 0 100 4 2 2 0 000-4z',
+  map: 'M9 3L3 6v15l6-3 6 3 6-3V3l-6 3-6-3zM9 3v15M15 6v15',
+  check: 'M20 6L9 17l-5-5',
+  close: 'M18 6L6 18M6 6l12 12',
+  calendar: 'M3 8h18M3 8v11a1 1 0 001 1h16a1 1 0 001-1V8M3 8V6a1 1 0 011-1h16a1 1 0 011 1v2M8 3v4M16 3v4',
+  edit: 'M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z',
+  flag: 'M5 22V4M5 4h13l-3 4 3 4H5',
+  box: 'M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8M12 13v8',
+  broadcast: 'M12 12a2 2 0 100 4 2 2 0 000-4zM8.5 8.5a6 6 0 000 8.5M15.5 8.5a6 6 0 010 8.5M5.3 5.3a10.5 10.5 0 000 14.9M18.7 5.3a10.5 10.5 0 010 14.9',
+  chevronRight: 'M9 6l6 6-6 6',
+  userPlus: 'M15 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M8 11a4 4 0 100-8 4 4 0 000 8zM19 8v6M22 11h-6',
+  file: 'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8zM14 2v6h6',
+  upload: 'M12 3v12M7 8l5-5 5 5M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2',
+}
+
+export default function Icon({ name, size = 18, className }) {
+  const d = PATHS[name] || PATHS.grid
+  return (
+    <svg
+      className={className}
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d={d} />
+    </svg>
+  )
+}

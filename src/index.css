@@ -1,0 +1,14 @@
+@import 'tailwindcss';
+
+/* Brand palette used via `brand`/`brand-dark` utility colors, e.g. bg-brand */
+@theme {
+  --color-brand: #00668a;
+  --color-brand-dark: #2a95bf;
+  --color-brand-soft: rgba(0, 102, 138, 0.1);
+}
+
+html,
+body,
+#root {
+  min-height: 100vh;
+}
