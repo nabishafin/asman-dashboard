@@ -39,4 +39,7 @@ export const ROUTE_ACCESS = {
   '/drivers': [ROLES.FLEET_OWNER],
   '/attorneys': [ROLES.FLEET_OWNER],
   '/facility/dc-4': [ROLES.FLEET_OWNER],
+  '/my-fleet/vehicle/u402': [ROLES.FLEET_OWNER],
+  '/my-fleet/vehicle/u119': [ROLES.FLEET_OWNER],
+  '/my-fleet/vehicle/u284': [ROLES.FLEET_OWNER],
 }

@@ -13,6 +13,7 @@ import Vehicles from './pages/Vehicles.jsx'
 import Drivers from './pages/Drivers.jsx'
 import Attorneys from './pages/Attorneys.jsx'
 import DetentionCenter from './pages/DetentionCenter.jsx'
+import VehicleDetail from './pages/VehicleDetail.jsx'
 
 export default function App() {
   return (
@@ -43,6 +44,7 @@ export default function App() {
             <Route path="/drivers" element={<Drivers />} />
             <Route path="/attorneys" element={<Attorneys />} />
             <Route path="/facility/dc-4" element={<DetentionCenter />} />
+            <Route path="/my-fleet/vehicle/:unitId" element={<VehicleDetail />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />
