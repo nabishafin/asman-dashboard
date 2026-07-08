@@ -49,6 +49,7 @@ const PATHS = {
   clipboard: 'M9 2h6a1 1 0 011 1v2H8V3a1 1 0 011-1zM8 5h8a2 2 0 012 2v13a2 2 0 01-2 2H8a2 2 0 01-2-2V7a2 2 0 012-2zM9 12l2 2 4-4',
   sos: 'M12 2v20M4.9 4.9l14.2 14.2M2 12h20M4.9 19.1L19.1 4.9',
   barChart: 'M4 20V10M12 20V4M20 20v-6',
+  creditCard: 'M2 6a2 2 0 012-2h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2zM2 10h20M6 15h4',
 }
 
 export default function Icon({ name, size = 18, className }) {
