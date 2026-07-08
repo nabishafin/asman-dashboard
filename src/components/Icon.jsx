@@ -50,6 +50,10 @@ const PATHS = {
   sos: 'M12 2v20M4.9 4.9l14.2 14.2M2 12h20M4.9 19.1L19.1 4.9',
   barChart: 'M4 20V10M12 20V4M20 20v-6',
   creditCard: 'M2 6a2 2 0 012-2h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2zM2 10h20M6 15h4',
+  filter: 'M4 4h16l-6 8v6l-4 2v-8z',
+  ban: 'M12 22a10 10 0 100-20 10 10 0 000 20zM5 5l14 14',
+  trash: 'M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2m2 0v14a2 2 0 01-2 2H8a2 2 0 01-2-2V6h12z',
+  globe: 'M12 22a10 10 0 100-20 10 10 0 000 20zM2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20',
 }
 
 export default function Icon({ name, size = 18, className }) {

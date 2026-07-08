@@ -2,6 +2,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext.jsx'
 import { NAV_BY_ROLE, ROLE_LABELS, ROLES } from '../auth/roles.js'
 import Icon from './Icon.jsx'
+import AdminHeader from './AdminHeader.jsx'
 
 export default function Layout() {
   const { user, logout } = useAuth()
@@ -88,9 +89,12 @@ export default function Layout() {
         </div>
       </aside>
 
-      <main className="max-w-full flex-1 overflow-x-auto p-5 md:p-8">
-        <Outlet />
-      </main>
+      <div className="flex max-w-full flex-1 flex-col overflow-x-auto">
+        {user.role === ROLES.SUPER_ADMIN && <AdminHeader />}
+        <main className="flex-1 p-5 md:p-8">
+          <Outlet />
+        </main>
+      </div>
     </div>
   )
 }

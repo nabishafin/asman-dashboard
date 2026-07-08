@@ -63,10 +63,10 @@ const SYSTEM_ACTIVITY = [
   },
 ]
 
-const TONE_DOT = {
-  blue: 'bg-brand',
-  green: 'bg-green-500',
-  red: 'bg-red-500',
+const TONE_RING = {
+  blue: 'border-brand',
+  green: 'border-green-500',
+  red: 'border-red-500',
 }
 
 const TONE_ICON = {
@@ -103,7 +103,7 @@ function StatTile({ stat }) {
 
 function MrrTile() {
   return (
-    <div className="flex flex-col rounded-xl bg-zinc-900 p-4 dark:bg-black">
+    <div className="flex flex-col rounded-xl bg-black p-4">
       <span className="grid h-8 w-8 place-items-center rounded-lg bg-white/10 text-white">
         <Icon name="creditCard" size={15} />
       </span>
@@ -141,13 +141,10 @@ function IntelligenceMap() {
       </div>
 
       <div className="relative mt-4 min-h-[320px] flex-1 overflow-hidden rounded-xl bg-[#e9ebee]">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              'repeating-radial-gradient(circle at 50% 55%, transparent 0 44px, #d3d7dc 45px, transparent 46px), ' +
-              'repeating-conic-gradient(from 0deg at 50% 55%, transparent 0deg 14.5deg, #d3d7dc 14.5deg 15deg)',
-          }}
+        <img
+          src="/superadmin%20overview%20page%20map.png"
+          alt="Live geospatial deployment map across the US"
+          className="absolute inset-0 h-full w-full object-cover"
         />
 
         <span className="absolute left-4 top-4 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 shadow-md">
@@ -156,11 +153,6 @@ function IntelligenceMap() {
           </span>
           Texas Corridor
         </span>
-
-        <span className="absolute left-[32%] top-[38%] h-2.5 w-2.5 rounded-full bg-brand ring-4 ring-brand/25" />
-        <span className="absolute left-[46%] top-[48%] h-2.5 w-2.5 rounded-full bg-red-500 ring-4 ring-red-500/25" />
-        <span className="absolute left-[58%] top-[42%] h-2.5 w-2.5 rounded-full bg-green-500 ring-4 ring-green-500/25" />
-        <span className="absolute left-[40%] top-[62%] h-2.5 w-2.5 rounded-full bg-brand ring-4 ring-brand/25" />
 
         <button className="absolute bottom-4 right-4 grid h-9 w-9 place-items-center rounded-lg bg-zinc-900 text-white shadow-md">
           <Icon name="layers" size={16} />
@@ -242,11 +234,19 @@ function SystemActivity() {
       <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
         System Activity
       </h3>
-      <div className="mt-3 flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
-        {SYSTEM_ACTIVITY.map((s) => (
-          <div key={s.id} className="flex gap-3 py-3">
+      <div className="mt-3 flex flex-col">
+        {SYSTEM_ACTIVITY.map((s, i) => (
+          <div
+            key={s.id}
+            className={
+              'flex gap-3 py-3.5 ' +
+              (i < SYSTEM_ACTIVITY.length - 1
+                ? 'border-b border-zinc-200 dark:border-zinc-800'
+                : '')
+            }
+          >
             <span
-              className={`mt-1.5 h-2 w-2 flex-shrink-0 rounded-full ${TONE_DOT[s.tone]}`}
+              className={`mt-0.5 h-4 w-4 flex-shrink-0 rounded-full border-2 bg-white dark:bg-zinc-900 ${TONE_RING[s.tone]}`}
             />
             <div className="min-w-0 flex-1">
               <div className="flex items-start justify-between gap-2">
