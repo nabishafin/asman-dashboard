@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { userDirectory } from '../data/mockData.js'
 import Icon from '../components/Icon.jsx'
-import AddFleetOwnerModal from '../components/AddFleetOwnerModal.jsx'
 import UserDetailModal from '../components/UserDetailModal.jsx'
 
 const PAGE_SIZE = 3
@@ -26,7 +25,6 @@ function FilterSelect({ label }) {
 }
 
 export default function Users() {
-  const [addOpen, setAddOpen] = useState(false)
   const [detailUser, setDetailUser] = useState(null)
   const [page, setPage] = useState(1)
   const [statuses, setStatuses] = useState(
@@ -45,22 +43,13 @@ export default function Users() {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-            User Management
-          </h1>
-          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-            Manage institutional personnel and access control.
-          </p>
-        </div>
-        <button
-          onClick={() => setAddOpen(true)}
-          className="flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:brightness-110"
-        >
-          <Icon name="userPlus" size={16} />
-          Add Fleet Owner
-        </button>
+      <div>
+        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+          User Management
+        </h1>
+        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+          Manage institutional personnel and access control.
+        </p>
       </div>
 
       {/* filters */}
@@ -240,7 +229,6 @@ export default function Users() {
         </div>
       </div>
 
-      <AddFleetOwnerModal open={addOpen} onClose={() => setAddOpen(false)} onCreated={() => {}} />
       <UserDetailModal
         open={!!detailUser}
         user={detailUser}

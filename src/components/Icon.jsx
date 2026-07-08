@@ -54,6 +54,8 @@ const PATHS = {
   ban: 'M12 22a10 10 0 100-20 10 10 0 000 20zM5 5l14 14',
   trash: 'M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2m2 0v14a2 2 0 01-2 2H8a2 2 0 01-2-2V6h12z',
   globe: 'M12 22a10 10 0 100-20 10 10 0 000 20zM2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20',
+  image: 'M3 3h18v18H3zM8.5 10a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM21 15l-5-5-11 11',
+  arrowUp: 'M12 19V5M5 12l7-7 7 7',
 }
 
 export default function Icon({ name, size = 18, className }) {

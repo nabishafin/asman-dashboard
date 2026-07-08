@@ -53,29 +53,10 @@ export function AuthProvider({ children }) {
     return { ok: true }
   }
 
-  // Provisioned by a Super Admin from the Users page — does not sign the
-  // admin out or switch the current session to the new account.
-  const createFleetOwner = ({ name, email, password, fleetId }) => {
-    const cleanEmail = email.trim().toLowerCase()
-    if (MOCK_USERS.some((u) => u.email === cleanEmail)) {
-      return { ok: false, error: 'An account with this email already exists' }
-    }
-    const newUser = {
-      id: `u${MOCK_USERS.length + 1}`,
-      name: name.trim(),
-      email: cleanEmail,
-      password,
-      role: ROLES.FLEET_OWNER,
-      fleetId,
-    }
-    MOCK_USERS.push(newUser)
-    return { ok: true, user: newUser }
-  }
-
   const logout = () => setUser(null)
 
   const value = useMemo(
-    () => ({ user, login, createFleetOwner, logout, isAuthenticated: !!user }),
+    () => ({ user, login, logout, isAuthenticated: !!user }),
     [user]
   )
 
