@@ -1,4 +1,5 @@
 import Icon from '../components/Icon.jsx'
+import GoogleMapView from '../components/GoogleMapView.jsx'
 
 /* ---------------- mock dashboard data ---------------- */
 const STATS = [
@@ -15,12 +16,14 @@ const SOS_ALARMS = [
     name: 'Maria Rodriguez',
     photo: '/driver-elena.jpg',
     detail: 'Enforcement Stop: I-10, El Paso',
+    coords: { lat: 31.7619, lng: -106.485 },
   },
   {
     id: 2,
     name: 'Johnathan Vance',
     photo: '/attorney-david.jpg',
     detail: 'Check-point Check-in: Laredo',
+    coords: { lat: 27.5058, lng: -99.5064 },
   },
 ]
 
@@ -30,13 +33,20 @@ const ENFORCEMENT_ALERTS = [
     title: 'New ICE Checkpoint',
     detail: 'Reported by 4 drivers near San Diego',
     time: '2 mins ago',
+    coords: { lat: 32.7157, lng: -117.1611 },
   },
   {
     id: 2,
     title: 'CBP Increased Activity',
     detail: 'Tucson Sector; High frequency alerts',
     time: '10 mins ago',
+    coords: { lat: 32.2226, lng: -110.9747 },
   },
+]
+
+const ATTORNEY_DEPLOYMENTS = [
+  { id: 1, coords: { lat: 29.4241, lng: -98.4936 } }, // San Antonio
+  { id: 2, coords: { lat: 32.7767, lng: -96.797 } }, // Dallas
 ]
 
 const SYSTEM_ACTIVITY = [
@@ -140,13 +150,15 @@ function IntelligenceMap() {
         </div>
       </div>
 
-      <div className="relative mt-4 min-h-[320px] flex-1 overflow-hidden rounded-xl bg-[#e9ebee]">
-        <img
-          src="/superadmin%20overview%20page%20map.png"
-          alt="Live geospatial deployment map across the US"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-
+      <GoogleMapView
+        className="mt-4 h-[380px]"
+        zoom={5}
+        markers={[
+          ...SOS_ALARMS.map((s) => ({ id: `sos-${s.id}`, ...s.coords, color: 'red' })),
+          ...ENFORCEMENT_ALERTS.map((a) => ({ id: `alert-${a.id}`, ...a.coords, color: 'brand' })),
+          ...ATTORNEY_DEPLOYMENTS.map((a) => ({ id: `attorney-${a.id}`, ...a.coords, color: 'green' })),
+        ]}
+      >
         <span className="absolute left-4 top-4 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 shadow-md">
           <span className="mr-1 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-700">
             Hot Zone
@@ -157,7 +169,7 @@ function IntelligenceMap() {
         <button className="absolute bottom-4 right-4 grid h-9 w-9 place-items-center rounded-lg bg-zinc-900 text-white shadow-md">
           <Icon name="layers" size={16} />
         </button>
-      </div>
+      </GoogleMapView>
     </div>
   )
 }

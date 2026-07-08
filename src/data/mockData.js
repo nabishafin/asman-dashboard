@@ -147,6 +147,7 @@ export const activeUnits = [
     routeProgress: 64,
     origin: 'Dallas, TX',
     destination: 'Phoenix, AZ',
+    coords: { lat: 32.4487, lng: -99.7331 },
     hos: { driveTime: '03:42', dutyLeft: '07:18' },
     vehicle: {
       model: 'Freightliner Cascadia · 2024 Model',
@@ -176,6 +177,7 @@ export const activeUnits = [
     routeProgress: 12,
     origin: 'Austin, TX',
     destination: 'Houston, TX',
+    coords: { lat: 30.2672, lng: -97.7431 },
     hos: { driveTime: '01:05', dutyLeft: '09:40' },
     vehicle: {
       model: 'Kenworth T680 · 2023 Model',
@@ -205,6 +207,7 @@ export const activeUnits = [
     routeProgress: 38,
     origin: 'El Paso, TX',
     destination: 'Tucson, AZ',
+    coords: { lat: 32.3199, lng: -106.7637 },
     hos: { driveTime: '05:12', dutyLeft: '02:50' },
     vehicle: {
       model: 'Peterbilt 579 · 2022 Model',

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Icon from '../components/Icon.jsx'
+import GoogleMapView from '../components/GoogleMapView.jsx'
 
 const SOS_QUEUE = [
   {
@@ -9,6 +10,7 @@ const SOS_QUEUE = [
     cdl: 'TX-482910',
     photo: '/driver-james.jpg',
     location: 'I-10 East, Texas',
+    coords: { lat: 29.7604, lng: -95.3698 },
     timeAgo: '4m ago',
     status: 'active',
     attorney: { assigned: true, name: 'Elena Rodriguez', photo: '/attorney-eleanor.jpg' },
@@ -34,6 +36,7 @@ const SOS_QUEUE = [
     cdl: 'CA-119284',
     photo: '/attorney-julian.jpg',
     location: 'San Ysidro, CA',
+    coords: { lat: 32.5541, lng: -117.0281 },
     timeAgo: '12m ago',
     status: 'dispatching',
     attorney: { assigned: false },
@@ -59,6 +62,7 @@ const SOS_QUEUE = [
     cdl: 'TX-227731',
     photo: '/driver-sarah.jpg',
     location: 'Laredo Port, TX',
+    coords: { lat: 27.5058, lng: -99.5064 },
     timeAgo: '1h ago',
     status: 'resolved',
     attorney: null,
@@ -167,36 +171,22 @@ function QueueCard({ incident, active, onClick }) {
   )
 }
 
-function MapPanel() {
+const SOS_MARKER_COLOR = {
+  active: 'red',
+  dispatching: 'blue',
+  resolved: 'green',
+}
+
+function MapPanel({ selectedId, onSelect }) {
+  const markers = SOS_QUEUE.filter((i) => i.coords).map((i) => ({
+    id: i.id,
+    lat: i.coords.lat,
+    lng: i.coords.lng,
+    color: SOS_MARKER_COLOR[i.status] ?? 'brand',
+  }))
+
   return (
-    <div className="relative h-full min-h-[420px] overflow-hidden rounded-xl border border-zinc-200 bg-[#e9ebee] dark:border-zinc-800">
-      <img
-        src="/superadmin%20overview%20page%20map.png"
-        alt="Live geospatial SOS deployment map"
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-
-      {/* scrubber bar */}
-      <div className="absolute inset-x-6 top-4 h-1 rounded-full bg-white/50">
-        <span className="absolute left-[42%] top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-zinc-700 shadow" />
-      </div>
-
-      {/* zoom / locate controls */}
-      <div className="absolute left-4 top-10 flex flex-col gap-2">
-        <button className="grid h-9 w-9 place-items-center rounded-lg bg-white text-zinc-600 shadow-md transition hover:bg-zinc-50">
-          <Icon name="plus" size={15} />
-        </button>
-        <button className="grid h-9 w-9 place-items-center rounded-lg bg-white text-zinc-600 shadow-md transition hover:bg-zinc-50">
-          <Icon name="minus" size={15} />
-        </button>
-        <button className="mt-1 grid h-9 w-9 place-items-center rounded-full bg-white text-zinc-600 shadow-md transition hover:bg-zinc-50">
-          <Icon name="compass" size={15} />
-        </button>
-      </div>
-
-      {/* SOS marker */}
-      <span className="absolute left-1/2 top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-600 ring-4 ring-red-500/30" />
-
+    <GoogleMapView markers={markers} zoom={5} selectedId={selectedId} onMarkerClick={onSelect}>
       {/* bottom overlay row */}
       <div className="absolute inset-x-4 bottom-4 flex flex-wrap items-end justify-between gap-2">
         <div className="flex flex-wrap items-center gap-2">
@@ -236,7 +226,7 @@ function MapPanel() {
           </div>
         </div>
       </div>
-    </div>
+    </GoogleMapView>
   )
 }
 
@@ -330,7 +320,10 @@ export default function SosIncidents() {
         </div>
       </div>
 
-      <MapPanel />
+      <MapPanel
+        selectedId={selectedId}
+        onSelect={(id) => setSelectedId((current) => (current === id ? null : id))}
+      />
 
       {selected && (
         <IncidentDetail incident={selected} onClose={() => setSelectedId(null)} />

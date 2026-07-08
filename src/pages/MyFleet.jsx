@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { activeUnits } from '../data/mockData.js'
 import Icon from '../components/Icon.jsx'
+import GoogleMapView from '../components/GoogleMapView.jsx'
 
 const STATUS_STYLES = {
   moving: 'text-green-600 dark:text-green-400',
@@ -145,18 +146,29 @@ function ActiveUnitsPanel({ tab, setTab, selectedId, setSelectedId }) {
   )
 }
 
-function MapPanel() {
-  return (
-    <div className="relative h-full min-h-[420px] overflow-hidden rounded-xl border border-zinc-200 bg-[#e9ebee] dark:border-zinc-800">
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage:
-            'repeating-radial-gradient(circle at 50% 55%, transparent 0 44px, #d3d7dc 45px, transparent 46px), ' +
-            'repeating-conic-gradient(from 0deg at 50% 55%, transparent 0deg 14.5deg, #d3d7dc 14.5deg 15deg)',
-        }}
-      />
+const UNIT_MARKER_COLOR = {
+  moving: 'green',
+  idle: 'blue',
+  delayed: 'red',
+}
 
+function MapPanel({ selectedId, onSelect }) {
+  const markers = activeUnits
+    .filter((u) => u.coords)
+    .map((u) => ({
+      id: u.id,
+      lat: u.coords.lat,
+      lng: u.coords.lng,
+      color: UNIT_MARKER_COLOR[u.status] ?? 'brand',
+    }))
+
+  return (
+    <GoogleMapView
+      markers={markers}
+      zoom={5}
+      selectedId={selectedId}
+      onMarkerClick={onSelect}
+    >
       <span className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 shadow-md">
         <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
         System Healthy: 242 API Calls/s
@@ -165,51 +177,7 @@ function MapPanel() {
       <span className="absolute right-6 top-6 text-zinc-400">
         <Icon name="drone" size={18} />
       </span>
-
-      <div className="absolute inset-0 grid place-items-center">
-        <p className="text-xs font-semibold tracking-[0.3em] text-zinc-400">
-          REGIONAL COMMAND GRID
-        </p>
-      </div>
-
-      <svg
-        className="absolute inset-0 h-full w-full"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-      >
-        <path
-          d="M 30 25 C 40 35, 42 50, 55 55 S 70 68, 78 62"
-          fill="none"
-          stroke="#4a9cc4"
-          strokeWidth="2"
-          strokeDasharray="6 6"
-          vectorEffect="non-scaling-stroke"
-        />
-      </svg>
-
-      <span className="absolute left-[45%] top-[45%] grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-brand text-white shadow-lg ring-4 ring-brand/20">
-        <Icon name="sync" size={16} />
-      </span>
-
-      <button className="absolute bottom-4 left-1/2 grid h-9 w-9 -translate-x-1/2 place-items-center rounded-lg bg-zinc-900 text-white shadow-md">
-        <Icon name="layers" size={16} />
-      </button>
-
-      <div className="absolute bottom-4 right-4 flex items-center gap-1 rounded-full bg-white px-2 py-1.5 shadow-md">
-        <button className="grid h-7 w-7 place-items-center rounded-full text-zinc-500 hover:bg-zinc-100">
-          <Icon name="plus" size={14} />
-        </button>
-        <button className="grid h-7 w-7 place-items-center rounded-full text-zinc-500 hover:bg-zinc-100">
-          <Icon name="minus" size={14} />
-        </button>
-        <button className="grid h-7 w-7 place-items-center rounded-full text-zinc-500 hover:bg-zinc-100">
-          <Icon name="layers" size={14} />
-        </button>
-        <button className="grid h-7 w-7 place-items-center rounded-full text-zinc-500 hover:bg-zinc-100">
-          <Icon name="compass" size={14} />
-        </button>
-      </div>
-    </div>
+    </GoogleMapView>
   )
 }
 
@@ -308,7 +276,7 @@ export default function MyFleet() {
         selectedId={selectedId}
         setSelectedId={setSelectedId}
       />
-      <MapPanel />
+      <MapPanel selectedId={selectedId} onSelect={setSelectedId} />
       <DriverPanel unit={selected} />
     </div>
   )
