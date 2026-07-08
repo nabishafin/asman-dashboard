@@ -39,6 +39,7 @@ export const NAV_BY_ROLE = {
 export const ROUTE_ACCESS = {
   '/': [ROLES.SUPER_ADMIN, ROLES.FLEET_OWNER],
   '/fleets': [ROLES.SUPER_ADMIN],
+  '/fleets/onboard': [ROLES.SUPER_ADMIN],
   '/users': [ROLES.SUPER_ADMIN],
   '/settings': [ROLES.SUPER_ADMIN, ROLES.FLEET_OWNER],
   '/my-fleet': [ROLES.FLEET_OWNER],
@@ -57,7 +58,14 @@ export const ROUTE_ACCESS = {
   '/attorneys/at6': [ROLES.SUPER_ADMIN, ROLES.FLEET_OWNER],
   '/subscription': [ROLES.SUPER_ADMIN, ROLES.FLEET_OWNER],
   '/all-drivers': [ROLES.SUPER_ADMIN],
+  '/all-drivers/ad1': [ROLES.SUPER_ADMIN],
+  '/all-drivers/ad2': [ROLES.SUPER_ADMIN],
+  '/all-drivers/ad3': [ROLES.SUPER_ADMIN],
   '/case-tracker': [ROLES.SUPER_ADMIN],
+  '/case-tracker/ca1': [ROLES.SUPER_ADMIN],
+  '/case-tracker/ca2': [ROLES.SUPER_ADMIN],
+  '/case-tracker/ca3': [ROLES.SUPER_ADMIN],
+  '/case-tracker/ca4': [ROLES.SUPER_ADMIN],
   '/sos-incidents': [ROLES.SUPER_ADMIN],
   '/analytics': [ROLES.SUPER_ADMIN],
 }

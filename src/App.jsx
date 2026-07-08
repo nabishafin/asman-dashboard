@@ -19,6 +19,9 @@ import AllDrivers from './pages/AllDrivers.jsx'
 import CaseTracker from './pages/CaseTracker.jsx'
 import SosIncidents from './pages/SosIncidents.jsx'
 import Analytics from './pages/Analytics.jsx'
+import PartnerOnboarding from './pages/PartnerOnboarding.jsx'
+import AdminDriverProfile from './pages/AdminDriverProfile.jsx'
+import CaseTrackerAttorneyProfile from './pages/CaseTrackerAttorneyProfile.jsx'
 
 export default function App() {
   return (
@@ -39,10 +42,13 @@ export default function App() {
 
             {/* Super Admin only */}
             <Route path="/fleets" element={<Fleets />} />
+            <Route path="/fleets/onboard" element={<PartnerOnboarding />} />
             <Route path="/users" element={<Users />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/all-drivers" element={<AllDrivers />} />
+            <Route path="/all-drivers/:driverId" element={<AdminDriverProfile />} />
             <Route path="/case-tracker" element={<CaseTracker />} />
+            <Route path="/case-tracker/:attorneyId" element={<CaseTrackerAttorneyProfile />} />
             <Route path="/sos-incidents" element={<SosIncidents />} />
             <Route path="/analytics" element={<Analytics />} />
 
