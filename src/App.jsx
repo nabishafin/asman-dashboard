@@ -22,6 +22,7 @@ import Analytics from './pages/Analytics.jsx'
 import PartnerOnboarding from './pages/PartnerOnboarding.jsx'
 import AdminDriverProfile from './pages/AdminDriverProfile.jsx'
 import CaseTrackerAttorneyProfile from './pages/CaseTrackerAttorneyProfile.jsx'
+import ManageSubscriptionPlans from './pages/ManageSubscriptionPlans.jsx'
 
 export default function App() {
   return (
@@ -51,6 +52,7 @@ export default function App() {
             <Route path="/case-tracker/:attorneyId" element={<CaseTrackerAttorneyProfile />} />
             <Route path="/sos-incidents" element={<SosIncidents />} />
             <Route path="/analytics" element={<Analytics />} />
+            <Route path="/subscription/plans" element={<ManageSubscriptionPlans />} />
 
             {/* Fleet Owner only */}
             <Route path="/my-fleet" element={<MyFleet />} />

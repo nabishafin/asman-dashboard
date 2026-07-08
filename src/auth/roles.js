@@ -68,4 +68,5 @@ export const ROUTE_ACCESS = {
   '/case-tracker/ca4': [ROLES.SUPER_ADMIN],
   '/sos-incidents': [ROLES.SUPER_ADMIN],
   '/analytics': [ROLES.SUPER_ADMIN],
+  '/subscription/plans': [ROLES.SUPER_ADMIN],
 }
