@@ -8,6 +8,8 @@ const MARKER_COLORS = {
   blue: { background: '#2563eb', borderColor: '#1e40af', glyphColor: '#bfdbfe' },
   green: { background: '#16a34a', borderColor: '#166534', glyphColor: '#bbf7d0' },
   brand: { background: '#0f2a3d', borderColor: '#0a1c29', glyphColor: '#9fd7ff' },
+  black: { background: '#18181b', borderColor: '#000000', glyphColor: '#a1a1aa' },
+  purple: { background: '#7c3aed', borderColor: '#5b21b6', glyphColor: '#ddd6fe' },
 }
 
 function FitBoundsToMarkers({ markers }) {

@@ -1,208 +1,159 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { attorneyNetwork } from '../data/mockData.js'
+import { attorneyAdmin } from '../data/mockData.js'
 import Icon from '../components/Icon.jsx'
+import OnboardAttorneyModal from '../components/OnboardAttorneyModal.jsx'
 
-const PAGE_SIZE = 3
-
-const STATUS_STYLES = {
-  available: 'bg-green-500 text-white',
-  active: 'bg-brand text-white',
-  on_leave: 'bg-red-500 text-white',
-}
-const STATUS_LABELS = {
-  available: 'Available',
-  active: 'Active',
-  on_leave: 'On Leave',
-}
-
-function FilterSelect({ label, icon }) {
+function FilterSelect({ label }) {
   return (
     <button className="flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-600 transition hover:border-brand/40 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300">
-      {icon && <Icon name={icon} size={14} className="text-amber-400" />}
       {label}
       <Icon name="chevronDown" size={14} className="text-zinc-400" />
     </button>
   )
 }
 
-function AttorneyCard({ a }) {
+function AttorneyCard({ a, onRemove }) {
   const navigate = useNavigate()
   return (
     <div className="flex flex-col rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
-      <div className="flex items-start justify-between">
-        <div className="relative">
-          <img
-            src={a.photo}
-            alt={a.name}
-            className="h-16 w-16 rounded-xl object-cover"
-          />
-          <span
-            className={`absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide shadow ${STATUS_STYLES[a.status]}`}
-          >
-            {STATUS_LABELS[a.status]}
-          </span>
-        </div>
-        <div className="text-right">
-          <p className="flex items-center justify-end gap-1 text-sm font-bold text-zinc-900 dark:text-zinc-50">
-            <Icon name="star" size={13} className="text-amber-400" />
-            {a.rating}
-          </p>
-          <p className="text-[11px] text-zinc-400">{a.reviews} reviews</p>
+      <div className="flex items-center gap-3">
+        <img
+          src={a.photo}
+          alt={a.name}
+          className="h-12 w-12 flex-shrink-0 rounded-full object-cover"
+        />
+        <div>
+          <p className="font-bold text-zinc-900 dark:text-zinc-50">{a.name}</p>
+          <p className="text-xs text-zinc-400">{a.firm}</p>
         </div>
       </div>
 
-      <p className="mt-4 font-bold text-zinc-900 dark:text-zinc-50">{a.name}</p>
-      <p className="text-xs text-zinc-400">
-        {a.role} · {a.location}
-      </p>
-
-      <div className="mt-3 flex flex-wrap gap-1.5">
-        {a.specialties.map((s) => (
-          <span
-            key={s}
-            className="rounded-full bg-brand/10 px-2.5 py-1 text-[11px] font-medium text-brand dark:text-brand-dark"
-          >
-            {s}
-          </span>
-        ))}
-      </div>
-
-      <div className="mt-4 grid grid-cols-2 gap-2 border-t border-zinc-100 pt-3 dark:border-zinc-800">
+      <div className="mt-4 grid grid-cols-2 gap-3 border-t border-zinc-100 pt-3 dark:border-zinc-800">
         <div>
           <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
-            Active Cases
+            Win Rate
           </p>
           <p className="font-bold text-zinc-900 dark:text-zinc-50">
-            {String(a.activeCases).padStart(2, '0')}
+            {a.winRate}%
           </p>
         </div>
         <div>
           <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
-            Success Rate
+            Cases
           </p>
-          <p className="font-bold text-green-600 dark:text-green-400">
-            {a.successRate}%
+          <p className="font-bold text-zinc-900 dark:text-zinc-50">
+            {a.cases.toLocaleString()}
           </p>
         </div>
       </div>
 
-      <button
-        onClick={() => navigate(`/attorneys/${a.id}`)}
-        className="mt-4 w-full rounded-lg bg-[#0f2a3d] py-2.5 text-sm font-semibold text-white transition hover:brightness-125"
-      >
-        View Full Profile
-      </button>
+      <p className="mt-3 flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+        <Icon name="globe" size={13} className="text-brand dark:text-brand-dark" />
+        {a.languages.join(', ')}
+      </p>
+
+      <div className="mt-4 flex gap-2">
+        <button
+          onClick={() => navigate(`/attorneys/${a.id}`)}
+          className="flex-1 rounded-lg bg-zinc-900 py-2 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
+        >
+          View Profile
+        </button>
+        <button
+          onClick={() => onRemove(a.id)}
+          className="flex-1 rounded-lg border border-red-200 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50 dark:border-red-500/30 dark:hover:bg-red-500/10"
+        >
+          Remove
+        </button>
+      </div>
     </div>
   )
 }
 
 export default function Attorneys() {
-  const [query, setQuery] = useState('')
-  const [page, setPage] = useState(1)
+  const [attorneys, setAttorneys] = useState(attorneyAdmin)
+  const [modalOpen, setModalOpen] = useState(false)
 
-  const results = attorneyNetwork.filter((a) => {
-    const q = query.trim().toLowerCase()
-    if (!q) return true
-    return (
-      a.name.toLowerCase().includes(q) ||
-      a.role.toLowerCase().includes(q) ||
-      a.specialties.some((s) => s.toLowerCase().includes(q))
-    )
-  })
+  const handleRemove = (id) =>
+    setAttorneys((prev) => prev.filter((a) => a.id !== id))
 
-  const pageCount = Math.max(1, Math.ceil(results.length / PAGE_SIZE))
-  const pageResults = results.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+  const handleCreated = (newAttorney) =>
+    setAttorneys((prev) => [...prev, newAttorney])
 
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-center gap-1.5 text-sm">
-        <span className="text-zinc-400">Network</span>
+        <span className="text-zinc-400">Admin</span>
         <Icon name="chevronRight" size={14} className="text-zinc-300" />
         <span className="font-semibold text-brand dark:text-brand-dark">
-          Directory
+          Attorney Network
         </span>
       </div>
 
-      <div>
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-          Attorney Network
-        </h1>
-        <p className="mt-1 max-w-xl text-sm text-zinc-500 dark:text-zinc-400">
-          Manage and deploy our verified network of institutional legal
-          experts specialized in fleet logistics and safety compliance.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+            Attorney Network Administration
+          </h1>
+          <p className="mt-1.5 flex items-center gap-1.5 text-sm text-zinc-500 dark:text-zinc-400">
+            <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+            482 Verified Attorneys active across 12 federal circuits
+          </p>
+        </div>
+        <button
+          onClick={() => setModalOpen(true)}
+          className="flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
+        >
+          <Icon name="userPlus" size={16} />
+          Onboard Attorney
+        </button>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="relative flex-1 min-w-[240px]">
-          <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-zinc-400">
-            <Icon name="search" size={16} />
+      {/* filters */}
+      <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="flex items-center gap-1.5 text-sm font-semibold text-zinc-500 dark:text-zinc-400">
+            <Icon name="filter" size={14} />
+            Filters
           </span>
-          <input
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value)
-              setPage(1)
-            }}
-            placeholder="Search by name, firm, or specialty..."
-            className="w-full rounded-lg border border-zinc-200 bg-white py-2.5 pl-9 pr-3 text-sm text-zinc-900 outline-none placeholder:text-zinc-400 focus:border-brand focus:ring-2 focus:ring-brand/30 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
-          />
+          <FilterSelect label="All Circuits" />
+          <FilterSelect label="All Languages" />
+          <FilterSelect label="All Statuses" />
+          <FilterSelect label="Any" />
+          <button className="ml-auto text-sm font-semibold text-brand hover:underline dark:text-brand-dark">
+            Clear All
+          </button>
         </div>
-        <FilterSelect label="Specialty" />
-        <FilterSelect label="State" />
-        <FilterSelect label="Rating" icon="star" />
       </div>
 
+      {/* grid */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {pageResults.map((a) => (
-          <AttorneyCard key={a.id} a={a} />
+        {attorneys.map((a) => (
+          <AttorneyCard key={a.id} a={a} onRemove={handleRemove} />
         ))}
-        {results.length === 0 && (
-          <p className="col-span-full py-10 text-center text-sm text-zinc-400">
-            No attorneys match your search.
-          </p>
-        )}
+
+        <button
+          onClick={() => setModalOpen(true)}
+          className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-zinc-200 py-10 text-center transition hover:border-brand/40 dark:border-zinc-700"
+        >
+          <span className="grid h-10 w-10 place-items-center rounded-full bg-zinc-100 text-zinc-400 dark:bg-zinc-800">
+            <Icon name="plus" size={18} />
+          </span>
+          <span className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">
+            Add New Practitioner
+          </span>
+          <span className="text-xs text-zinc-400">
+            Manual enrollment or batch invite
+          </span>
+        </button>
       </div>
 
-      {results.length > 0 && (
-        <div className="flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-5 py-3 dark:border-zinc-800 dark:bg-zinc-900">
-          <p className="text-xs text-zinc-400">
-            Showing {(page - 1) * PAGE_SIZE + 1}–
-            {Math.min(page * PAGE_SIZE, results.length)} of {results.length}
-          </p>
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
-              className="grid h-7 w-7 place-items-center rounded-lg text-zinc-500 transition hover:bg-zinc-100 disabled:opacity-30 disabled:hover:bg-transparent dark:text-zinc-400 dark:hover:bg-zinc-800"
-            >
-              <Icon name="chevronRight" size={14} className="rotate-180" />
-            </button>
-            {Array.from({ length: pageCount }, (_, i) => i + 1).map((p) => (
-              <button
-                key={p}
-                onClick={() => setPage(p)}
-                className={
-                  'grid h-7 w-7 place-items-center rounded-lg text-xs font-semibold transition ' +
-                  (p === page
-                    ? 'bg-brand text-white'
-                    : 'text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800')
-                }
-              >
-                {p}
-              </button>
-            ))}
-            <button
-              onClick={() => setPage((p) => Math.min(pageCount, p + 1))}
-              disabled={page === pageCount}
-              className="grid h-7 w-7 place-items-center rounded-lg text-zinc-500 transition hover:bg-zinc-100 disabled:opacity-30 disabled:hover:bg-transparent dark:text-zinc-400 dark:hover:bg-zinc-800"
-            >
-              <Icon name="chevronRight" size={14} />
-            </button>
-          </div>
-        </div>
-      )}
+      <OnboardAttorneyModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onCreated={handleCreated}
+      />
     </div>
   )
 }

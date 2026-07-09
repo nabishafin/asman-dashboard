@@ -1,17 +1,13 @@
 import Icon from './Icon.jsx'
+import GoogleMapView from './GoogleMapView.jsx'
 
-function InfoRow({ label, value, icon }) {
+function InfoBox({ label, value }) {
   return (
-    <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-4 py-3 dark:bg-zinc-800">
-      <div>
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
-          {label}
-        </p>
-        <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-          {value}
-        </p>
-      </div>
-      <Icon name={icon} size={16} className="text-brand dark:text-brand-dark" />
+    <div className="rounded-lg border border-zinc-200 p-3 dark:border-zinc-700">
+      <p className="text-[11px] font-medium text-zinc-400">{label}</p>
+      <p className="mt-1 text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+        {value}
+      </p>
     </div>
   )
 }
@@ -24,75 +20,63 @@ export default function UserDetailModal({ open, onClose, user, onSuspend }) {
       <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl dark:bg-zinc-900">
         <button
           onClick={onClose}
-          className="absolute left-6 top-6 grid h-8 w-8 place-items-center rounded-lg text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800"
+          className="absolute right-6 top-6 grid h-8 w-8 place-items-center rounded-lg text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800"
         >
           <Icon name="close" size={18} />
         </button>
 
-        <div className="mt-2 flex flex-col items-center text-center">
+        <div className="flex items-center gap-3">
           <div className="relative">
             <img
               src={user.photo}
               alt={user.name}
-              className="h-24 w-24 rounded-xl object-cover"
+              className="h-14 w-14 rounded-xl object-cover"
             />
-            <span className="absolute -bottom-1 -right-1 grid h-6 w-6 place-items-center rounded-full border-2 border-white bg-green-500 text-white dark:border-zinc-900">
-              <Icon name="sync" size={11} />
+            <span className="absolute -bottom-1 -right-1 grid h-5 w-5 place-items-center rounded-full border-2 border-white bg-green-500 text-white dark:border-zinc-900">
+              <Icon name="sync" size={9} />
             </span>
           </div>
-          <p className="mt-3 text-lg font-bold text-zinc-900 dark:text-zinc-50">
-            {user.name}
-          </p>
-          <p className="text-xs text-zinc-400">
-            {user.title} · {user.tier}
-          </p>
+          <div>
+            <p className="text-lg font-bold text-zinc-900 dark:text-zinc-50">
+              {user.name}
+            </p>
+            <p className="text-xs text-zinc-400">
+              {user.title} · {user.tier}
+            </p>
+          </div>
         </div>
 
-        <div className="mt-6">
+        {user.coords && (
+          <GoogleMapView
+            className="mt-4 h-40"
+            zoom={9}
+            markers={[{ id: user.id, ...user.coords, color: 'red' }]}
+          >
+            <span className="absolute right-3 top-3 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-zinc-700 shadow-md dark:bg-zinc-900/95 dark:text-zinc-200">
+              {user.address}
+            </span>
+          </GoogleMapView>
+        )}
+
+        <div className="mt-5">
           <p className="mb-2 text-xs font-bold uppercase tracking-wide text-zinc-400">
             Personal Information
           </p>
-          <div className="flex flex-col gap-2">
-            <InfoRow label="Phone Number" value={user.phone} icon="phone" />
-            <InfoRow label="Email" value={user.email} icon="mail" />
-            <InfoRow label="Nationality" value={user.nationality} icon="globe" />
+          <div className="grid grid-cols-2 gap-2.5">
+            <InfoBox label="Phone Number" value={user.phone} />
+            <InfoBox label="Email" value={user.email} />
+            <InfoBox label="Address" value={user.address} />
+            <InfoBox label="Nationality" value={user.nationality} />
           </div>
         </div>
 
         <div className="mt-5">
           <p className="mb-2 text-xs font-bold uppercase tracking-wide text-zinc-400">
-            Emergency Contacts
+            Vehicle Fleet
           </p>
-          <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-4 py-3 dark:bg-zinc-800">
-            <div className="flex items-center gap-3">
-              <span className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full bg-brand/10 text-brand dark:text-brand-dark">
-                <Icon name="users" size={15} />
-              </span>
-              <div className="text-left">
-                <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-                  {user.emergencyContact.name}
-                </p>
-                <p className="text-xs text-zinc-400">
-                  {user.emergencyContact.relation} · {user.emergencyContact.phone}
-                </p>
-              </div>
-            </div>
-            <Icon name="warning" size={16} className="text-green-500" />
-          </div>
-        </div>
-
-        <div className="mt-5">
-          <p className="mb-2 text-xs font-bold uppercase tracking-wide text-zinc-400">
-            Verified Documents
-          </p>
-          <div className="flex flex-col items-center gap-1.5 rounded-xl border-2 border-dashed border-zinc-200 py-5 dark:border-zinc-700">
-            <Icon name="file" size={22} className="text-brand dark:text-brand-dark" />
-            <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-              {user.document.name}
-            </p>
-            <p className="text-xs text-zinc-400">
-              {user.document.type} · {user.document.size}
-            </p>
+          <div className="grid grid-cols-2 gap-2.5">
+            <InfoBox label="VIN Number" value={user.vin} />
+            <InfoBox label="License Plate" value={user.licensePlate} />
           </div>
         </div>
 

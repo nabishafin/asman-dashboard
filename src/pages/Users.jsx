@@ -34,8 +34,6 @@ export default function Users() {
   const pageCount = Math.max(1, Math.ceil(userDirectory.length / PAGE_SIZE))
   const pageRows = userDirectory.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
-  const activeCount = Object.values(statuses).filter((s) => s === 'active').length
-
   const handleSuspend = (user) => {
     setStatuses((prev) => ({ ...prev, [user.id]: 'suspended' }))
     setDetailUser(null)
@@ -194,37 +192,6 @@ export default function Users() {
             >
               <Icon name="chevronRight" size={14} />
             </button>
-          </div>
-        </div>
-      </div>
-
-      {/* stats */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand/10 text-brand dark:text-brand-dark">
-            <Icon name="users" size={16} />
-          </span>
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
-              Total Users
-            </p>
-            <p className="font-bold text-zinc-900 dark:text-zinc-50">1,240</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-green-500/10 text-green-600 dark:text-green-400">
-            <Icon name="check" size={16} />
-          </span>
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
-              Active Now
-            </p>
-            <p className="font-bold text-zinc-900 dark:text-zinc-50">
-              982
-              <span className="ml-1 text-xs font-normal text-zinc-400">
-                ({activeCount} in this view)
-              </span>
-            </p>
           </div>
         </div>
       </div>

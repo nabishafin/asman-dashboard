@@ -186,47 +186,24 @@ function MapPanel({ selectedId, onSelect }) {
   }))
 
   return (
-    <GoogleMapView markers={markers} zoom={5} selectedId={selectedId} onMarkerClick={onSelect}>
-      {/* bottom overlay row */}
-      <div className="absolute inset-x-4 bottom-4 flex flex-wrap items-end justify-between gap-2">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="flex items-center gap-1.5 rounded-lg bg-zinc-900/90 px-3 py-2 text-xs font-semibold text-white backdrop-blur">
-            <Icon name="broadcast" size={13} />
-            Real-time Feed
-          </span>
-          <span className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-zinc-700 shadow-md">
-            <Icon name="bolt" size={13} className="text-brand" />
-            101.5ms <span className="font-normal text-zinc-400">Latency</span>
-          </span>
-        </div>
-
-        <div className="rounded-lg bg-white px-4 py-3 text-xs shadow-md">
-          <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-zinc-400">
-            Live Unit Legend
-          </p>
-          <div className="flex flex-col gap-1.5">
-            <span className="flex items-center justify-between gap-6 font-semibold text-zinc-700">
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-red-500" /> SOS Critical
-              </span>
-              03
-            </span>
-            <span className="flex items-center justify-between gap-6 font-semibold text-zinc-700">
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-blue-500" /> Attorney En Route
-              </span>
-              12
-            </span>
-            <span className="flex items-center justify-between gap-6 font-semibold text-zinc-700">
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-green-500" /> Active Drivers
-              </span>
-              842
-            </span>
-          </div>
-        </div>
+    <div className="flex h-full flex-col rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
+      <div>
+        <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
+          Intelligence Deployment
+        </h3>
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+          Real-time geospatial asset tracking
+        </p>
       </div>
-    </GoogleMapView>
+
+      <GoogleMapView
+        className="mt-4 flex-1"
+        markers={markers}
+        zoom={5}
+        selectedId={selectedId}
+        onMarkerClick={onSelect}
+      />
+    </div>
   )
 }
 

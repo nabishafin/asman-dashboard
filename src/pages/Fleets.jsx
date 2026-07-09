@@ -12,20 +12,17 @@ const ICON_TONES = {
 }
 
 function PartnerCard({ fleet, onManage }) {
-  const compliant = fleet.safetyStatus === 'compliant'
   return (
     <div className="flex flex-col rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <span
-            className={`grid h-11 w-11 flex-shrink-0 place-items-center rounded-xl ${ICON_TONES[fleet.iconTone]}`}
-          >
-            <Icon name={fleet.icon} size={18} />
-          </span>
-          <p className="font-bold text-zinc-900 dark:text-zinc-50">
-            {fleet.name}
-          </p>
-        </div>
+      <div className="flex items-center gap-3">
+        <span
+          className={`grid h-11 w-11 flex-shrink-0 place-items-center rounded-xl ${ICON_TONES[fleet.iconTone]}`}
+        >
+          <Icon name={fleet.icon} size={18} />
+        </span>
+        <p className="font-bold text-zinc-900 dark:text-zinc-50">
+          {fleet.name}
+        </p>
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-3">
@@ -47,39 +44,12 @@ function PartnerCard({ fleet, onManage }) {
         </div>
       </div>
 
-      <div className="mt-4 border-t border-zinc-100 pt-3 dark:border-zinc-800">
-        <p
-          className={
-            'flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide ' +
-            (compliant ? 'text-green-600 dark:text-green-400' : 'text-red-500')
-          }
-        >
-          <span
-            className={`h-1.5 w-1.5 rounded-full ${compliant ? 'bg-green-500' : 'bg-red-500'}`}
-          />
-          Safety Status: {compliant ? 'Compliant' : 'Non-Compliant'}
-        </p>
-        {fleet.safetyNote && (
-          <p className="mt-0.5 text-xs text-red-500">{fleet.safetyNote}</p>
-        )}
-      </div>
-
-      <div className="mt-4 flex items-center justify-between border-t border-zinc-100 pt-3 dark:border-zinc-800">
-        <div>
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
-            Monthly Rev
-          </p>
-          <p className="font-bold text-zinc-900 dark:text-zinc-50">
-            {fleet.monthlyRev}
-          </p>
-        </div>
-        <button
-          onClick={() => onManage(fleet)}
-          className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
-        >
-          Manage
-        </button>
-      </div>
+      <button
+        onClick={() => onManage(fleet)}
+        className="mt-4 self-start rounded-lg bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
+      >
+        Manage
+      </button>
     </div>
   )
 }

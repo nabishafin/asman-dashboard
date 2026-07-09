@@ -15,13 +15,13 @@ import DetentionCenter from './pages/DetentionCenter.jsx'
 import VehicleDetail from './pages/VehicleDetail.jsx'
 import AttorneyProfile from './pages/AttorneyProfile.jsx'
 import Subscription from './pages/Subscription.jsx'
-import AllDrivers from './pages/AllDrivers.jsx'
+// Super Admin Drivers page temporarily disabled (kept for later re-enable)
+// import AllDrivers from './pages/AllDrivers.jsx'
 import CaseTracker from './pages/CaseTracker.jsx'
 import SosIncidents from './pages/SosIncidents.jsx'
-import Analytics from './pages/Analytics.jsx'
 import PartnerOnboarding from './pages/PartnerOnboarding.jsx'
-import AdminDriverProfile from './pages/AdminDriverProfile.jsx'
-import CaseTrackerAttorneyProfile from './pages/CaseTrackerAttorneyProfile.jsx'
+// import AdminDriverProfile from './pages/AdminDriverProfile.jsx'
+import CaseDetail from './pages/CaseDetail.jsx'
 import ManageSubscriptionPlans from './pages/ManageSubscriptionPlans.jsx'
 
 export default function App() {
@@ -46,12 +46,13 @@ export default function App() {
             <Route path="/fleets/onboard" element={<PartnerOnboarding />} />
             <Route path="/users" element={<Users />} />
             <Route path="/settings" element={<Settings />} />
+            {/* Super Admin Drivers page temporarily disabled
             <Route path="/all-drivers" element={<AllDrivers />} />
             <Route path="/all-drivers/:driverId" element={<AdminDriverProfile />} />
+            */}
             <Route path="/case-tracker" element={<CaseTracker />} />
-            <Route path="/case-tracker/:attorneyId" element={<CaseTrackerAttorneyProfile />} />
+            <Route path="/case-tracker/:caseId" element={<CaseDetail />} />
             <Route path="/sos-incidents" element={<SosIncidents />} />
-            <Route path="/analytics" element={<Analytics />} />
             <Route path="/subscription/plans" element={<ManageSubscriptionPlans />} />
 
             {/* Fleet Owner only */}

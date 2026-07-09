@@ -38,6 +38,7 @@ const SUBSCRIBERS = [
     plan: 'Enterprise',
     status: 'active',
     cycle: 'Annual',
+    amount: '$12,400',
   },
   {
     id: 's2',
@@ -47,6 +48,7 @@ const SUBSCRIBERS = [
     plan: 'Professional',
     status: 'active',
     cycle: 'Monthly',
+    amount: '$249',
   },
   {
     id: 's3',
@@ -56,6 +58,7 @@ const SUBSCRIBERS = [
     plan: 'Basic',
     status: 'past_due',
     cycle: 'Monthly',
+    amount: '$99',
   },
   {
     id: 's4',
@@ -65,6 +68,7 @@ const SUBSCRIBERS = [
     plan: 'Professional',
     status: 'active',
     cycle: 'Monthly',
+    amount: '$249',
   },
 ]
 
@@ -152,6 +156,12 @@ export default function SuperAdminSubscription() {
                 <th className="pb-3 text-left text-xs font-semibold uppercase tracking-wide text-zinc-400">
                   Cycle
                 </th>
+                <th className="pb-3 text-left text-xs font-semibold uppercase tracking-wide text-zinc-400">
+                  Amount
+                </th>
+                <th className="pb-3 text-left text-xs font-semibold uppercase tracking-wide text-zinc-400">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -177,6 +187,14 @@ export default function SuperAdminSubscription() {
                     </span>
                   </td>
                   <td className="py-3 text-zinc-600 dark:text-zinc-300">{s.cycle}</td>
+                  <td className="py-3 font-semibold text-zinc-900 dark:text-zinc-50">
+                    {s.amount}
+                  </td>
+                  <td className="py-3">
+                    <button className="grid h-8 w-8 place-items-center rounded-lg text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800">
+                      <Icon name="moreVertical" size={16} />
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

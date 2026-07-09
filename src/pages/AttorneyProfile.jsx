@@ -1,11 +1,11 @@
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { attorneyNetwork } from '../data/mockData.js'
+import { attorneyAdmin } from '../data/mockData.js'
 import Icon from '../components/Icon.jsx'
 
 export default function AttorneyProfile() {
   const { attorneyId } = useParams()
   const navigate = useNavigate()
-  const a = attorneyNetwork.find((x) => x.id === attorneyId)
+  const a = attorneyAdmin.find((x) => x.id === attorneyId)
 
   if (!a) {
     return (
@@ -17,7 +17,7 @@ export default function AttorneyProfile() {
           onClick={() => navigate('/attorneys')}
           className="w-fit text-sm font-semibold text-brand hover:underline dark:text-brand-dark"
         >
-          Back to Directory
+          Back to Attorney Network
         </button>
       </div>
     )
@@ -26,48 +26,50 @@ export default function AttorneyProfile() {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-center gap-1.5 text-sm">
-        <span className="text-zinc-400">Network</span>
+        <span className="text-zinc-400">Admin</span>
         <Icon name="chevronRight" size={14} className="text-zinc-300" />
         <Link
           to="/attorneys"
-          className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+          className="font-semibold text-brand hover:underline dark:text-brand-dark"
         >
-          Directory
+          Attorney Network
         </Link>
-        <Icon name="chevronRight" size={14} className="text-zinc-300" />
-        <span className="font-semibold text-brand dark:text-brand-dark">
-          {a.name}
-        </span>
       </div>
 
       {/* header */}
       <div className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="flex flex-wrap items-start gap-4">
-          <img
-            src={a.photo}
-            alt={a.name}
-            className="h-20 w-20 rounded-xl object-cover"
-          />
-          <div className="flex-1">
-            <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-                {a.name}
-              </h1>
-              <span className="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">
-                {a.contactBadge}
-              </span>
-            </div>
-            <div className="mt-2 flex flex-wrap gap-x-6 gap-y-1 text-sm text-zinc-500 dark:text-zinc-400">
-              <span className="flex items-center gap-1.5">
-                <Icon name="mail" size={14} />
-                {a.email}
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Icon name="phone" size={14} />
-                {a.phone}
-              </span>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="flex flex-wrap items-start gap-4">
+            <img
+              src={a.photo}
+              alt={a.name}
+              className="h-20 w-20 rounded-xl object-cover"
+            />
+            <div>
+              <div className="flex flex-wrap items-center gap-3">
+                <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
+                  {a.name}
+                </h1>
+                <span className="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">
+                  {a.contactBadge}
+                </span>
+              </div>
+              <div className="mt-2 flex flex-wrap gap-x-6 gap-y-1 text-sm text-zinc-500 dark:text-zinc-400">
+                <span className="flex items-center gap-1.5">
+                  <Icon name="mail" size={14} />
+                  {a.email}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Icon name="phone" size={14} />
+                  {a.phone}
+                </span>
+              </div>
             </div>
           </div>
+          <button className="flex flex-shrink-0 items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900">
+            <Icon name="edit" size={14} />
+            Edit Profile
+          </button>
         </div>
       </div>
 
@@ -99,21 +101,21 @@ export default function AttorneyProfile() {
         </div>
         <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
-            Case Volume
+            Habeas Corpus Case Volume
           </p>
           <p className="mt-1 font-bold text-zinc-900 dark:text-zinc-50">
             {a.caseVolume.total.toLocaleString()} Total
           </p>
           <p className="mt-1 text-[11px] text-zinc-400">
-            General: {a.caseVolume.general} · Internal: {a.caseVolume.internal}
+            General: {a.caseVolume.general} | Internal: {a.caseVolume.internal}
           </p>
         </div>
         <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
-            Win Rate
+            Habeas Corpus Win Rate
           </p>
           <p className="mt-1 font-bold text-zinc-900 dark:text-zinc-50">
-            {a.winRate}%
+            {a.habeasWinRate}%
           </p>
         </div>
       </div>
