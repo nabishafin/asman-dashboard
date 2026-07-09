@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useFleets } from '../data/FleetsContext.jsx'
 import Icon from '../components/Icon.jsx'
 
 function SectionLabel({ icon, children }) {
@@ -19,10 +20,41 @@ const fieldLabel = 'block text-xs font-medium text-zinc-500 dark:text-zinc-400'
 const fieldInput =
   'mt-1.5 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 outline-none placeholder:text-zinc-400 focus:border-brand focus:bg-white focus:ring-2 focus:ring-brand/30 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50'
 
+// Pull a plain size value ("1,250") out of a stored display string like
+// "1,250 Vehicles" so the form input round-trips cleanly on edit.
+function sizeFromPartner(p) {
+  if (p?.sizeInput != null) return p.sizeInput
+  const m = (p?.fleetSize || p?.activeDrivers || '').match(/[\d,]+\+?/)
+  return m ? m[0] : ''
+}
+
+function initialForm(existing) {
+  return {
+    name: existing?.name || '',
+    hqLocation: existing?.hqLocation || 'Select Region',
+    subscription: existing?.subscription || 'Enterprise',
+    sizeInput: sizeFromPartner(existing),
+    operationalRegions: existing?.operationalRegions || 'Continental US',
+    contactName: existing?.contact?.name || '',
+    contactEmail: existing?.contact?.email || '',
+    contactPhone: existing?.contact?.phone || '',
+  }
+}
+
 export default function PartnerOnboarding() {
   const navigate = useNavigate()
-  const [routes, setRoutes] = useState(['Midwest', 'East Coast'])
+  const [searchParams] = useSearchParams()
+  const { partners, addPartner, updatePartner } = useFleets()
+
+  const editId = searchParams.get('id')
+  const existing = editId ? partners.find((p) => p.id === editId) : null
+  const isEdit = !!existing
+
+  const [form, setForm] = useState(() => initialForm(existing))
+  const [routes, setRoutes] = useState(existing?.routes || ['Midwest', 'East Coast'])
   const [routeInput, setRouteInput] = useState('')
+
+  const setField = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }))
 
   const addRoute = () => {
     const val = routeInput.trim()
@@ -34,6 +66,40 @@ export default function PartnerOnboarding() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+
+    const size = form.sizeInput.trim()
+    const shared = {
+      name: form.name.trim() || 'Unnamed Partner',
+      subscription: form.subscription,
+      activeDrivers: size ? `${size} Units` : '—',
+      fleetSize: size ? `${size} Vehicles` : '—',
+      activeRoutes: `${routes.length} Route${routes.length === 1 ? '' : 's'}`,
+      // round-trip helpers so a subsequent edit re-fills these fields
+      hqLocation: form.hqLocation,
+      operationalRegions: form.operationalRegions,
+      sizeInput: size,
+      routes,
+      contact: {
+        name: form.contactName.trim(),
+        email: form.contactEmail.trim(),
+        phone: form.contactPhone.trim(),
+      },
+    }
+
+    if (isEdit) {
+      updatePartner(existing.id, shared)
+    } else {
+      addPartner({
+        id: `fp-${Date.now()}`,
+        iconTone: 'blue',
+        icon: 'truck',
+        safetyStatus: 'compliant',
+        monthlyRev: '$0',
+        fleetIdCode: `#NEW-${String(Date.now()).slice(-3)}-X`,
+        managers: '1 Active',
+        ...shared,
+      })
+    }
     navigate('/fleets')
   }
 
@@ -41,10 +107,12 @@ export default function PartnerOnboarding() {
     <div className="flex flex-col gap-5">
       <div>
         <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-          Partner Onboarding
+          {isEdit ? 'Manage Partner' : 'Partner Onboarding'}
         </h1>
         <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          Establish institutional logistics partnership.
+          {isEdit
+            ? `Update institutional details for ${existing.name}.`
+            : 'Establish institutional logistics partnership.'}
         </p>
       </div>
 
@@ -60,17 +128,34 @@ export default function PartnerOnboarding() {
               <div>
                 <label className={fieldLabel}>Legal Company Name</label>
                 <input
+                  value={form.name}
+                  onChange={setField('name')}
                   placeholder="e.g. Atlas Logistics Group"
                   className={fieldInput}
                 />
               </div>
               <div>
                 <label className={fieldLabel}>HQ Location</label>
-                <select className={fieldInput}>
+                <select
+                  value={form.hqLocation}
+                  onChange={setField('hqLocation')}
+                  className={fieldInput}
+                >
                   <option>Select Region</option>
                   <option>Continental US</option>
                   <option>Canada</option>
                   <option>EU</option>
+                </select>
+              </div>
+              <div>
+                <label className={fieldLabel}>Subscription Tier</label>
+                <select
+                  value={form.subscription}
+                  onChange={setField('subscription')}
+                  className={fieldInput}
+                >
+                  <option>Enterprise</option>
+                  <option>Basic</option>
                 </select>
               </div>
             </div>
@@ -82,11 +167,20 @@ export default function PartnerOnboarding() {
             <div className="flex flex-col gap-4">
               <div>
                 <label className={fieldLabel}>Active Fleet Size</label>
-                <input placeholder="50+" className={fieldInput} />
+                <input
+                  value={form.sizeInput}
+                  onChange={setField('sizeInput')}
+                  placeholder="50+"
+                  className={fieldInput}
+                />
               </div>
               <div>
                 <label className={fieldLabel}>Operational Regions</label>
-                <select className={fieldInput}>
+                <select
+                  value={form.operationalRegions}
+                  onChange={setField('operationalRegions')}
+                  className={fieldInput}
+                >
                   <option>Continental US</option>
                   <option>North America</option>
                   <option>Global</option>
@@ -134,12 +228,19 @@ export default function PartnerOnboarding() {
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
               <label className={fieldLabel}>Full Name</label>
-              <input placeholder="John Doe" className={fieldInput} />
+              <input
+                value={form.contactName}
+                onChange={setField('contactName')}
+                placeholder="John Doe"
+                className={fieldInput}
+              />
             </div>
             <div>
               <label className={fieldLabel}>Institutional Email</label>
               <input
                 type="email"
+                value={form.contactEmail}
+                onChange={setField('contactEmail')}
                 placeholder="john.doe@company.com"
                 className={fieldInput}
               />
@@ -148,6 +249,8 @@ export default function PartnerOnboarding() {
               <label className={fieldLabel}>Direct Line</label>
               <input
                 type="tel"
+                value={form.contactPhone}
+                onChange={setField('contactPhone')}
                 placeholder="+1 (555) 000-0000"
                 className={fieldInput}
               />
@@ -188,13 +291,13 @@ export default function PartnerOnboarding() {
             onClick={() => navigate('/fleets')}
             className="text-sm font-semibold text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
           >
-            Save Draft
+            Cancel
           </button>
           <button
             type="submit"
             className="rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
           >
-            Approve
+            {isEdit ? 'Save Changes' : 'Approve'}
           </button>
         </div>
       </form>

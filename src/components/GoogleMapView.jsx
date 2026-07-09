@@ -14,6 +14,22 @@ const MARKER_COLORS = {
   dark: { background: '#18181b', borderColor: '#000000', glyphColor: '#a1a1aa' },
 }
 
+// Filled car glyph used for badge-style map markers (reads clearly at small
+// sizes, unlike the thin stroke icon). Inherits color via currentColor.
+function CarGlyph({ size = 20 }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z" />
+    </svg>
+  )
+}
+
 function FitBoundsToMarkers({ markers }) {
   const map = useMap()
 
@@ -31,6 +47,7 @@ export default function GoogleMapView({
   markers = [],
   center,
   zoom = 6,
+  fitBounds = true,
   selectedId,
   onMarkerClick,
   className = '',
@@ -68,7 +85,7 @@ export default function GoogleMapView({
           disableDefaultUI
           style={{ width: '100%', height: '100%' }}
         >
-          <FitBoundsToMarkers markers={markers} />
+          {fitBounds && <FitBoundsToMarkers markers={markers} />}
           {markers.map((marker) => (
             <AdvancedMarker
               key={marker.id}
@@ -76,15 +93,31 @@ export default function GoogleMapView({
               onClick={() => onMarkerClick?.(marker.id)}
             >
               {marker.icon ? (
-                <span
-                  className="grid h-8 w-8 place-items-center rounded-full border-2 border-white text-white shadow-md transition-transform"
-                  style={{
-                    background: (MARKER_COLORS[marker.color] ?? MARKER_COLORS.brand).background,
-                    transform: selectedId === marker.id ? 'scale(1.25)' : undefined,
-                  }}
-                >
-                  <Icon name={marker.icon} size={15} />
-                </span>
+                // "badge" style: light rounded-square background with a
+                // colored icon (matches the app-icon look). Default style is a
+                // solid colored circle with a white icon.
+                marker.iconStyle === 'badge' ? (
+                  <span
+                    className="grid h-9 w-9 place-items-center rounded-2xl border-2 bg-white shadow-md transition-transform dark:bg-white"
+                    style={{
+                      color: (MARKER_COLORS[marker.color] ?? MARKER_COLORS.brand).background,
+                      borderColor: (MARKER_COLORS[marker.color] ?? MARKER_COLORS.brand).background,
+                      transform: selectedId === marker.id ? 'scale(1.25)' : undefined,
+                    }}
+                  >
+                    {marker.icon === 'car' ? <CarGlyph size={20} /> : <Icon name={marker.icon} size={18} />}
+                  </span>
+                ) : (
+                  <span
+                    className="grid h-8 w-8 place-items-center rounded-full border-2 border-white text-white shadow-md transition-transform"
+                    style={{
+                      background: (MARKER_COLORS[marker.color] ?? MARKER_COLORS.brand).background,
+                      transform: selectedId === marker.id ? 'scale(1.25)' : undefined,
+                    }}
+                  >
+                    <Icon name={marker.icon} size={15} />
+                  </span>
+                )
               ) : (
                 <Pin
                   {...(MARKER_COLORS[marker.color] ?? MARKER_COLORS.brand)}

@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './auth/AuthContext.jsx'
+import { FleetsProvider } from './data/FleetsContext.jsx'
 import RequireAuth from './components/RequireAuth.jsx'
 import Layout from './components/Layout.jsx'
 import Login from './pages/Login.jsx'
@@ -27,6 +28,7 @@ import ManageSubscriptionPlans from './pages/ManageSubscriptionPlans.jsx'
 export default function App() {
   return (
     <AuthProvider>
+      <FleetsProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
@@ -69,6 +71,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
+      </FleetsProvider>
     </AuthProvider>
   )
 }

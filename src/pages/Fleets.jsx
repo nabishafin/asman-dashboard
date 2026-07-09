@@ -1,8 +1,6 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { fleetPartners } from '../data/mockData.js'
+import { useFleets } from '../data/FleetsContext.jsx'
 import Icon from '../components/Icon.jsx'
-import FleetDetailModal from '../components/FleetDetailModal.jsx'
 
 const ICON_TONES = {
   blue: 'bg-blue-50 text-blue-600',
@@ -56,7 +54,7 @@ function PartnerCard({ fleet, onManage }) {
 
 export default function Fleets() {
   const navigate = useNavigate()
-  const [selectedFleet, setSelectedFleet] = useState(null)
+  const { partners } = useFleets()
 
   return (
     <div className="flex flex-col gap-5">
@@ -118,17 +116,15 @@ export default function Fleets() {
       </div>
 
       {/* partner grid */}
-      <div className="grid gap-4 sm:grid-cols-2">
-        {fleetPartners.map((fleet) => (
-          <PartnerCard key={fleet.id} fleet={fleet} onManage={setSelectedFleet} />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {partners.map((fleet) => (
+          <PartnerCard
+            key={fleet.id}
+            fleet={fleet}
+            onManage={(f) => navigate(`/fleets/onboard?id=${f.id}`)}
+          />
         ))}
       </div>
-
-      <FleetDetailModal
-        open={!!selectedFleet}
-        fleet={selectedFleet}
-        onClose={() => setSelectedFleet(null)}
-      />
     </div>
   )
 }

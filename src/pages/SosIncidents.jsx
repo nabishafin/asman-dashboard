@@ -171,18 +171,17 @@ function QueueCard({ incident, active, onClick }) {
   )
 }
 
-const SOS_MARKER_COLOR = {
-  active: 'red',
-  dispatching: 'blue',
-  resolved: 'green',
-}
+// Continental US default view.
+const US_CENTER = { lat: 39.8283, lng: -98.5795 }
 
 function MapPanel({ selectedId, onSelect }) {
   const markers = SOS_QUEUE.filter((i) => i.coords).map((i) => ({
     id: i.id,
     lat: i.coords.lat,
     lng: i.coords.lng,
-    color: SOS_MARKER_COLOR[i.status] ?? 'brand',
+    color: 'red',
+    icon: 'car',
+    iconStyle: 'badge',
   }))
 
   return (
@@ -199,7 +198,9 @@ function MapPanel({ selectedId, onSelect }) {
       <GoogleMapView
         className="mt-4 flex-1"
         markers={markers}
-        zoom={5}
+        center={US_CENTER}
+        zoom={4}
+        fitBounds={false}
         selectedId={selectedId}
         onMarkerClick={onSelect}
       />
