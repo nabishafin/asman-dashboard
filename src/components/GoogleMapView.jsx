@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { APIProvider, Map, AdvancedMarker, Pin, useMap } from '@vis.gl/react-google-maps'
+import Icon from './Icon.jsx'
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 
@@ -8,6 +9,8 @@ const MARKER_COLORS = {
   blue: { background: '#2563eb', borderColor: '#1e40af', glyphColor: '#bfdbfe' },
   green: { background: '#16a34a', borderColor: '#166534', glyphColor: '#bbf7d0' },
   brand: { background: '#0f2a3d', borderColor: '#0a1c29', glyphColor: '#9fd7ff' },
+  purple: { background: '#7c3aed', borderColor: '#5b21b6', glyphColor: '#ddd6fe' },
+  dark: { background: '#18181b', borderColor: '#000000', glyphColor: '#a1a1aa' },
 }
 
 function FitBoundsToMarkers({ markers }) {
@@ -71,10 +74,22 @@ export default function GoogleMapView({
               position={{ lat: marker.lat, lng: marker.lng }}
               onClick={() => onMarkerClick?.(marker.id)}
             >
-              <Pin
-                {...(MARKER_COLORS[marker.color] ?? MARKER_COLORS.brand)}
-                scale={selectedId === marker.id ? 1.3 : 1}
-              />
+              {marker.icon ? (
+                <span
+                  className="grid h-8 w-8 place-items-center rounded-full border-2 border-white text-white shadow-md transition-transform"
+                  style={{
+                    background: (MARKER_COLORS[marker.color] ?? MARKER_COLORS.brand).background,
+                    transform: selectedId === marker.id ? 'scale(1.25)' : undefined,
+                  }}
+                >
+                  <Icon name={marker.icon} size={15} />
+                </span>
+              ) : (
+                <Pin
+                  {...(MARKER_COLORS[marker.color] ?? MARKER_COLORS.brand)}
+                  scale={selectedId === marker.id ? 1.3 : 1}
+                />
+              )}
             </AdvancedMarker>
           ))}
         </Map>

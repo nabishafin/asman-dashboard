@@ -1,6 +1,17 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { activeUnits } from '../data/mockData.js'
 import Icon from '../components/Icon.jsx'
+import GoogleMapView from '../components/GoogleMapView.jsx'
+
+// Approximate coordinates for the origin/destination cities used in mock transit data.
+const CITY_COORDS = {
+  'Dallas, TX': { lat: 32.7767, lng: -96.797 },
+  'Phoenix, AZ': { lat: 33.4484, lng: -112.074 },
+  'Austin, TX': { lat: 30.2672, lng: -97.7431 },
+  'Houston, TX': { lat: 29.7604, lng: -95.3698 },
+  'El Paso, TX': { lat: 31.7619, lng: -106.485 },
+  'Tucson, AZ': { lat: 32.2226, lng: -110.9747 },
+}
 
 export default function VehicleDetail() {
   const { unitId } = useParams()
@@ -94,37 +105,29 @@ export default function VehicleDetail() {
             </p>
           </div>
 
-          <div className="relative h-64 overflow-hidden rounded-xl border border-zinc-200 bg-[#e9ebee] dark:border-zinc-800">
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage:
-                  'repeating-radial-gradient(circle at 50% 55%, transparent 0 44px, #d3d7dc 45px, transparent 46px), ' +
-                  'repeating-conic-gradient(from 0deg at 50% 55%, transparent 0deg 14.5deg, #d3d7dc 14.5deg 15deg)',
-              }}
-            />
-            <svg
-              className="absolute inset-0 h-full w-full"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
-            >
-              <path
-                d="M 12 75 C 30 60, 35 40, 50 42 S 75 50, 90 20"
-                fill="none"
-                stroke="#4a9cc4"
-                strokeWidth="2"
-                strokeDasharray="6 6"
-                vectorEffect="non-scaling-stroke"
-              />
-            </svg>
-            <span className="absolute left-[12%] top-[75%] h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand ring-4 ring-brand/25" />
-            <span className="absolute left-[90%] top-[20%] h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-500 ring-4 ring-red-500/25" />
-
+          <GoogleMapView
+            className="h-64"
+            zoom={6}
+            markers={[
+              CITY_COORDS[unit.origin] && {
+                id: 'origin',
+                ...CITY_COORDS[unit.origin],
+                color: 'brand',
+                icon: 'pin',
+              },
+              CITY_COORDS[unit.destination] && {
+                id: 'destination',
+                ...CITY_COORDS[unit.destination],
+                color: 'red',
+                icon: 'flag',
+              },
+            ].filter(Boolean)}
+          >
             <span className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 shadow-md">
               <Icon name="pin" size={14} className="text-brand" />
               Current Location: {vehicle.currentLocation}
             </span>
-          </div>
+          </GoogleMapView>
 
           <div className="grid grid-cols-2 gap-4 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
             <div className="flex items-center gap-2.5">

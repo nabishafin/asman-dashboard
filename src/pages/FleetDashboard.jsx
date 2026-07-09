@@ -3,49 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import NotificationsPanel from '../components/NotificationsPanel.jsx'
 import NewDispatchModal from '../components/NewDispatchModal.jsx'
+import GoogleMapView from '../components/GoogleMapView.jsx'
 
 /* ---------------- mock dashboard data ---------------- */
-const STATS = [
-  { key: 'drivers', label: 'Active Drivers', value: '1,248', icon: 'users', accent: 'blue', badge: '+12%' },
-  { key: 'trips', label: 'Active Trips', value: '432', icon: 'send', accent: 'cyan', badge: 'Steady' },
-  { key: 'detention', label: 'Detention Alerts', value: '18', icon: 'clock', accent: 'red', badge: 'Critical' },
-  { key: 'cases', label: 'Active Cases', value: '64', icon: 'folder', accent: 'green', badge: '-5%' },
-  { key: 'risks', label: 'Nearby Risks', value: '3', icon: 'warning', accent: 'gray', badge: null },
-]
-
-const ACCENTS = {
-  blue: {
-    border: 'border-blue-400/60 dark:border-blue-500/40',
-    icon: 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400',
-    badge: 'bg-green-500/15 text-green-600 dark:text-green-400',
-    value: 'text-zinc-900 dark:text-zinc-50',
-  },
-  cyan: {
-    border: 'border-cyan-300/70 dark:border-cyan-400/40',
-    icon: 'bg-cyan-50 text-cyan-600 dark:bg-cyan-500/10 dark:text-cyan-400',
-    badge: 'bg-zinc-500/10 text-zinc-500 dark:text-zinc-400',
-    value: 'text-zinc-900 dark:text-zinc-50',
-  },
-  red: {
-    border: 'border-red-300 dark:border-red-500/40',
-    icon: 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400',
-    badge: 'bg-red-500/15 text-red-600 dark:text-red-400',
-    value: 'text-red-600 dark:text-red-400',
-  },
-  green: {
-    border: 'border-green-300/70 dark:border-green-500/40',
-    icon: 'bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400',
-    badge: 'bg-green-500/15 text-green-600 dark:text-green-400',
-    value: 'text-zinc-900 dark:text-zinc-50',
-  },
-  gray: {
-    border: 'border-zinc-200 dark:border-zinc-700',
-    icon: 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400',
-    badge: 'bg-zinc-500/10 text-zinc-500 dark:text-zinc-400',
-    value: 'text-zinc-900 dark:text-zinc-50',
-  },
-}
-
 const CHART = [
   { day: 'Mon', safe: 42, idle: 10 },
   { day: 'Tue', safe: 55, idle: 14 },
@@ -56,44 +16,7 @@ const CHART = [
   { day: 'Sun', safe: 35, idle: 9 },
 ]
 
-const FEED = [
-  { id: 1, icon: 'warning', tone: 'red', title: 'Overspeeding Alert', unit: 'Unit #802', tags: [{ t: 'REVIEW', k: 'muted' }, { t: 'HIGH', k: 'red' }], time: '10M AGO' },
-  { id: 2, icon: 'pin', tone: 'blue', title: 'Geofence Departure', unit: 'Unit #119 — Port', tags: [{ t: 'AUTO-LOG', k: 'muted' }], time: '55M AGO' },
-  { id: 3, icon: 'check', tone: 'green', title: 'Pre-trip Verified', unit: 'Unit #992', tags: [], time: '1H AGO' },
-  { id: 4, icon: 'bell', tone: 'blue', title: 'Policy Updated', unit: 'Winter safety protocols now active.', tags: [], time: '2H AGO' },
-]
-
-const toneRing = {
-  red: 'bg-red-500/10 text-red-600 dark:text-red-400',
-  blue: 'bg-brand/10 text-brand dark:text-brand-dark',
-  green: 'bg-green-500/10 text-green-600 dark:text-green-400',
-}
-
 /* ---------------- small pieces ---------------- */
-function StatTile({ stat }) {
-  const a = ACCENTS[stat.accent]
-  return (
-    <div
-      className={`flex h-full flex-col rounded-xl border-2 bg-white p-4 shadow-sm dark:bg-zinc-900 ${a.border}`}
-    >
-      <div className="flex items-center justify-between">
-        <span className={`grid h-9 w-9 place-items-center rounded-lg ${a.icon}`}>
-          <Icon name={stat.icon} size={16} />
-        </span>
-        {stat.badge && (
-          <span
-            className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${a.badge}`}
-          >
-            {stat.badge}
-          </span>
-        )}
-      </div>
-      <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">{stat.label}</p>
-      <p className={`mt-1 text-2xl font-bold ${a.value}`}>{stat.value}</p>
-    </div>
-  )
-}
-
 function DriverActivity() {
   const [range, setRange] = useState('Week')
   const max = Math.max(...CHART.map((d) => d.safe + d.idle))
@@ -126,7 +49,7 @@ function DriverActivity() {
         </div>
       </div>
 
-      <div className="mt-8 flex min-h-52 flex-1 items-end gap-4 border-b border-zinc-100 pb-0 dark:border-zinc-800">
+      <div className="mt-8 flex h-52 items-end gap-4 border-b border-zinc-100 pb-0 dark:border-zinc-800">
         {CHART.map((d) => {
           const total = d.safe + d.idle
           const heavy = total / max > 0.7
@@ -158,85 +81,43 @@ function DriverActivity() {
   )
 }
 
-function SafetyFeed() {
-  const tag = {
-    muted: 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400',
-    red: 'bg-red-500/15 text-red-600 dark:text-red-400',
-  }
-  return (
-    <div className="flex h-full flex-col rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
-      <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">Safety Feed</h3>
-      <div className="mt-4 flex flex-col">
-        {FEED.map((f, i) => (
-          <div
-            key={f.id}
-            className={
-              'flex gap-3 py-3 ' +
-              (i < FEED.length - 1
-                ? 'border-b border-zinc-100 dark:border-zinc-800'
-                : '')
-            }
-          >
-            <span
-              className={`mt-0.5 grid h-8 w-8 flex-shrink-0 place-items-center rounded-full ${toneRing[f.tone]}`}
-            >
-              <Icon name={f.icon} size={15} />
-            </span>
-            <div className="min-w-0 flex-1">
-              <div className="flex items-start justify-between gap-2">
-                <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-                  {f.title}
-                </p>
-                <span className="flex-shrink-0 text-[10px] text-zinc-400">
-                  {f.time}
-                </span>
-              </div>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">{f.unit}</p>
-              {f.tags.length > 0 && (
-                <div className="mt-1.5 flex gap-1.5">
-                  {f.tags.map((t) => (
-                    <span
-                      key={t.t}
-                      className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${tag[t.k]}`}
-                    >
-                      {t.t}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
+const ROUTE_MARKERS = [
+  { id: 'sos-1', lat: 31.5493, lng: -99.3312, color: 'red', icon: 'warning' },
+  { id: 'detention-1', lat: 33.5779, lng: -101.8552, color: 'dark', icon: 'building' },
+  { id: 'rest-1', lat: 32.2288, lng: -100.5352, color: 'green', icon: 'pin' },
+  { id: 'driver-1', lat: 31.9686, lng: -99.9018, color: 'green', icon: 'car' },
+  { id: 'truckstop-1', lat: 32.6, lng: -99.4, color: 'purple', icon: 'truck' },
+  { id: 'police-1', lat: 31.2, lng: -99.6, color: 'blue', icon: 'shield' },
+]
+
+const ROUTE_LEGEND = [
+  { label: 'SOS', dot: 'bg-red-500' },
+  { label: 'Detention centers', dot: 'bg-zinc-900' },
+  { label: 'Rest areas', dot: 'bg-green-500' },
+  { label: "Driver's", dot: 'bg-green-500' },
+  { label: 'Truck stops', dot: 'bg-purple-600' },
+  { label: 'police alert points', dot: 'bg-blue-500' },
+]
 
 function RouteIntelligence() {
   const [tab, setTab] = useState('Active Routes')
   const navigate = useNavigate()
-  return (
-    <div className="relative h-96 overflow-hidden rounded-xl border border-zinc-200 bg-[#e9ebee] dark:border-zinc-800">
-      {/* polar / radar grid background */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage:
-            'repeating-radial-gradient(circle at 50% 58%, transparent 0 44px, #d3d7dc 45px, transparent 46px), ' +
-            'repeating-conic-gradient(from 0deg at 50% 58%, transparent 0deg 14.5deg, #d3d7dc 14.5deg 15deg)',
-        }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#e9ebee] via-transparent to-[#e9ebee]/60" />
 
+  const handleMarkerClick = (id) => {
+    if (id === 'detention-1') navigate('/facility/dc-4')
+  }
+
+  return (
+    <div className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
       {/* header */}
-      <div className="relative flex items-start justify-between p-5">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h3 className="font-semibold text-zinc-900">Route Intelligence</h3>
-          <p className="text-xs text-zinc-500">
+          <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">Route Intelligence</h3>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">
             Live tracking of high-risk corridors
           </p>
         </div>
-        <div className="flex rounded-lg bg-white/80 p-1 text-xs shadow-sm backdrop-blur">
+        <div className="flex rounded-lg bg-zinc-100 p-1 text-xs dark:bg-zinc-800">
           {['Active Routes', 'Traffic Heatmap'].map((t) => (
             <button
               key={t}
@@ -245,7 +126,7 @@ function RouteIntelligence() {
                 'rounded-md px-3 py-1.5 font-semibold transition ' +
                 (tab === t
                   ? 'bg-[#0f2a3d] text-white'
-                  : 'text-zinc-500 hover:text-zinc-800')
+                  : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-300')
               }
             >
               {t}
@@ -254,74 +135,30 @@ function RouteIntelligence() {
         </div>
       </div>
 
-      {/* route line */}
-      <svg
-        className="absolute inset-0 h-full w-full"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
+      <GoogleMapView
+        className="mt-4 h-96"
+        zoom={6}
+        markers={ROUTE_MARKERS}
+        onMarkerClick={handleMarkerClick}
       >
-        <path
-          d="M 6 78 C 28 65, 38 45, 58 46 S 84 56, 94 32"
-          fill="none"
-          stroke="#4a9cc4"
-          strokeWidth="2"
-          strokeDasharray="6 6"
-          vectorEffect="non-scaling-stroke"
-        />
-      </svg>
-
-      {/* nodes */}
-      <span className="absolute left-[6%] top-[78%] h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand ring-4 ring-brand/25" />
-      <span className="absolute left-[94%] top-[32%] h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-500 ring-4 ring-red-500/25" />
-
-      <div className="absolute left-[24%] top-[38%] flex -translate-x-1/2 items-center gap-2 rounded-xl bg-white px-3 py-2 shadow-md">
-        <span className="grid h-7 w-7 flex-shrink-0 place-items-center rounded-full bg-green-100 text-green-600">
-          <Icon name="pin" size={14} />
-        </span>
-        <div className="leading-tight">
-          <p className="text-[11px] font-bold tracking-wide text-green-600">
-            HUB DELTA
+        <div className="absolute left-4 top-4 rounded-xl bg-white/95 px-4 py-3 text-xs shadow-md backdrop-blur">
+          <p className="font-bold text-zinc-900">Texas Corridor</p>
+          <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-amber-600">
+            Hot Zone
           </p>
-          <p className="text-[11px] font-medium text-zinc-700">Normal Op</p>
+          <div className="flex flex-col gap-1.5">
+            {ROUTE_LEGEND.map((l) => (
+              <span
+                key={l.label}
+                className="flex items-center gap-1.5 font-medium text-zinc-700"
+              >
+                <span className={`h-2 w-2 flex-shrink-0 rounded-full ${l.dot}`} />
+                {l.label}
+              </span>
+            ))}
+          </div>
         </div>
-      </div>
-
-      <div className="absolute left-[52%] top-[52%] flex -translate-x-1/2 items-center gap-2 rounded-xl bg-white px-3 py-2 shadow-md">
-        <span className="grid h-7 w-7 flex-shrink-0 place-items-center rounded-full bg-[#0f2a3d] text-white">
-          <Icon name="truck" size={14} />
-        </span>
-        <div className="leading-tight">
-          <p className="text-[11px] font-bold tracking-wide text-[#0f2a3d]">
-            VESSEL #TX-9
-          </p>
-          <p className="text-[11px] font-medium text-zinc-700">Heading North</p>
-        </div>
-      </div>
-
-      <button
-        onClick={() => navigate('/facility/dc-4')}
-        className="absolute left-[76%] top-[24%] flex -translate-x-1/2 flex-col items-center gap-1.5 transition hover:scale-105"
-      >
-        <span className="grid h-9 w-9 place-items-center rounded-lg bg-red-600 text-white shadow-md">
-          <Icon name="building" size={16} />
-        </span>
-        <span className="whitespace-nowrap rounded-lg bg-white px-2.5 py-1 text-[11px] font-semibold text-zinc-800 shadow-md">
-          Detention Center
-        </span>
-      </button>
-
-      {/* legend */}
-      <div className="absolute bottom-4 right-4 flex items-center gap-4 rounded-full bg-white px-4 py-2 text-[11px] font-semibold text-zinc-600 shadow-md">
-        <span className="flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full bg-brand" /> MOVING
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full bg-green-500" /> STATIONARY
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full bg-red-500" /> HAZARD
-        </span>
-      </div>
+      </GoogleMapView>
     </div>
   )
 }
@@ -376,20 +213,8 @@ export default function FleetDashboard() {
         onClose={() => setDispatchOpen(false)}
       />
 
-      {/* stat tiles */}
-      <div className="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-3 lg:grid-cols-5">
-        {STATS.map((s) => (
-          <StatTile key={s.key} stat={s} />
-        ))}
-      </div>
-
-      {/* activity + feed */}
-      <div className="grid items-stretch gap-5 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          <DriverActivity />
-        </div>
-        <SafetyFeed />
-      </div>
+      {/* driver activity */}
+      <DriverActivity />
 
       {/* route intelligence */}
       <RouteIntelligence />
