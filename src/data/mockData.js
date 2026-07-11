@@ -223,6 +223,9 @@ export const activeUnits = [
 ]
 
 // Institutional fleet partners for the Company Directory page (Super Admin).
+// `parentOrgId` links a sub-fleet to the parent organization whose
+// subscription it shares — sub-fleets don't carry their own `subscription`
+// value, they inherit the parent's plan/billing (one subscription per org).
 export const fleetPartners = [
   {
     id: 'fp1',
@@ -231,6 +234,7 @@ export const fleetPartners = [
     icon: 'send',
     activeDrivers: '842 Units',
     subscription: 'Enterprise',
+    parentOrgId: null,
     safetyStatus: 'compliant',
     monthlyRev: '$142,500',
     fleetIdCode: '#ATC-992-G',
@@ -239,12 +243,28 @@ export const fleetPartners = [
     managers: '12 Active',
   },
   {
+    id: 'fp1-sw',
+    name: 'Atlas Transcontinental — Southwest Division',
+    iconTone: 'blue',
+    icon: 'send',
+    activeDrivers: '210 Units',
+    subscription: null,
+    parentOrgId: 'fp1',
+    safetyStatus: 'compliant',
+    monthlyRev: '—',
+    fleetIdCode: '#ATC-992-G-SW',
+    fleetSize: '318 Vehicles',
+    activeRoutes: '64 Regional',
+    managers: '3 Active',
+  },
+  {
     id: 'fp2',
     name: 'Nexus Global Fleet',
     iconTone: 'dark',
     icon: 'sync',
     activeDrivers: '1,120 Units',
     subscription: 'Enterprise',
+    parentOrgId: null,
     safetyStatus: 'compliant',
     monthlyRev: '$210,800',
     fleetIdCode: '#NGF-441-K',
@@ -253,12 +273,28 @@ export const fleetPartners = [
     managers: '18 Active',
   },
   {
+    id: 'fp2-eu',
+    name: 'Nexus Global Fleet — European Division',
+    iconTone: 'dark',
+    icon: 'sync',
+    activeDrivers: '265 Units',
+    subscription: null,
+    parentOrgId: 'fp2',
+    safetyStatus: 'compliant',
+    monthlyRev: '—',
+    fleetIdCode: '#NGF-441-K-EU',
+    fleetSize: '390 Vehicles',
+    activeRoutes: '58 Regional',
+    managers: '4 Active',
+  },
+  {
     id: 'fp3',
     name: 'SwiftLogistics Co.',
     iconTone: 'red',
     icon: 'send',
     activeDrivers: '45 Units',
     subscription: 'Basic',
+    parentOrgId: null,
     safetyStatus: 'non_compliant',
     safetyNote: 'Frequent High-Risk Zone Entry',
     monthlyRev: '$12,400',
@@ -274,6 +310,7 @@ export const fleetPartners = [
     icon: 'truck',
     activeDrivers: '38 Units',
     subscription: 'Basic',
+    parentOrgId: null,
     safetyStatus: 'non_compliant',
     safetyNote: 'Overdue Vehicle Inspections',
     monthlyRev: '$9,900',
@@ -603,9 +640,14 @@ export const driversByFleet = (fleetId) => drivers.filter((d) => d.fleetId === f
 export const fleetById = (fleetId) => fleets.find((f) => f.id === fleetId)
 
 // Legal case oversight roster for the Super Admin Case Tracker page.
+// Each case links to a real driverDirectory record via `driverId` — this is
+// the single source of truth for driver identity, so a case's status is
+// always in sync with what shows on that driver's profile (no duplicated,
+// driftable copy of the driver's name/photo).
 export const legalCases = [
   {
     id: 'ASM-88219',
+    driverId: 'dd7',
     stage: 'filed',
     lifecycleStatus: 'active',
     court: 'Federal District 9',
@@ -620,12 +662,8 @@ export const legalCases = [
       { id: 'doc4', name: 'Driver_Statement.pdf', type: 'pdf', date: 'Oct 03', size: '640 KB' },
       { id: 'doc5', name: 'Court_Filing_Receipt.pdf', type: 'pdf', date: 'Oct 01', size: '210 KB' },
     ],
-    driver: {
-      name: 'Marco Rossi',
-      photo: '/driver-diego.jpg',
-      fleetIdCode: '#AS-7729',
-      vehicle: '2024 Heavy Hauler X-9',
-    },
+    // Attorney info is internal to the Super Admin (client team) view only —
+    // fleet managers never see this per the offline-attorney-handling model.
     attorney: {
       name: 'Elena Vance, Esq.',
       photo: '/attorney-eleanor.jpg',
@@ -636,6 +674,7 @@ export const legalCases = [
   },
   {
     id: 'ASM-90114',
+    driverId: 'dd4',
     stage: 'pending',
     lifecycleStatus: 'active',
     court: 'Laredo North Port',
@@ -648,12 +687,6 @@ export const legalCases = [
       { id: 'doc2', name: 'Checkpoint_Log.pdf', type: 'pdf', date: 'Oct 18', size: '780 KB' },
       { id: 'doc3', name: 'Cargo_Inspection_Photos.zip', type: 'zip', date: 'Oct 18', size: '22.6 MB' },
     ],
-    driver: {
-      name: 'Sarah Jenkins',
-      photo: '/driver-sarah.jpg',
-      fleetIdCode: '#AS-6614',
-      vehicle: '2023 Kenworth T680',
-    },
     attorney: {
       name: 'Julius Wright',
       photo: '/attorney-david.jpg',
@@ -664,6 +697,7 @@ export const legalCases = [
   },
   {
     id: 'ASM-77301',
+    driverId: 'dd3',
     stage: 'decision',
     lifecycleStatus: 'active',
     court: 'El Paso Central',
@@ -675,12 +709,6 @@ export const legalCases = [
       { id: 'doc1', name: 'Closing_Argument_Brief.pdf', type: 'pdf', date: 'Oct 14', size: '3.0 MB' },
       { id: 'doc2', name: 'Impoundment_Record.pdf', type: 'pdf', date: 'Oct 08', size: '900 KB' },
     ],
-    driver: {
-      name: 'David Chen',
-      photo: '/driver-james.jpg',
-      fleetIdCode: '#AS-5502',
-      vehicle: '2022 Peterbilt 579',
-    },
     attorney: {
       name: 'Elena Vance, Esq.',
       photo: '/attorney-eleanor.jpg',
@@ -690,3 +718,9 @@ export const legalCases = [
     },
   },
 ]
+
+// Case status for a given driver, derived live from legalCases — this is
+// what "auto-sync to driver profile" means: no separate copy to fall out of
+// sync, just a lookup against the same records the Case Tracker reads.
+export const caseStatusForDriver = (driverId) =>
+  legalCases.filter((c) => c.driverId === driverId)

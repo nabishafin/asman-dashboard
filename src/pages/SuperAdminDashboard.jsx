@@ -2,15 +2,56 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import GoogleMapView from '../components/GoogleMapView.jsx'
+import { DW_FACILITIES, DW_NEWS, dwFacMarkerColor, dwTagColor, dwTagBg } from '../data/detentionWatchData.js'
 
 /* ---------------- mock dashboard data ---------------- */
 const STATS = [
-  { key: 'subs', label: 'Subscribers', value: '12,402', icon: 'creditCard', tone: 'zinc', to: '/users' },
-  { key: 'drivers', label: 'Active Drivers', value: '4,280', icon: 'truck', tone: 'green', to: '/all-drivers' },
-  { key: 'fleets', label: 'Fleets', value: '42', icon: 'clipboard', tone: 'zinc', to: '/fleets' },
-  { key: 'attorneys', label: 'Attorneys', value: '156', icon: 'briefcase', tone: 'zinc', to: '/attorneys' },
-  { key: 'sos', label: 'SOS Today', value: '12', icon: 'sos', tone: 'red', to: '/sos-incidents' },
+  { key: 'subs', label: 'Subscribers', value: '12,402', icon: 'creditCard', accent: 'brand', trend: '+8%', to: '/users' },
+  { key: 'drivers', label: 'Active Drivers', value: '4,280', icon: 'truck', accent: 'green', trend: '+3%', to: '/all-drivers' },
+  { key: 'fleets', label: 'Fleets', value: '42', icon: 'clipboard', accent: 'purple', trend: '+2', to: '/fleets' },
+  { key: 'attorneys', label: 'Attorneys', value: '156', icon: 'briefcase', accent: 'blue', trend: '+5', to: '/attorneys' },
+  { key: 'sos', label: 'SOS Today', value: '12', icon: 'sos', accent: 'red', trend: 'Live', to: '/sos-incidents' },
+  { key: 'detained', label: 'In ICE Detention', value: '60,311', icon: 'building', accent: 'amber', trend: 'Nat’l', to: '/case-tracker' },
 ]
+
+const ACCENTS = {
+  brand: {
+    ring: 'from-brand/60 to-brand/10',
+    icon: 'bg-brand/10 text-brand dark:bg-brand-dark/15 dark:text-brand-dark',
+    value: 'text-zinc-900 dark:text-zinc-50',
+    trend: 'bg-brand/10 text-brand dark:text-brand-dark',
+  },
+  green: {
+    ring: 'from-emerald-500/60 to-emerald-500/10',
+    icon: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400',
+    value: 'text-emerald-600 dark:text-emerald-400',
+    trend: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400',
+  },
+  purple: {
+    ring: 'from-purple-500/60 to-purple-500/10',
+    icon: 'bg-purple-50 text-purple-600 dark:bg-purple-500/10 dark:text-purple-400',
+    value: 'text-zinc-900 dark:text-zinc-50',
+    trend: 'bg-purple-50 text-purple-600 dark:bg-purple-500/10 dark:text-purple-400',
+  },
+  blue: {
+    ring: 'from-blue-500/60 to-blue-500/10',
+    icon: 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400',
+    value: 'text-zinc-900 dark:text-zinc-50',
+    trend: 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400',
+  },
+  red: {
+    ring: 'from-red-500/60 to-red-500/10',
+    icon: 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400',
+    value: 'text-red-600 dark:text-red-400',
+    trend: 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400 animate-pulse',
+  },
+  amber: {
+    ring: 'from-amber-500/60 to-amber-500/10',
+    icon: 'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400',
+    value: 'text-zinc-900 dark:text-zinc-50',
+    trend: 'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400',
+  },
+}
 
 const SOS_ALARMS = [
   {
@@ -61,53 +102,45 @@ const DRIVER_POSITIONS = [
   { id: 2, coords: { lat: 32.7767, lng: -96.797 } }, // Dallas
 ]
 
-const DETENTION_CENTERS = [{ id: 1, coords: { lat: 28.8908, lng: -99.0967 } }] // Pearsall, TX
-
 const REST_AREAS = [{ id: 1, coords: { lat: 30.6744, lng: -101.4849 } }] // I-10 rest stop, Ozona, TX
 
 const TRUCK_STOPS = [{ id: 1, coords: { lat: 29.5738, lng: -98.2211 } }] // I-10 truck stop, Seguin, TX
 
 const MAP_LEGEND = [
   { key: 'sos', label: 'SOS', color: 'bg-red-500' },
-  { key: 'detention', label: 'Detention centers', color: 'bg-zinc-900 dark:bg-zinc-100' },
+  { key: 'critical', label: 'Detention — Critical (1,000+)', color: 'bg-red-600' },
+  { key: 'high', label: 'Detention — High (500–999)', color: 'bg-orange-500' },
+  { key: 'moderate', label: 'Detention — Moderate/Planned', color: 'bg-amber-500' },
   { key: 'rest', label: 'Rest areas', color: 'bg-green-500' },
   { key: 'drivers', label: "Driver's", color: 'bg-green-500' },
   { key: 'truck', label: 'Truck stops', color: 'bg-purple-500' },
   { key: 'police', label: 'Police alert points', color: 'bg-blue-500' },
 ]
 
-const TONE_ICON = {
-  zinc: 'text-brand dark:text-brand-dark',
-  green: 'text-green-500 dark:text-green-400',
-  red: 'text-red-500',
-}
-
 /* ---------------- small pieces ---------------- */
 function StatTile({ stat, onClick }) {
+  const a = ACCENTS[stat.accent]
   return (
     <button
       type="button"
       onClick={onClick}
-      className="group flex flex-col rounded-xl border border-zinc-200 bg-white p-4 text-left transition hover:-translate-y-0.5 hover:border-brand hover:shadow-sm dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-brand-dark"
+      className="group relative flex flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white p-4 text-left shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
     >
+      <span
+        className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${a.ring} opacity-90 transition group-hover:h-1.5`}
+      />
       <div className="flex items-center justify-between">
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
-          {stat.label}
-        </p>
-        <Icon name={stat.icon} size={15} className={TONE_ICON[stat.tone]} />
+        <span className={`grid h-9 w-9 place-items-center rounded-lg transition group-hover:scale-110 ${a.icon}`}>
+          <Icon name={stat.icon} size={16} />
+        </span>
+        <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${a.trend}`}>
+          {stat.trend}
+        </span>
       </div>
-      <p
-        className={
-          'mt-0.5 text-xl font-bold ' +
-          (stat.tone === 'red'
-            ? 'text-red-500'
-            : stat.tone === 'green'
-              ? 'text-green-600 dark:text-green-400'
-              : 'text-zinc-900 dark:text-zinc-50')
-        }
-      >
-        {stat.value}
+      <p className="mt-3 text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
+        {stat.label}
       </p>
+      <p className={`mt-0.5 text-2xl font-extrabold tracking-tight ${a.value}`}>{stat.value}</p>
     </button>
   )
 }
@@ -116,30 +149,42 @@ function IntelligenceMap() {
   const [showLegend, setShowLegend] = useState(true)
 
   return (
-    <div className="flex h-full flex-col rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
-      <div>
-        <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
-          Intelligence Deployment
-        </h3>
-        <p className="text-xs text-zinc-500 dark:text-zinc-400">
-          Real-time geospatial asset tracking
-        </p>
+    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="flex items-center gap-3 border-b border-zinc-100 p-5 pb-4 dark:border-zinc-800">
+        <span className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-xl bg-gradient-to-br from-brand to-brand-dark text-white shadow-md">
+          <Icon name="globe" size={18} />
+        </span>
+        <div>
+          <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
+            Intelligence Deployment
+          </h3>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+            Real-time geospatial asset tracking
+          </p>
+        </div>
       </div>
 
       <GoogleMapView
-        className="mt-4 h-[380px]"
+        className="m-4 h-[380px]"
         zoom={5}
         markers={[
-          ...SOS_ALARMS.map((s) => ({ id: `sos-${s.id}`, ...s.coords, color: 'red' })),
-          ...ENFORCEMENT_ALERTS.map((a) => ({ id: `alert-${a.id}`, ...a.coords, color: 'blue' })),
-          ...DRIVER_POSITIONS.map((d) => ({ id: `driver-${d.id}`, ...d.coords, color: 'green' })),
-          ...DETENTION_CENTERS.map((d) => ({ id: `detention-${d.id}`, ...d.coords, color: 'black' })),
-          ...REST_AREAS.map((r) => ({ id: `rest-${r.id}`, ...r.coords, color: 'green' })),
-          ...TRUCK_STOPS.map((t) => ({ id: `truck-${t.id}`, ...t.coords, color: 'purple' })),
+          ...SOS_ALARMS.map((s) => ({ id: `sos-${s.id}`, ...s.coords, color: 'red', icon: 'warning', pulse: true })),
+          ...ENFORCEMENT_ALERTS.map((a) => ({ id: `alert-${a.id}`, ...a.coords, color: 'blue', icon: 'shield' })),
+          ...DRIVER_POSITIONS.map((d) => ({ id: `driver-${d.id}`, ...d.coords, color: 'green', icon: 'car' })),
+          ...DW_FACILITIES.map((f) => ({
+            id: `fac-${f.id}`,
+            lat: f.lat,
+            lng: f.lng,
+            color: dwFacMarkerColor(f.pop, f.status),
+            icon: 'building',
+            pulse: f.pop >= 1000,
+          })),
+          ...REST_AREAS.map((r) => ({ id: `rest-${r.id}`, ...r.coords, color: 'green', icon: 'pin' })),
+          ...TRUCK_STOPS.map((t) => ({ id: `truck-${t.id}`, ...t.coords, color: 'purple', icon: 'truck' })),
         ]}
       >
         {showLegend && (
-          <div className="absolute left-4 top-4 rounded-lg bg-white px-3 py-2.5 text-xs shadow-md dark:bg-zinc-900">
+          <div className="absolute left-4 top-4 rounded-lg bg-white/95 px-3 py-2.5 text-xs shadow-lg backdrop-blur dark:bg-zinc-900/95">
             <p className="font-bold text-zinc-800 dark:text-zinc-100">
               Texas Corridor
             </p>
@@ -165,7 +210,7 @@ function IntelligenceMap() {
           onClick={() => setShowLegend((v) => !v)}
           title={showLegend ? 'Hide legend' : 'Show legend'}
           className={
-            'absolute bottom-4 right-4 grid h-9 w-9 place-items-center rounded-lg shadow-md transition ' +
+            'absolute bottom-4 right-4 grid h-9 w-9 place-items-center rounded-lg shadow-lg transition ' +
             (showLegend
               ? 'bg-zinc-900 text-white'
               : 'bg-white text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300')
@@ -180,10 +225,14 @@ function IntelligenceMap() {
 
 function ActiveSosAlarms({ onTrack }) {
   return (
-    <div className="rounded-xl border border-red-200 bg-white p-5 dark:border-red-500/30 dark:bg-zinc-900">
+    <div className="relative overflow-hidden rounded-xl border border-red-200 bg-white p-5 shadow-sm dark:border-red-500/30 dark:bg-zinc-900">
+      <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-red-500 to-red-500/20" />
       <div className="flex items-center justify-between gap-2">
-        <p className="flex items-center gap-1.5 font-semibold text-red-600 dark:text-red-400">
-          <Icon name="warning" size={16} />
+        <p className="flex items-center gap-2 font-semibold text-red-600 dark:text-red-400">
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500" />
+          </span>
           Active SOS Alarms
         </p>
         <button
@@ -201,13 +250,13 @@ function ActiveSosAlarms({ onTrack }) {
             key={s.id}
             type="button"
             onClick={onTrack}
-            className="flex flex-col items-start gap-2 rounded-lg border border-zinc-100 p-3 text-left transition hover:border-red-200 hover:bg-red-50/50 dark:border-zinc-800 dark:hover:border-red-500/30 dark:hover:bg-red-500/5"
+            className="flex flex-col items-start gap-2 rounded-lg border border-zinc-100 p-3 text-left transition hover:-translate-y-0.5 hover:border-red-200 hover:bg-red-50/50 hover:shadow-md dark:border-zinc-800 dark:hover:border-red-500/30 dark:hover:bg-red-500/5"
           >
             <div className="flex w-full items-center gap-2.5">
               <img
                 src={s.photo}
                 alt={s.name}
-                className="h-9 w-9 flex-shrink-0 rounded-full object-cover"
+                className="h-9 w-9 flex-shrink-0 rounded-full object-cover ring-2 ring-red-100 dark:ring-red-500/20"
               />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-2">
@@ -231,6 +280,107 @@ function ActiveSosAlarms({ onTrack }) {
   )
 }
 
+function EnforcementAlerts() {
+  return (
+    <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      <p className="flex items-center gap-2 font-semibold text-zinc-900 dark:text-zinc-50">
+        <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand/10 text-brand dark:bg-brand-dark/15 dark:text-brand-dark">
+          <Icon name="pin" size={15} />
+        </span>
+        Enforcement Alerts
+      </p>
+      <div className="mt-3 flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
+        {ENFORCEMENT_ALERTS.map((a) => (
+          <div key={a.id} className="py-2.5 transition hover:pl-1">
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">{a.title}</p>
+              <span className="flex-shrink-0 text-[10px] text-zinc-400">{a.time}</span>
+            </div>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">{a.detail}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// Feed items are keyed by `tag` so this panel is ready to be pointed at a
+// live aggregator/API later — swapping DW_NEWS for a polled data source
+// requires no change to the filtering or rendering logic below.
+function LiveIntelligenceFeed() {
+  const [tagFilter, setTagFilter] = useState('all')
+  const [lastSynced, setLastSynced] = useState(new Date())
+
+  const tags = ['all', ...new Set(DW_NEWS.map((n) => n.tag))]
+  const visible = tagFilter === 'all' ? DW_NEWS : DW_NEWS.filter((n) => n.tag === tagFilter)
+
+  const syncedLabel = lastSynced.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+  })
+
+  return (
+    <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="flex items-start justify-between gap-2">
+        <p className="flex items-center gap-2 font-semibold text-zinc-900 dark:text-zinc-50">
+          <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400">
+            <Icon name="broadcast" size={15} />
+          </span>
+          Live Intelligence Feed
+        </p>
+        <button
+          onClick={() => setLastSynced(new Date())}
+          title="Check for new items"
+          className="flex flex-shrink-0 items-center gap-1.5 rounded-full bg-zinc-100 px-2.5 py-1 text-[10px] font-semibold text-zinc-500 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+          Synced {syncedLabel}
+        </button>
+      </div>
+      <p className="mt-1 text-xs text-zinc-400">National detention &amp; enforcement news · Vera, TRAC, ACLU, Reuters</p>
+
+      <div className="mt-3 flex flex-wrap gap-1.5">
+        {tags.map((t) => (
+          <button
+            key={t}
+            onClick={() => setTagFilter(t)}
+            className={
+              'rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide transition ' +
+              (tagFilter === t
+                ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
+                : 'bg-zinc-100 text-zinc-500 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700')
+            }
+          >
+            {t === 'all' ? 'All' : t}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-3 flex max-h-72 flex-col divide-y divide-zinc-100 overflow-y-auto dark:divide-zinc-800">
+        {visible.map((n) => (
+          <div key={n.head} className="py-2.5 transition hover:pl-1">
+            <span
+              className="rounded px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide"
+              style={{ background: dwTagBg(n.tag), color: dwTagColor(n.tag) }}
+            >
+              {n.lbl}
+            </span>
+            <p className="mt-1.5 text-sm leading-snug text-zinc-800 dark:text-zinc-100">{n.head}</p>
+            <div className="mt-1 flex justify-between text-[11px] text-zinc-400">
+              <span>{n.src}</span>
+              <span>{n.time}</span>
+            </div>
+          </div>
+        ))}
+
+        {visible.length === 0 && (
+          <p className="py-6 text-center text-xs text-zinc-400">No items for this category.</p>
+        )}
+      </div>
+    </div>
+  )
+}
+
 /* ---------------- main ---------------- */
 export default function SuperAdminDashboard() {
   const navigate = useNavigate()
@@ -243,27 +393,39 @@ export default function SuperAdminDashboard() {
 
   return (
     <div className="flex flex-col gap-5">
-      {/* page header */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-            Command Center
-          </h1>
-          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-            Platform-wide operational overview · {today}
-          </p>
-        </div>
-        <span className="flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-700 dark:border-green-500/30 dark:bg-green-500/10 dark:text-green-400">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
+      {/* hero header */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand via-brand to-brand-dark p-6 text-white shadow-lg">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-20"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle at 15% 20%, white 0, transparent 35%), radial-gradient(circle at 85% 80%, white 0, transparent 40%)',
+          }}
+        />
+        <div className="relative flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-4">
+            <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-2xl bg-white/15 backdrop-blur">
+              <Icon name="shield" size={24} />
+            </span>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight">Command Center</h1>
+              <p className="mt-0.5 text-sm text-white/80">
+                Platform-wide operational overview · {today}
+              </p>
+            </div>
+          </div>
+          <span className="flex items-center gap-2 rounded-full border border-white/25 bg-white/15 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-300 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-300" />
+            </span>
+            Live · Systems operational
           </span>
-          Live · Systems operational
-        </span>
+        </div>
       </div>
 
       {/* stat tiles */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         {STATS.map((s) => (
           <StatTile key={s.key} stat={s} onClick={() => navigate(s.to)} />
         ))}
@@ -271,6 +433,11 @@ export default function SuperAdminDashboard() {
 
       <IntelligenceMap />
       <ActiveSosAlarms onTrack={() => navigate('/sos-incidents')} />
+
+      <div className="grid gap-5 lg:grid-cols-2">
+        <EnforcementAlerts />
+        <LiveIntelligenceFeed />
+      </div>
     </div>
   )
 }

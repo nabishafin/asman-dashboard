@@ -1,8 +1,25 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { attorneyAdmin } from '../data/mockData.js'
+import { DW_ATTORNEYS } from '../data/detentionWatchData.js'
 import Icon from '../components/Icon.jsx'
 import OnboardAttorneyModal from '../components/OnboardAttorneyModal.jsx'
+
+// Real, publicly documented HC attorneys (PACER/AILA/CLINIC) — kept distinct
+// from the internal ASMAN roster: no fabricated photo, no fabricated profile
+// page, and not editable via "View Profile" (there's no real bio on file).
+const PUBLIC_RECORD_ATTORNEYS = DW_ATTORNEYS.map((a) => ({
+  id: `dw-${a.id}`,
+  name: a.name,
+  photo: null,
+  firm: a.firm,
+  winRate: a.rate,
+  cases: a.total,
+  languages: [],
+  source: 'public',
+  pacer: a.pacer,
+  specs: a.specs,
+}))
 
 function FilterSelect({ label }) {
   return (
@@ -13,18 +30,45 @@ function FilterSelect({ label }) {
   )
 }
 
+function initials(name) {
+  return name
+    .replace(/^Hon\.\s*/, '')
+    .split(' ')
+    .map((p) => p[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
+}
+
 function AttorneyCard({ a, onRemove }) {
   const navigate = useNavigate()
+  const isPublic = a.source === 'public'
   return (
     <div className="flex flex-col rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
       <div className="flex items-center gap-3">
-        <img
-          src={a.photo}
-          alt={a.name}
-          className="h-12 w-12 flex-shrink-0 rounded-full object-cover"
-        />
-        <div>
-          <p className="font-bold text-zinc-900 dark:text-zinc-50">{a.name}</p>
+        {a.photo ? (
+          <img
+            src={a.photo}
+            alt={a.name}
+            className="h-12 w-12 flex-shrink-0 rounded-full object-cover"
+          />
+        ) : (
+          <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-full bg-brand/10 text-sm font-bold text-brand dark:text-brand-dark">
+            {initials(a.name)}
+          </span>
+        )}
+        <div className="min-w-0">
+          <div className="flex items-center gap-1.5">
+            <p className="truncate font-bold text-zinc-900 dark:text-zinc-50">{a.name}</p>
+            {isPublic && (
+              <span
+                title="Publicly documented (PACER/AILA/CLINIC) — not an ASMAN-managed profile"
+                className="flex-shrink-0 rounded-full bg-teal-500/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-teal-600 dark:text-teal-400"
+              >
+                Public Record
+              </span>
+            )}
+          </div>
           <p className="text-xs text-zinc-400">{a.firm}</p>
         </div>
       </div>
@@ -48,18 +92,28 @@ function AttorneyCard({ a, onRemove }) {
         </div>
       </div>
 
-      <p className="mt-3 flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
-        <Icon name="globe" size={13} className="text-brand dark:text-brand-dark" />
-        {a.languages.join(', ')}
-      </p>
+      {isPublic ? (
+        <p className="mt-3 text-xs text-zinc-500 dark:text-zinc-400">{a.specs}</p>
+      ) : (
+        <p className="mt-3 flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+          <Icon name="globe" size={13} className="text-brand dark:text-brand-dark" />
+          {a.languages.join(', ')}
+        </p>
+      )}
 
       <div className="mt-4 flex gap-2">
-        <button
-          onClick={() => navigate(`/attorneys/${a.id}`)}
-          className="flex-1 rounded-lg bg-zinc-900 py-2 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
-        >
-          View Profile
-        </button>
+        {isPublic ? (
+          <span className="flex flex-1 items-center justify-center rounded-lg bg-zinc-100 py-2 text-xs font-semibold text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+            PACER Ref: {a.pacer}
+          </span>
+        ) : (
+          <button
+            onClick={() => navigate(`/attorneys/${a.id}`)}
+            className="flex-1 rounded-lg bg-zinc-900 py-2 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
+          >
+            View Profile
+          </button>
+        )}
         <button
           onClick={() => onRemove(a.id)}
           className="flex-1 rounded-lg border border-red-200 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50 dark:border-red-500/30 dark:hover:bg-red-500/10"
@@ -72,7 +126,7 @@ function AttorneyCard({ a, onRemove }) {
 }
 
 export default function Attorneys() {
-  const [attorneys, setAttorneys] = useState(attorneyAdmin)
+  const [attorneys, setAttorneys] = useState([...attorneyAdmin, ...PUBLIC_RECORD_ATTORNEYS])
   const [modalOpen, setModalOpen] = useState(false)
 
   const handleRemove = (id) =>

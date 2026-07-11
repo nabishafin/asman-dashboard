@@ -1,7 +1,14 @@
 import { useState } from 'react'
-import { driverDirectory } from '../data/mockData.js'
+import { driverDirectory, caseStatusForDriver } from '../data/mockData.js'
 import Icon from '../components/Icon.jsx'
 import NewDriverModal from '../components/NewDriverModal.jsx'
+
+const CASE_STAGE_STYLES = {
+  filed: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300',
+  pending: 'bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300',
+  decision: 'bg-pink-100 text-pink-700 dark:bg-pink-500/15 dark:text-pink-300',
+}
+const CASE_STAGE_LABELS = { filed: 'Filed', pending: 'Pending', decision: 'Decision' }
 
 const PAGE_SIZE = 4
 
@@ -28,6 +35,8 @@ const STATUS_TEXT_STYLES = {
 }
 
 function DriverDetailPanel({ driver, onClose }) {
+  const cases = caseStatusForDriver(driver.id)
+
   return (
     <div className="relative flex h-full flex-col items-center rounded-xl border border-zinc-200 bg-white p-6 text-center dark:border-zinc-800 dark:bg-zinc-900">
       <button
@@ -103,9 +112,34 @@ function DriverDetailPanel({ driver, onClose }) {
         </div>
       </div>
 
+      {cases.length > 0 && (
+        <div className="mt-5 w-full border-t border-zinc-100 pt-5 text-left dark:border-zinc-800">
+          <p className="mb-3 text-xs font-bold uppercase tracking-wide text-zinc-400">
+            Case Status
+          </p>
+          <div className="flex flex-col gap-2">
+            {cases.map((c) => (
+              <div
+                key={c.id}
+                className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800"
+              >
+                <span className="text-xs font-semibold text-zinc-600 dark:text-zinc-300">
+                  #{c.id}
+                </span>
+                <span
+                  className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${CASE_STAGE_STYLES[c.stage]}`}
+                >
+                  {CASE_STAGE_LABELS[c.stage]}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <button className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-200 py-2.5 text-sm font-semibold text-brand transition hover:bg-brand/5 dark:border-zinc-700 dark:text-brand-dark">
         <Icon name="file" size={15} />
-        View License Document
+        View Documents
       </button>
       <button className="mt-3 w-full rounded-lg border border-zinc-200 py-2.5 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800">
         Edit Profile

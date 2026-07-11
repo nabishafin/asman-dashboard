@@ -18,3 +18,24 @@ body,
 body {
   font-family: var(--font-sans);
 }
+
+/* Used by the Detention Watch intelligence page */
+@keyframes slideUp {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}

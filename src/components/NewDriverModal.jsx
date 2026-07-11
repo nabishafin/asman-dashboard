@@ -118,10 +118,36 @@ export default function NewDriverModal({ open, onClose }) {
             </div>
           </div>
 
-          {/* document upload */}
+          {/* immigration document questionnaire */}
           <div className="border-t border-zinc-100 pt-5 dark:border-zinc-800">
-            <SectionLabel>Document Upload</SectionLabel>
-            <UploadBox label="License Document" hint="PDF, PNG (Max 10MB)" />
+            <SectionLabel>Immigration Documents</SectionLabel>
+            <div className="space-y-5">
+              <div>
+                <label className={fieldLabel}>
+                  Employment Authorization Document (EAD) Number
+                </label>
+                <input placeholder="e.g. EAC-23-901-23456" className={fieldInput} />
+                <div className="mt-1.5">
+                  <UploadBox label="EAD Card" hint="PDF, PNG (Max 10MB)" />
+                </div>
+              </div>
+
+              <div>
+                <label className={fieldLabel}>Notice to Appear (NTA) — A-Number</label>
+                <input placeholder="e.g. A123-456-789" className={fieldInput} />
+                <div className="mt-1.5">
+                  <UploadBox label="Notice to Appear" hint="PDF, PNG (Max 10MB)" />
+                </div>
+              </div>
+
+              <div>
+                <label className={fieldLabel}>I-589 Receipt Number</label>
+                <input placeholder="e.g. YSC-23-901-23456" className={fieldInput} />
+                <div className="mt-1.5">
+                  <UploadBox label="I-589 Receipt Notice" hint="PDF, PNG (Max 10MB)" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

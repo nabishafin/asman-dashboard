@@ -62,11 +62,12 @@ const PATHS = {
   moreVertical: 'M12 5v.01M12 12v.01M12 19v.01',
 }
 
-export default function Icon({ name, size = 18, className }) {
+export default function Icon({ name, size = 18, className, style }) {
   const d = PATHS[name] || PATHS.grid
   return (
     <svg
       className={className}
+      style={style}
       width={size}
       height={size}
       viewBox="0 0 24 24"

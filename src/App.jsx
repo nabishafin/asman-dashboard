@@ -24,6 +24,8 @@ import PartnerOnboarding from './pages/PartnerOnboarding.jsx'
 // import AdminDriverProfile from './pages/AdminDriverProfile.jsx'
 import CaseDetail from './pages/CaseDetail.jsx'
 import ManageSubscriptionPlans from './pages/ManageSubscriptionPlans.jsx'
+import FleetCaseStatus from './pages/FleetCaseStatus.jsx'
+import Templates from './pages/Templates.jsx'
 
 export default function App() {
   return (
@@ -52,6 +54,7 @@ export default function App() {
             <Route path="/all-drivers" element={<AllDrivers />} />
             <Route path="/all-drivers/:driverId" element={<AdminDriverProfile />} />
             */}
+            <Route path="/templates" element={<Templates />} />
             <Route path="/case-tracker" element={<CaseTracker />} />
             <Route path="/case-tracker/:caseId" element={<CaseDetail />} />
             <Route path="/sos-incidents" element={<SosIncidents />} />
@@ -63,6 +66,7 @@ export default function App() {
             <Route path="/drivers" element={<Drivers />} />
             <Route path="/attorneys" element={<Attorneys />} />
             <Route path="/attorneys/:attorneyId" element={<AttorneyProfile />} />
+            <Route path="/case-status" element={<FleetCaseStatus />} />
             <Route path="/facility/dc-4" element={<DetentionCenter />} />
             <Route path="/my-fleet/vehicle/:unitId" element={<VehicleDetail />} />
             <Route path="/subscription" element={<Subscription />} />

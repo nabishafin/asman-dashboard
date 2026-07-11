@@ -1,5 +1,6 @@
 import Icon from '../components/Icon.jsx'
-import TierCard, { TIERS } from '../components/SubscriptionTierCard.jsx'
+import TierCard from '../components/SubscriptionTierCard.jsx'
+import { TIERS } from '../data/subscriptionTiers.js'
 
 export default function FleetSubscription() {
   return (

@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { legalCases } from '../data/mockData.js'
+import { legalCases, driverDirectory } from '../data/mockData.js'
 import Icon from '../components/Icon.jsx'
 
 const LIFECYCLE_STYLES = {
@@ -17,6 +17,7 @@ export default function CaseDetail() {
   const { caseId } = useParams()
   const navigate = useNavigate()
   const c = legalCases.find((x) => x.id === caseId)
+  const driver = c ? driverDirectory.find((d) => d.id === c.driverId) : null
 
   if (!c) {
     return (
@@ -98,24 +99,31 @@ export default function CaseDetail() {
                 Driver Assigned
                 <Icon name="truck" size={16} className="text-zinc-400" />
               </h3>
-              <div className="mt-3 flex items-center gap-3">
-                <img
-                  src={c.driver.photo}
-                  alt={c.driver.name}
-                  className="h-12 w-12 flex-shrink-0 rounded-lg object-cover"
-                />
-                <div>
-                  <p className="font-semibold text-zinc-900 dark:text-zinc-50">
-                    {c.driver.name}
-                  </p>
-                  <p className="text-xs text-zinc-400">
-                    Fleet ID: {c.driver.fleetIdCode}
-                  </p>
-                  <p className="text-xs text-zinc-400">
-                    Vehicle: {c.driver.vehicle}
-                  </p>
-                </div>
-              </div>
+              {driver ? (
+                <Link
+                  to="/drivers"
+                  className="mt-3 flex items-center gap-3 rounded-lg transition hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                >
+                  <img
+                    src={driver.photo}
+                    alt={driver.name}
+                    className="h-12 w-12 flex-shrink-0 rounded-lg object-cover"
+                  />
+                  <div>
+                    <p className="font-semibold text-zinc-900 dark:text-zinc-50">
+                      {driver.name}
+                    </p>
+                    <p className="text-xs text-zinc-400">
+                      Employee ID: {driver.employeeId}
+                    </p>
+                    <p className="text-xs text-zinc-400">
+                      License: {driver.licenseNumber}
+                    </p>
+                  </div>
+                </Link>
+              ) : (
+                <p className="mt-3 text-sm text-zinc-400">No driver linked to this case.</p>
+              )}
             </div>
 
             <div className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
@@ -123,6 +131,9 @@ export default function CaseDetail() {
                 Lead Attorney
                 <Icon name="briefcase" size={16} className="text-zinc-400" />
               </h3>
+              <p className="mt-0.5 text-[11px] text-zinc-400">
+                Handled offline by counsel · internal reference only, not visible to fleet managers
+              </p>
               <div className="mt-3 flex items-center gap-3">
                 <img
                   src={c.attorney.photo}
