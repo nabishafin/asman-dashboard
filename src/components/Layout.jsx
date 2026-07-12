@@ -16,17 +16,17 @@ export default function Layout() {
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-50 dark:bg-zinc-950 md:flex-row">
-      <aside className="flex w-full flex-col gap-6 border-b border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900 md:sticky md:top-0 md:h-screen md:w-[248px] md:flex-shrink-0 md:border-b-0 md:border-r md:py-6">
+      <aside className="flex w-full flex-col gap-6 bg-gradient-to-b from-brand to-brand-dark p-4 shadow-xl md:sticky md:top-0 md:h-screen md:w-[248px] md:flex-shrink-0 md:py-6">
         {/* Brand */}
         <div className="flex items-center gap-2 px-1">
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand text-white">
+          <span className="grid h-8 w-8 place-items-center rounded-lg bg-white/15 text-white backdrop-blur">
             <Icon name="shield" size={18} />
           </span>
           <div className="leading-none">
-            <div className="text-lg font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50">
+            <div className="text-lg font-extrabold tracking-tight text-white">
               ASMAN
             </div>
-            <div className="mt-0.5 text-[10px] font-semibold tracking-[0.18em] text-zinc-400">
+            <div className="mt-0.5 text-[10px] font-semibold tracking-[0.18em] text-white/60">
               ENTERPRISE SAFETY
             </div>
           </div>
@@ -41,8 +41,8 @@ export default function Layout() {
               className={({ isActive }) =>
                 'flex items-center gap-3 rounded-lg px-3 py-2.5 text-[15px] transition-colors ' +
                 (isActive
-                  ? 'bg-brand/10 font-semibold text-brand dark:text-brand-dark'
-                  : 'text-zinc-600 hover:bg-brand/5 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100')
+                  ? 'bg-white font-semibold text-brand shadow-md'
+                  : 'text-white/70 hover:bg-white/10 hover:text-white')
               }
             >
               <Icon name={item.icon} />
@@ -53,7 +53,7 @@ export default function Layout() {
 
         {/* Premium upsell (fleet owner) */}
         {user.role === ROLES.FLEET_OWNER && (
-          <div className="rounded-xl bg-gradient-to-br from-brand to-[#004a66] p-4 text-white">
+          <div className="rounded-xl border border-white/20 bg-white/10 p-4 text-white backdrop-blur">
             <div className="flex items-center gap-2 text-sm font-semibold">
               <Icon name="star" size={16} />
               PREMIUM PLAN
@@ -65,23 +65,23 @@ export default function Layout() {
         )}
 
         {/* User + logout */}
-        <div className="flex flex-col gap-3 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+        <div className="flex flex-col gap-3 border-t border-white/15 pt-4">
           <div className="flex items-center gap-2.5">
-            <div className="grid h-9 w-9 place-items-center rounded-full bg-brand font-bold text-white">
+            <div className="grid h-9 w-9 place-items-center rounded-full bg-white font-bold text-brand">
               {user.name.charAt(0)}
             </div>
             <div className="flex min-w-0 flex-col leading-tight">
-              <strong className="truncate text-sm text-zinc-900 dark:text-zinc-50">
+              <strong className="truncate text-sm text-white">
                 {user.name}
               </strong>
-              <small className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
+              <small className="text-[10px] font-semibold uppercase tracking-wider text-white/60">
                 {ROLE_LABELS[user.role]}
               </small>
             </div>
             <button
               onClick={handleLogout}
               title="Logout"
-              className="ml-auto grid h-8 w-8 place-items-center rounded-lg text-zinc-400 transition-colors hover:bg-brand/5 hover:text-brand"
+              className="ml-auto grid h-8 w-8 place-items-center rounded-lg text-white/70 transition-colors hover:bg-white/10 hover:text-white"
             >
               <Icon name="logout" size={16} />
             </button>

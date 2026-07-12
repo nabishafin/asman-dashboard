@@ -10,65 +10,87 @@ const ICON_TONES = {
   amber: 'bg-amber-50 text-amber-600',
 }
 
+const SAFETY_ACCENT = {
+  compliant: 'from-green-400 to-green-500',
+  non_compliant: 'from-red-400 to-red-500',
+}
+const SAFETY_BADGE = {
+  compliant: 'bg-green-500/15 text-green-600 dark:text-green-400',
+  non_compliant: 'bg-red-500/15 text-red-600 dark:text-red-400',
+}
+const SAFETY_LABEL = { compliant: 'Compliant', non_compliant: 'Non-Compliant' }
+
 function PartnerCard({ fleet, onManage, subFleets = [] }) {
   return (
-    <div className="flex flex-col rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
-      <div className="flex items-center gap-3">
-        <span
-          className={`grid h-11 w-11 flex-shrink-0 place-items-center rounded-xl ${ICON_TONES[fleet.iconTone]}`}
-        >
-          <Icon name={fleet.icon} size={18} />
-        </span>
-        <p className="font-bold text-zinc-900 dark:text-zinc-50">
-          {fleet.name}
-        </p>
-      </div>
+    <div className="group relative flex flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
+      <span className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${SAFETY_ACCENT[fleet.safetyStatus]}`} />
 
-      <div className="mt-4 grid grid-cols-2 gap-3">
-        <div>
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
-            Active Drivers
-          </p>
-          <p className="font-bold text-zinc-900 dark:text-zinc-50">
-            {fleet.activeDrivers}
-          </p>
+      <div className="flex flex-col p-5">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex items-center gap-3">
+            <span
+              className={`grid h-11 w-11 flex-shrink-0 place-items-center rounded-xl ring-4 ring-black/[0.02] transition group-hover:scale-110 ${ICON_TONES[fleet.iconTone]}`}
+            >
+              <Icon name={fleet.icon} size={18} />
+            </span>
+            <p className="font-bold text-zinc-900 dark:text-zinc-50">
+              {fleet.name}
+            </p>
+          </div>
+          <span
+            className={`flex-shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${SAFETY_BADGE[fleet.safetyStatus]}`}
+          >
+            {SAFETY_LABEL[fleet.safetyStatus]}
+          </span>
         </div>
-        <div>
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
-            Subscription
-          </p>
-          <p className="font-bold text-brand dark:text-brand-dark">
-            {fleet.subscription}
-          </p>
-        </div>
-      </div>
 
-      {subFleets.length > 0 && (
-        <div className="mt-4 border-t border-zinc-100 pt-3 dark:border-zinc-800">
-          <p className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
-            Sub-Fleets · Shared Subscription
-          </p>
-          <div className="flex flex-col gap-1.5">
-            {subFleets.map((sf) => (
-              <button
-                key={sf.id}
-                onClick={() => onManage(sf)}
-                className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 text-left transition hover:bg-zinc-100 dark:bg-zinc-800 dark:hover:bg-zinc-700"
-              >
-                <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-200">
-                  {sf.name}
-                </span>
-                <span className="text-[10px] text-zinc-400">{sf.activeDrivers}</span>
-              </button>
-            ))}
+        <div className="mt-4 grid grid-cols-2 gap-3">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+              Active Drivers
+            </p>
+            <p className="font-bold text-zinc-900 dark:text-zinc-50">
+              {fleet.activeDrivers}
+            </p>
+          </div>
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+              Subscription
+            </p>
+            <p className="font-bold text-brand dark:text-brand-dark">
+              {fleet.subscription}
+            </p>
           </div>
         </div>
-      )}
+
+        {subFleets.length > 0 && (
+          <div className="mt-4 border-t border-zinc-100 pt-3 dark:border-zinc-800">
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+              Sub-Fleets · Shared Subscription
+            </p>
+            <div className="flex flex-col gap-1.5">
+              {subFleets.map((sf) => (
+                <button
+                  key={sf.id}
+                  onClick={() => onManage(sf)}
+                  className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 text-left transition hover:bg-zinc-100 dark:bg-zinc-800 dark:hover:bg-zinc-700"
+                >
+                  <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-200">
+                    {sf.name}
+                  </span>
+                  <span className="text-[10px] text-zinc-400">{sf.activeDrivers}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
 
       <button
         onClick={() => onManage(fleet)}
-        className="mt-4 self-start rounded-lg bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
+        className="mt-auto flex items-center justify-center gap-1.5 border-t border-zinc-100 py-3 text-sm font-semibold text-zinc-600 transition hover:bg-zinc-50 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-800"
       >
+        <Icon name="edit" size={14} />
         Manage
       </button>
     </div>
@@ -77,7 +99,9 @@ function PartnerCard({ fleet, onManage, subFleets = [] }) {
 
 function OperatorCard({ corp }) {
   return (
-    <div className="flex flex-col rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900" style={{ borderTopColor: corp.col, borderTopWidth: 3 }}>
+    <div className="group relative flex flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
+      <span className="absolute inset-x-0 top-0 h-1" style={{ background: corp.col }} />
+
       <div className="flex items-start justify-between gap-2">
         <div>
           <p className="font-bold text-zinc-900 dark:text-zinc-50">{corp.name}</p>

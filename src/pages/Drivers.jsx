@@ -33,12 +33,26 @@ const STATUS_TEXT_STYLES = {
   expiring: 'text-red-500',
   pending: 'text-indigo-500',
 }
+const STATUS_ACCENT = {
+  valid: 'from-green-400 to-green-500',
+  expiring: 'from-red-400 to-red-500',
+  pending: 'from-indigo-400 to-indigo-500',
+}
+
+const STAT_TILES = [
+  { key: 'total', label: 'Total Drivers', icon: 'users', tone: 'bg-brand/10 text-brand dark:text-brand-dark' },
+  { key: 'valid', label: 'Valid License', icon: 'check', tone: 'bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400' },
+  { key: 'expiring', label: 'Expiring Soon', icon: 'warning', tone: 'bg-red-50 text-red-500 dark:bg-red-500/10 dark:text-red-400' },
+  { key: 'pending', label: 'Pending', icon: 'clock', tone: 'bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400' },
+]
 
 function DriverDetailPanel({ driver, onClose }) {
   const cases = caseStatusForDriver(driver.id)
 
   return (
-    <div className="relative flex h-full flex-col items-center rounded-xl border border-zinc-200 bg-white p-6 text-center dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="relative flex h-full flex-col items-center overflow-hidden rounded-xl border border-zinc-200 bg-white p-6 text-center shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      <span className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${STATUS_ACCENT[driver.licenseStatus]}`} />
+
       <button
         onClick={onClose}
         className="absolute right-4 top-4 grid h-7 w-7 place-items-center rounded-lg text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800"
@@ -160,31 +174,73 @@ export default function Drivers() {
     page * PAGE_SIZE
   )
 
+  const statValues = {
+    total: driverDirectory.length,
+    valid: driverDirectory.filter((d) => d.licenseStatus === 'valid').length,
+    expiring: driverDirectory.filter((d) => d.licenseStatus === 'expiring').length,
+    pending: driverDirectory.filter((d) => d.licenseStatus === 'pending').length,
+  }
+
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-            Driver Directory
-          </h1>
-          <p className="mt-1 max-w-md text-sm text-zinc-500 dark:text-zinc-400">
-            Manage institutional fleet personnel and onboarding compliance.
-          </p>
+      {/* hero header */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand via-brand to-brand-dark p-6 text-white shadow-lg">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-20"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle at 15% 20%, white 0, transparent 35%), radial-gradient(circle at 85% 80%, white 0, transparent 40%)',
+          }}
+        />
+        <div className="relative flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-4">
+            <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-2xl bg-white/15 backdrop-blur">
+              <Icon name="users" size={24} />
+            </span>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight">Driver Directory</h1>
+              <p className="mt-0.5 text-sm text-white/80">
+                Manage institutional fleet personnel and onboarding compliance.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => setModalOpen(true)}
+            className="flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-brand transition hover:bg-white/90"
+          >
+            <Icon name="userPlus" size={16} /> Add New Driver
+          </button>
         </div>
-        <button
-          onClick={() => setModalOpen(true)}
-          className="flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
-        >
-          <Icon name="userPlus" size={16} /> Add New Driver
-        </button>
+      </div>
+
+      {/* stat tiles */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {STAT_TILES.map((s) => (
+          <div
+            key={s.key}
+            className="group flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
+          >
+            <span className={`grid h-11 w-11 flex-shrink-0 place-items-center rounded-xl transition group-hover:scale-110 ${s.tone}`}>
+              <Icon name={s.icon} size={18} />
+            </span>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
+                {s.label}
+              </p>
+              <p className="text-xl font-extrabold text-zinc-900 dark:text-zinc-50">
+                {statValues[s.key]}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
 
       <div className="grid items-stretch gap-5 lg:grid-cols-3">
-        <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white lg:col-span-2 dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm lg:col-span-2 dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex-1 overflow-x-auto">
             <table className="w-full min-w-[520px] border-collapse text-sm">
               <thead>
-                <tr>
+                <tr className="bg-zinc-50/80 dark:bg-zinc-800/40">
                   <th className="px-5 pb-3 pt-4 text-left text-xs font-semibold uppercase tracking-wide text-zinc-400">
                     Driver Name
                   </th>
@@ -216,7 +272,7 @@ export default function Drivers() {
                         <img
                           src={d.photo}
                           alt={d.name}
-                          className="h-10 w-10 flex-shrink-0 rounded-full object-cover"
+                          className="h-10 w-10 flex-shrink-0 rounded-full object-cover ring-2 ring-brand/10"
                         />
                         <div>
                           <p className="font-semibold text-zinc-900 dark:text-zinc-50">
@@ -230,8 +286,9 @@ export default function Drivers() {
                     </td>
                     <td className="px-5 py-3">
                       <span
-                        className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${LICENSE_STYLES[d.licenseStatus]}`}
+                        className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ${LICENSE_STYLES[d.licenseStatus]}`}
                       >
+                        <span className="h-1.5 w-1.5 rounded-full bg-current" />
                         {LICENSE_LABELS[d.licenseStatus]}
                       </span>
                     </td>

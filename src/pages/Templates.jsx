@@ -36,8 +36,10 @@ const LETTER_TEMPLATES = [
 
 function TemplateCard({ tpl }) {
   return (
-    <div className="flex flex-col rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
-      <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand/10 text-brand dark:text-brand-dark">
+    <div className="group relative flex flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
+      <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand to-brand-dark" />
+
+      <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand/10 text-brand ring-4 ring-brand/10 transition group-hover:scale-110 dark:text-brand-dark">
         <Icon name="file" size={16} />
       </span>
       <p className="mt-3 font-semibold text-zinc-900 dark:text-zinc-50">{tpl.name}</p>

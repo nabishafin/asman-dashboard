@@ -102,20 +102,24 @@ const TIMELINE_DOT = {
   green: 'border-green-500',
 }
 
+const QUEUE_ACCENT = {
+  active: 'from-red-500 to-red-500/40',
+  dispatching: 'from-indigo-500 to-indigo-500/40',
+  resolved: 'from-green-500 to-green-500/40',
+}
+
 function QueueCard({ incident, active, onClick }) {
   return (
     <button
       onClick={onClick}
       className={
-        'relative w-full overflow-hidden rounded-lg border p-4 text-left transition-colors ' +
+        'relative w-full overflow-hidden rounded-lg border p-4 text-left shadow-sm transition ' +
         (active
-          ? 'border-zinc-200 bg-brand/5 dark:border-zinc-700'
-          : 'border-zinc-200 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/60')
+          ? 'border-zinc-200 bg-brand/5 shadow-md dark:border-zinc-700'
+          : 'border-zinc-200 hover:-translate-y-0.5 hover:bg-zinc-50 hover:shadow-md dark:border-zinc-800 dark:hover:bg-zinc-800/60')
       }
     >
-      {incident.status === 'active' && (
-        <span className="absolute inset-x-0 top-0 h-0.5 bg-red-500" />
-      )}
+      <span className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${QUEUE_ACCENT[incident.status]}`} />
 
       <div className="flex items-start justify-between gap-2">
         <p className="font-bold text-zinc-900 dark:text-zinc-50">{incident.name}</p>
@@ -182,21 +186,52 @@ function MapPanel({ selectedId, onSelect }) {
     color: 'red',
     icon: 'car',
     iconStyle: 'badge',
+    pulse: i.status === 'active',
   }))
 
+  const activeCount = SOS_QUEUE.filter((i) => i.status === 'active').length
+  const dispatchingCount = SOS_QUEUE.filter((i) => i.status === 'dispatching').length
+
   return (
-    <div className="flex h-full flex-col rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
-      <div>
-        <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
-          Intelligence Deployment
-        </h3>
-        <p className="text-xs text-zinc-500 dark:text-zinc-400">
-          Real-time geospatial asset tracking
-        </p>
+    <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-xl ring-1 ring-black/5 dark:border-zinc-800 dark:bg-zinc-900">
+      <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-red-500 via-red-600 to-red-500" />
+
+      <div className="flex flex-wrap items-center justify-between gap-3 p-5 pb-4">
+        <div className="flex items-center gap-3">
+          <span className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-xl bg-gradient-to-br from-red-500 to-red-600 text-white shadow-md">
+            <Icon name="sos" size={20} />
+          </span>
+          <div>
+            <h3 className="flex items-center gap-2 font-bold text-zinc-900 dark:text-zinc-50">
+              SOS Incident Map
+              <span className="flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-600 dark:bg-red-500/10 dark:text-red-400">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-500" />
+                </span>
+                Live
+              </span>
+            </h3>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              Real-time geospatial incident tracking
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="rounded-lg bg-red-50 px-2.5 py-1.5 text-center text-xs font-semibold text-red-600 dark:bg-red-500/10 dark:text-red-400">
+            <span className="block text-sm font-extrabold leading-none">{activeCount}</span>
+            <span className="text-[9px] font-bold uppercase tracking-wide opacity-80">Active</span>
+          </span>
+          <span className="rounded-lg bg-indigo-50 px-2.5 py-1.5 text-center text-xs font-semibold text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400">
+            <span className="block text-sm font-extrabold leading-none">{dispatchingCount}</span>
+            <span className="text-[9px] font-bold uppercase tracking-wide opacity-80">Dispatching</span>
+          </span>
+        </div>
       </div>
 
       <GoogleMapView
-        className="mt-4 flex-1"
+        className="mx-4 mb-4 flex-1 rounded-xl shadow-inner"
         markers={markers}
         center={US_CENTER}
         zoom={4}

@@ -100,7 +100,6 @@ function UnitRow({ unit, active, onClick }) {
 
 function ActiveUnitsPanel({ tab, setTab, selectedId, setSelectedId }) {
   const filtered = activeUnits.filter((u) => {
-    if (tab === 'Alerts') return u.status !== 'moving'
     if (tab === 'Idle') return u.status === 'idle'
     return true
   })
@@ -116,7 +115,7 @@ function ActiveUnitsPanel({ tab, setTab, selectedId, setSelectedId }) {
       </div>
 
       <div className="mt-3 flex gap-1 rounded-lg bg-zinc-100 p-1 text-xs dark:bg-zinc-800">
-        {['All', 'Alerts', 'Idle'].map((t) => (
+        {['All', 'Idle'].map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}

@@ -148,24 +148,54 @@ function StatTile({ stat, onClick }) {
 function IntelligenceMap() {
   const [showLegend, setShowLegend] = useState(true)
 
+  const mapStats = [
+    { key: 'sos', label: 'SOS Active', value: SOS_ALARMS.length, tone: 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400' },
+    { key: 'fac', label: 'Facilities', value: DW_FACILITIES.length, tone: 'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400' },
+    { key: 'drv', label: 'Drivers Live', value: DRIVER_POSITIONS.length, tone: 'bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400' },
+    { key: 'alt', label: 'Alerts', value: ENFORCEMENT_ALERTS.length, tone: 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400' },
+  ]
+
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-      <div className="flex items-center gap-3 border-b border-zinc-100 p-5 pb-4 dark:border-zinc-800">
-        <span className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-xl bg-gradient-to-br from-brand to-brand-dark text-white shadow-md">
-          <Icon name="globe" size={18} />
-        </span>
-        <div>
-          <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
-            Intelligence Deployment
-          </h3>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            Real-time geospatial asset tracking
-          </p>
+    <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-xl ring-1 ring-black/5 dark:border-zinc-800 dark:bg-zinc-900">
+      <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand via-brand-dark to-brand" />
+
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-100 p-5 pb-4 dark:border-zinc-800">
+        <div className="flex items-center gap-3">
+          <span className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-xl bg-gradient-to-br from-brand to-brand-dark text-white shadow-md">
+            <Icon name="globe" size={20} />
+          </span>
+          <div>
+            <h3 className="flex items-center gap-2 font-bold text-zinc-900 dark:text-zinc-50">
+              Intelligence Deployment
+              <span className="flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-600 dark:bg-red-500/10 dark:text-red-400">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-500" />
+                </span>
+                Live
+              </span>
+            </h3>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              Real-time geospatial asset tracking
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          {mapStats.map((s) => (
+            <span
+              key={s.key}
+              className={`rounded-lg px-2.5 py-1.5 text-center text-xs font-semibold ${s.tone}`}
+            >
+              <span className="block text-sm font-extrabold leading-none">{s.value}</span>
+              <span className="text-[9px] font-bold uppercase tracking-wide opacity-80">{s.label}</span>
+            </span>
+          ))}
         </div>
       </div>
 
       <GoogleMapView
-        className="m-4 h-[380px]"
+        className="m-4 h-[560px] rounded-xl shadow-inner"
         zoom={5}
         markers={[
           ...SOS_ALARMS.map((s) => ({ id: `sos-${s.id}`, ...s.coords, color: 'red', icon: 'warning', pulse: true })),

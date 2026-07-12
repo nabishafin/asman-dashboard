@@ -44,16 +44,20 @@ function AttorneyCard({ a, onRemove }) {
   const navigate = useNavigate()
   const isPublic = a.source === 'public'
   return (
-    <div className="flex flex-col rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="group relative flex flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
+      <span
+        className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${isPublic ? 'from-teal-400 to-teal-500' : 'from-brand to-brand-dark'}`}
+      />
+
       <div className="flex items-center gap-3">
         {a.photo ? (
           <img
             src={a.photo}
             alt={a.name}
-            className="h-12 w-12 flex-shrink-0 rounded-full object-cover"
+            className="h-12 w-12 flex-shrink-0 rounded-full object-cover ring-4 ring-brand/10 transition group-hover:scale-105"
           />
         ) : (
-          <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-full bg-brand/10 text-sm font-bold text-brand dark:text-brand-dark">
+          <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-full bg-brand/10 text-sm font-bold text-brand ring-4 ring-brand/10 transition group-hover:scale-105 dark:text-brand-dark">
             {initials(a.name)}
           </span>
         )}
