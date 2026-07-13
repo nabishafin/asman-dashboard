@@ -163,7 +163,7 @@ export default function ManageSubscriptionPlans() {
       <div>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-50">
+            <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-50">
               Plan Configuration
             </h2>
             <p className="text-sm text-zinc-500 dark:text-zinc-400">
@@ -325,7 +325,7 @@ export default function ManageSubscriptionPlans() {
         <button
           type="button"
           onClick={handleSave}
-          className="flex items-center gap-2 rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
+          className="flex items-center gap-2 rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-900"
         >
           <Icon name="save" size={15} />
           Save Subscription Changes

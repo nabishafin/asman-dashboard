@@ -40,10 +40,10 @@ export default function Login() {
             <span className="text-xl text-zinc-900">ASMAN</span>
           </div>
 
-          <h1 className="text-4xl font-bold leading-tight tracking-tight text-zinc-900 sm:text-5xl">
+          <h1 className="text-xl font-bold leading-tight tracking-tight text-zinc-900 sm:text-xl">
             Precision in Enterprise Safety.
           </h1>
-          <p className="mt-4 max-w-md text-[15px] leading-relaxed text-zinc-500">
+          <p className="mt-4 max-w-md text-sm leading-relaxed text-zinc-500">
             Live route tracking, detention risk alerts, and attorney response for
             every driver on your network, in one view
           </p>
@@ -64,7 +64,7 @@ export default function Login() {
             onSubmit={handleSubmit}
             className="mx-auto flex w-full max-w-md flex-col justify-center rounded-2xl border border-zinc-200 bg-white p-8 shadow-xl shadow-sky-900/5"
           >
-            <h2 className="text-2xl font-bold text-zinc-900">Welcome Back</h2>
+            <h2 className="text-xl font-bold text-zinc-900">Welcome Back</h2>
 
             <label className="mt-6 block text-sm font-medium text-zinc-600">
               Business Email
@@ -76,7 +76,7 @@ export default function Login() {
                   placeholder="name@enterprise.com"
                   autoComplete="username"
                   required
-                  className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 pr-10 text-[15px] text-zinc-900 outline-none placeholder:text-zinc-400 focus:border-brand focus:bg-white focus:ring-2 focus:ring-brand/30"
+                  className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 pr-10 text-sm text-zinc-900 outline-none placeholder:text-zinc-400 focus:border-brand focus:bg-white dark:focus:bg-zinc-900 focus:ring-2 focus:ring-brand/30"
                 />
                 <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zinc-400">
                   <Icon name="mail" size={18} />
@@ -107,7 +107,7 @@ export default function Login() {
                 placeholder="••••••••"
                 autoComplete="current-password"
                 required
-                className="mt-1.5 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 text-[15px] text-zinc-900 outline-none placeholder:text-zinc-400 focus:border-brand focus:bg-white focus:ring-2 focus:ring-brand/30"
+                className="mt-1.5 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 text-sm text-zinc-900 outline-none placeholder:text-zinc-400 focus:border-brand focus:bg-white dark:focus:bg-zinc-900 focus:ring-2 focus:ring-brand/30"
               />
             </div>
 
@@ -129,7 +129,7 @@ export default function Login() {
 
             <button
               type="submit"
-              className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-brand py-3 text-[15px] font-semibold text-white transition hover:brightness-110"
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-brand py-3 text-sm font-semibold text-white transition hover:brightness-110"
             >
               Sign In <Icon name="arrow" size={18} />
             </button>

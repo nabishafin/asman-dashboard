@@ -19,6 +19,7 @@ import Subscription from './pages/Subscription.jsx'
 // Super Admin Drivers page temporarily disabled (kept for later re-enable)
 // import AllDrivers from './pages/AllDrivers.jsx'
 import CaseTracker from './pages/CaseTracker.jsx'
+import IntelligenceHub from './pages/IntelligenceHub.jsx'
 import SosIncidents from './pages/SosIncidents.jsx'
 import PartnerOnboarding from './pages/PartnerOnboarding.jsx'
 // import AdminDriverProfile from './pages/AdminDriverProfile.jsx'
@@ -56,6 +57,7 @@ export default function App() {
             */}
             <Route path="/templates" element={<Templates />} />
             <Route path="/case-tracker" element={<CaseTracker />} />
+            <Route path="/intelligence" element={<IntelligenceHub />} />
             <Route path="/case-tracker/:caseId" element={<CaseDetail />} />
             <Route path="/sos-incidents" element={<SosIncidents />} />
             <Route path="/subscription/plans" element={<ManageSubscriptionPlans />} />

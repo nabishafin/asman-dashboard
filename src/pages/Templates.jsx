@@ -43,7 +43,7 @@ function TemplateCard({ tpl }) {
         <Icon name="file" size={16} />
       </span>
       <p className="mt-3 font-semibold text-zinc-900 dark:text-zinc-50">{tpl.name}</p>
-      <span className="mt-1 w-fit rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] font-semibold text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+      <span className="mt-1 w-fit rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-semibold text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
         {tpl.category}
       </span>
       <p className="mt-3 flex-1 text-xs text-zinc-400">Last updated {tpl.updated}</p>
@@ -71,15 +71,6 @@ export default function Templates() {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-            Templates
-          </h1>
-          <p className="mt-1 max-w-lg text-sm text-zinc-500 dark:text-zinc-400">
-            Letter and document templates used by legal counsel for case
-            filings and correspondence.
-          </p>
-        </div>
         <div className="relative">
           <Icon
             name="search"

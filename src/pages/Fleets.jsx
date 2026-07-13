@@ -38,7 +38,7 @@ function PartnerCard({ fleet, onManage, subFleets = [] }) {
             </p>
           </div>
           <span
-            className={`flex-shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${SAFETY_BADGE[fleet.safetyStatus]}`}
+            className={`flex-shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ${SAFETY_BADGE[fleet.safetyStatus]}`}
           >
             {SAFETY_LABEL[fleet.safetyStatus]}
           </span>
@@ -46,7 +46,7 @@ function PartnerCard({ fleet, onManage, subFleets = [] }) {
 
         <div className="mt-4 grid grid-cols-2 gap-3">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+            <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
               Active Drivers
             </p>
             <p className="font-bold text-zinc-900 dark:text-zinc-50">
@@ -54,7 +54,7 @@ function PartnerCard({ fleet, onManage, subFleets = [] }) {
             </p>
           </div>
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+            <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
               Subscription
             </p>
             <p className="font-bold text-brand dark:text-brand-dark">
@@ -65,7 +65,7 @@ function PartnerCard({ fleet, onManage, subFleets = [] }) {
 
         {subFleets.length > 0 && (
           <div className="mt-4 border-t border-zinc-100 pt-3 dark:border-zinc-800">
-            <p className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-400">
               Sub-Fleets · Shared Subscription
             </p>
             <div className="flex flex-col gap-1.5">
@@ -78,7 +78,7 @@ function PartnerCard({ fleet, onManage, subFleets = [] }) {
                   <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-200">
                     {sf.name}
                   </span>
-                  <span className="text-[10px] text-zinc-400">{sf.activeDrivers}</span>
+                  <span className="text-xs text-zinc-400">{sf.activeDrivers}</span>
                 </button>
               ))}
             </div>
@@ -112,7 +112,7 @@ function OperatorCard({ corp }) {
         </div>
         <div className="flex-shrink-0 text-right">
           <p className="font-semibold text-zinc-900 dark:text-zinc-50">{corp.rev}</p>
-          <p className="text-[10px] text-zinc-400">2025 REV</p>
+          <p className="text-xs text-zinc-400">2025 REV</p>
         </div>
       </div>
 
@@ -125,7 +125,7 @@ function OperatorCard({ corp }) {
         ].map((s) => (
           <div key={s.l} className="text-center">
             <p className="text-xs font-bold text-zinc-900 dark:text-zinc-50">{s.v}</p>
-            <p className="text-[9px] uppercase text-zinc-400">{s.l}</p>
+            <p className="text-xs uppercase text-zinc-400">{s.l}</p>
           </div>
         ))}
       </div>
@@ -173,7 +173,7 @@ export default function Fleets() {
             <Icon name="creditCard" size={16} className="text-brand dark:text-brand-dark" />
           </div>
           <p className="mt-1 text-xl font-bold text-zinc-900 dark:text-zinc-50">$842k</p>
-          <p className="mt-1 text-xs text-zinc-400">
+          <p className="mt-1 text-sm text-zinc-400">
             Projected <span className="font-semibold text-zinc-600 dark:text-zinc-300">$1.2M</span>
           </p>
         </div>
@@ -181,17 +181,9 @@ export default function Fleets() {
 
       {/* header */}
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-            Company Directory
-          </h1>
-          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-            Manage and audit institutional fleet safety compliance.
-          </p>
-        </div>
         <button
           onClick={() => navigate('/fleets/onboard')}
-          className="flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
+          className="flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-900"
         >
           <Icon name="plus" size={16} />
           Onboard New Partner
@@ -214,10 +206,10 @@ export default function Fleets() {
 
       {/* ICE facility operators (real, publicly reported) */}
       <div>
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-50">
+        <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-50">
           ICE Facility Operators
         </h2>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="mt-1 text-base text-zinc-500 dark:text-zinc-400">
           For-profit companies operating ICE detention facilities · 2025-2026 financials · SEC filings, Reuters, Prison Legal News
         </p>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

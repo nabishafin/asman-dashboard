@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { legalCases, driverDirectory } from '../data/mockData.js'
-import { DW_HC_CASES, DW_JUDGES, dwJudgeColor } from '../data/detentionWatchData.js'
+
 import Icon from '../components/Icon.jsx'
 import InitiateCaseModal from '../components/InitiateCaseModal.jsx'
 
@@ -30,7 +30,7 @@ function StatTile({ icon, tone, label, value }) {
       <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-zinc-400">
         {label}
       </p>
-      <p className="mt-0.5 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+      <p className="mt-0.5 text-xl font-bold text-zinc-900 dark:text-zinc-50">
         {value}
       </p>
     </div>
@@ -53,17 +53,9 @@ export default function CaseTracker() {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-            Case Status
-          </h1>
-          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-            Monitoring high-priority immigration and logistical safety protocols.
-          </p>
-        </div>
         <button
           onClick={() => setModalOpen(true)}
-          className="flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
+          className="flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-900"
         >
           <Icon name="plus" size={16} />
           Add New Case
@@ -104,8 +96,8 @@ export default function CaseTracker() {
                 className={
                   'rounded-md px-3 py-1.5 font-semibold transition ' +
                   (statusFilter === s
-                    ? 'bg-white text-brand shadow-sm dark:bg-zinc-700 dark:text-brand-dark'
-                    : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300')
+                    ? 'bg-white text-brand shadow-sm dark:bg-zinc-700 dark:text-white'
+                    : 'text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200')
                 }
               >
                 {s}
@@ -194,78 +186,7 @@ export default function CaseTracker() {
         </div>
       </div>
 
-      {/* federal habeas corpus docket (real, public PACER data) */}
-      <div className="rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="border-b border-zinc-100 p-5 pb-4 dark:border-zinc-800">
-          <h3 className="font-bold text-zinc-900 dark:text-zinc-50">
-            Federal Habeas Corpus Docket
-          </h3>
-          <p className="mt-1 text-xs text-zinc-400">
-            Nationwide federal district court HC writs · PACER, ACLU, NIP · A-numbers anonymized per FRAP Rule 25
-          </p>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[760px] border-collapse text-sm">
-            <thead>
-              <tr>
-                {['Case No.', 'A-Number', 'Respondent', 'Court', 'Judge', 'Filed', 'Outcome', 'Counsel'].map((h) => (
-                  <th
-                    key={h}
-                    className="px-5 pb-3 pt-4 text-left text-xs font-semibold uppercase tracking-wide text-zinc-400"
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {DW_HC_CASES.map((c) => (
-                <tr key={c.cs} className="border-t border-zinc-100 dark:border-zinc-800">
-                  <td className="px-5 py-3 font-mono text-xs text-brand dark:text-brand-dark">{c.cs}</td>
-                  <td className="px-5 py-3 font-mono text-xs text-zinc-400">{c.a}</td>
-                  <td className="px-5 py-3 text-zinc-600 dark:text-zinc-300">{c.resp}</td>
-                  <td className="px-5 py-3 text-zinc-600 dark:text-zinc-300">{c.court}</td>
-                  <td className="px-5 py-3 text-zinc-600 dark:text-zinc-300">{c.judge}</td>
-                  <td className="px-5 py-3 font-mono text-xs text-zinc-400">{c.filed}</td>
-                  <td className="px-5 py-3">
-                    <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${HC_OUTCOME_STYLES[c.out]}`}>
-                      {c.out.charAt(0).toUpperCase() + c.out.slice(1)}
-                    </span>
-                  </td>
-                  <td className="px-5 py-3 text-zinc-600 dark:text-zinc-300">{c.atty}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
 
-      {/* immigration judges reference */}
-      <div className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
-        <h3 className="font-bold text-zinc-900 dark:text-zinc-50">Immigration Judges Reference</h3>
-        <p className="mt-1 text-xs text-zinc-400">Grant/denial rates by court · TRAC Immigration (Syracuse)</p>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {DW_JUDGES.map((j) => (
-            <div key={j.id} className="rounded-lg border border-zinc-100 p-3 dark:border-zinc-800">
-              <div className="flex items-center justify-between gap-2">
-                <p className="truncate text-sm font-semibold text-zinc-900 dark:text-zinc-50">{j.name}</p>
-                <span className="flex-shrink-0 text-xs font-bold" style={{ color: dwJudgeColor(j.approve) }}>
-                  {j.approve}%
-                </span>
-              </div>
-              <p className="text-xs text-zinc-400">
-                {j.court} · {j.circuit} Circuit
-              </p>
-              <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
-                <div
-                  className="h-full rounded-full"
-                  style={{ width: `${j.approve}%`, background: dwJudgeColor(j.approve) }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
 
       <InitiateCaseModal
         open={modalOpen}

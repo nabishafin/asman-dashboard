@@ -124,12 +124,12 @@ function QueueCard({ incident, active, onClick }) {
       <div className="flex items-start justify-between gap-2">
         <p className="font-bold text-zinc-900 dark:text-zinc-50">{incident.name}</p>
         <span
-          className={`flex-shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold ${TIME_BADGE_STYLES[incident.status]}`}
+          className={`flex-shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold ${TIME_BADGE_STYLES[incident.status]}`}
         >
           {incident.timeAgo}
         </span>
       </div>
-      <p className="mt-1 flex items-center gap-1 text-xs text-zinc-400">
+      <p className="mt-1 flex items-center gap-1 text-sm text-zinc-400">
         <Icon name="pin" size={12} />
         {incident.location}
       </p>
@@ -137,10 +137,10 @@ function QueueCard({ incident, active, onClick }) {
       {incident.attorney && (
         <div className="mt-3 flex items-center gap-2 border-t border-zinc-100 pt-3 dark:border-zinc-800">
           <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+            <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
               Attorney Assigned
             </p>
-            <p className="mt-1 flex items-center gap-1.5 text-sm font-semibold text-zinc-800 dark:text-zinc-100">
+            <p className="mt-1 flex items-center gap-1.5 text-base font-semibold text-zinc-800 dark:text-zinc-100">
               {incident.attorney.assigned ? (
                 <>
                   <img
@@ -167,7 +167,7 @@ function QueueCard({ incident, active, onClick }) {
       )}
 
       <span
-        className={`mt-3 inline-block rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide ${STATUS_STYLES[incident.status]}`}
+        className={`mt-3 inline-block rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide ${STATUS_STYLES[incident.status]}`}
       >
         {STATUS_LABELS[incident.status]}
       </span>
@@ -204,7 +204,7 @@ function MapPanel({ selectedId, onSelect }) {
           <div>
             <h3 className="flex items-center gap-2 font-bold text-zinc-900 dark:text-zinc-50">
               SOS Incident Map
-              <span className="flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-600 dark:bg-red-500/10 dark:text-red-400">
+              <span className="flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-red-600 dark:bg-red-500/10 dark:text-red-400">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-500" />
@@ -220,12 +220,12 @@ function MapPanel({ selectedId, onSelect }) {
 
         <div className="flex items-center gap-2">
           <span className="rounded-lg bg-red-50 px-2.5 py-1.5 text-center text-xs font-semibold text-red-600 dark:bg-red-500/10 dark:text-red-400">
-            <span className="block text-sm font-extrabold leading-none">{activeCount}</span>
-            <span className="text-[9px] font-bold uppercase tracking-wide opacity-80">Active</span>
+            <span className="block text-sm font-bold leading-none">{activeCount}</span>
+            <span className="text-xs font-bold uppercase tracking-wide opacity-80">Active</span>
           </span>
           <span className="rounded-lg bg-indigo-50 px-2.5 py-1.5 text-center text-xs font-semibold text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400">
-            <span className="block text-sm font-extrabold leading-none">{dispatchingCount}</span>
-            <span className="text-[9px] font-bold uppercase tracking-wide opacity-80">Dispatching</span>
+            <span className="block text-sm font-bold leading-none">{dispatchingCount}</span>
+            <span className="text-xs font-bold uppercase tracking-wide opacity-80">Dispatching</span>
           </span>
         </div>
       </div>
@@ -247,7 +247,7 @@ function IncidentDetail({ incident, onClose }) {
   return (
     <div className="flex h-full flex-col rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
       <div className="flex items-start justify-between">
-        <p className="text-[11px] font-bold uppercase tracking-wide text-zinc-400">
+        <p className="text-xs font-bold uppercase tracking-wide text-zinc-400">
           Incident #{incident.incidentCode}
         </p>
         <button
@@ -292,7 +292,7 @@ function IncidentDetail({ incident, onClose }) {
                   <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
                     {t.title}
                   </p>
-                  <span className="flex-shrink-0 text-[11px] text-zinc-400">{t.time}</span>
+                  <span className="flex-shrink-0 text-xs text-zinc-400">{t.time}</span>
                 </div>
                 <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">{t.detail}</p>
               </div>

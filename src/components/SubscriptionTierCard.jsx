@@ -18,32 +18,32 @@ export default function TierCard({ tier, selected, onEdit }) {
           <Icon name={tier.icon} size={15} />
         </span>
         {typeof tier.price === 'number' && (
-          <p className="text-lg font-bold text-zinc-900 dark:text-zinc-50">
+          <p className="text-base font-bold text-zinc-900 dark:text-zinc-50">
             ${tier.price}
             <span className="text-xs font-medium text-zinc-400">/mo</span>
           </p>
         )}
       </div>
 
-      <p className="mt-4 text-lg font-bold text-zinc-900 dark:text-zinc-50">{tier.name}</p>
-      <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">{tier.description}</p>
+      <p className="mt-4 text-base font-bold text-zinc-900 dark:text-zinc-50">{tier.name}</p>
+      <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{tier.description}</p>
 
       <div className="mt-4 grid grid-cols-2 gap-3 border-t border-zinc-100 pt-4 dark:border-zinc-800">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
             Group Size
           </p>
           <p className="font-bold text-zinc-900 dark:text-zinc-50">{tier.groupSize}</p>
         </div>
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
             Mandatory Period
           </p>
           <p className="font-bold text-zinc-900 dark:text-zinc-50">{tier.period}</p>
         </div>
       </div>
 
-      <p className="mt-3 flex-1 text-[11px] italic text-zinc-400">{tier.eligibility}</p>
+      <p className="mt-3 flex-1 text-xs italic text-zinc-400">{tier.eligibility}</p>
 
       <button
         type="button"

@@ -31,7 +31,7 @@ function CaseStatusCard({ driver, caseRecord }) {
           </div>
         </div>
         <span
-          className={`flex-shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${STAGE_STYLES[caseRecord.stage]}`}
+          className={`flex-shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ${STAGE_STYLES[caseRecord.stage]}`}
         >
           {STAGE_LABELS[caseRecord.stage]}
         </span>
@@ -61,17 +61,6 @@ export default function FleetCaseStatus() {
 
   return (
     <div className="flex flex-col gap-5">
-      <div>
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-          Case Status
-        </h1>
-        <p className="mt-1 max-w-lg text-sm text-zinc-500 dark:text-zinc-400">
-          Live status for your drivers&apos; open legal cases. Legal counsel is
-          managed directly by our compliance team — reach out to support for
-          case details or updates.
-        </p>
-      </div>
-
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {rows.map(({ case: c, driver }) => (
           <CaseStatusCard key={c.id} driver={driver} caseRecord={c} />

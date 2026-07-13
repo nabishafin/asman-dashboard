@@ -45,7 +45,7 @@ function DriverActivity() {
               className={
                 'rounded-full px-3 py-1 font-semibold transition ' +
                 (range === r
-                  ? 'bg-white text-brand shadow-sm dark:bg-zinc-700 dark:text-brand-dark'
+                  ? 'bg-white text-brand shadow-sm dark:bg-zinc-700 dark:text-white'
                   : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300')
               }
             >
@@ -77,7 +77,7 @@ function DriverActivity() {
         {CHART.map((d) => (
           <span
             key={d.day}
-            className="flex-1 text-center text-[11px] text-zinc-400"
+            className="flex-1 text-center text-xs text-zinc-400"
           >
             {d.day}
           </span>
@@ -186,7 +186,7 @@ function RouteIntelligence() {
           <div>
             <h3 className="flex items-center gap-2 font-bold text-zinc-900 dark:text-zinc-50">
               Route Intelligence
-              <span className="flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-600 dark:bg-red-500/10 dark:text-red-400">
+              <span className="flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-red-600 dark:bg-red-500/10 dark:text-red-400">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-500" />
@@ -225,7 +225,7 @@ function RouteIntelligence() {
       >
         <div className="absolute left-4 top-4 rounded-xl bg-white/95 px-4 py-3 text-xs shadow-md backdrop-blur">
           <p className="font-bold text-zinc-900">Texas Corridor</p>
-          <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-amber-600">
+          <p className="mb-2 text-xs font-bold uppercase tracking-wide text-amber-600">
             Hot Zone
           </p>
           <div className="flex flex-col gap-1.5">
@@ -261,14 +261,14 @@ function FleetStatTile({ stat }) {
         <span className={`grid h-9 w-9 place-items-center rounded-lg transition group-hover:scale-110 ${a.icon}`}>
           <Icon name={stat.icon} size={16} />
         </span>
-        <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${a.trend}`}>
+        <span className={`rounded-full px-2 py-0.5 text-xs font-bold uppercase tracking-wide ${a.trend}`}>
           {stat.trend}
         </span>
       </div>
-      <p className="mt-3 text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
+      <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-zinc-400">
         {stat.label}
       </p>
-      <p className={`mt-0.5 text-2xl font-extrabold tracking-tight ${a.value}`}>{stat.value}</p>
+      <p className={`mt-0.5 text-xl font-bold tracking-tight ${a.value}`}>{stat.value}</p>
     </div>
   )
 }
@@ -298,48 +298,25 @@ export default function FleetDashboard() {
 
   return (
     <div className="flex flex-col gap-5">
-      {/* hero header */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand via-brand to-brand-dark p-6 text-white shadow-lg">
-        <div
-          className="pointer-events-none absolute inset-0 opacity-20"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle at 15% 20%, white 0, transparent 35%), radial-gradient(circle at 85% 80%, white 0, transparent 40%)',
-          }}
-        />
-        <div className="relative flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-4">
-            <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-2xl bg-white/15 backdrop-blur">
-              <Icon name="truck" size={24} />
-            </span>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight">Fleet Intelligence</h1>
-              <p className="mt-0.5 text-sm text-white/80">
-                Overview for {today}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="relative">
-              <button
-                onClick={() => setNotifOpen((v) => !v)}
-                className="grid h-10 w-10 place-items-center rounded-xl bg-white/15 text-white backdrop-blur transition hover:bg-white/25"
-              >
-                <Icon name="bell" size={18} />
-              </button>
-              <NotificationsPanel
-                open={notifOpen}
-                onClose={() => setNotifOpen(false)}
-              />
-            </div>
-            <button
-              onClick={() => setDispatchOpen(true)}
-              className="flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-brand transition hover:bg-white/90"
-            >
-              <Icon name="plus" size={16} /> New Dispatch
-            </button>
-          </div>
+      <div className="flex justify-end gap-3">
+        <div className="relative">
+          <button
+            onClick={() => setNotifOpen((v) => !v)}
+            className="grid h-10 w-10 place-items-center rounded-xl bg-zinc-100 text-zinc-500 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
+          >
+            <Icon name="bell" size={18} />
+          </button>
+          <NotificationsPanel
+            isOpen={notifOpen}
+            onClose={() => setNotifOpen(false)}
+          />
         </div>
+        <button
+          onClick={() => setDispatchOpen(true)}
+          className="flex items-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark"
+        >
+          <Icon name="plus" size={16} /> New Dispatch
+        </button>
       </div>
 
       <NewDispatchModal

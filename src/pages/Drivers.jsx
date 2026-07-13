@@ -65,12 +65,12 @@ function DriverDetailPanel({ driver, onClose }) {
         alt={driver.name}
         className="h-20 w-20 rounded-full object-cover ring-4 ring-brand/15"
       />
-      <p className="mt-3 text-lg font-bold text-zinc-900 dark:text-zinc-50">
+      <p className="mt-3 text-base font-bold text-zinc-900 dark:text-zinc-50">
         {driver.name}
       </p>
 
       <div className="mt-3 rounded-lg bg-zinc-50 px-5 py-2 dark:bg-zinc-800">
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
+        <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
           Status
         </p>
         <p
@@ -183,34 +183,14 @@ export default function Drivers() {
 
   return (
     <div className="flex flex-col gap-5">
-      {/* hero header */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand via-brand to-brand-dark p-6 text-white shadow-lg">
-        <div
-          className="pointer-events-none absolute inset-0 opacity-20"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle at 15% 20%, white 0, transparent 35%), radial-gradient(circle at 85% 80%, white 0, transparent 40%)',
-          }}
-        />
-        <div className="relative flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-4">
-            <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-2xl bg-white/15 backdrop-blur">
-              <Icon name="users" size={24} />
-            </span>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight">Driver Directory</h1>
-              <p className="mt-0.5 text-sm text-white/80">
-                Manage institutional fleet personnel and onboarding compliance.
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => setModalOpen(true)}
-            className="flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-brand transition hover:bg-white/90"
-          >
-            <Icon name="userPlus" size={16} /> Add New Driver
-          </button>
-        </div>
+      <div className="flex justify-end">
+        <button
+          onClick={() => setModalOpen(true)}
+          className="flex items-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark"
+        >
+          <Icon name="plus" size={18} />
+          New Driver
+        </button>
       </div>
 
       {/* stat tiles */}
@@ -227,7 +207,7 @@ export default function Drivers() {
               <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
                 {s.label}
               </p>
-              <p className="text-xl font-extrabold text-zinc-900 dark:text-zinc-50">
+              <p className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
                 {statValues[s.key]}
               </p>
             </div>

@@ -133,14 +133,14 @@ function StatTile({ stat, onClick }) {
         <span className={`grid h-9 w-9 place-items-center rounded-lg transition group-hover:scale-110 ${a.icon}`}>
           <Icon name={stat.icon} size={16} />
         </span>
-        <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${a.trend}`}>
+        <span className={`rounded-full px-2 py-0.5 text-xs font-bold uppercase tracking-wide ${a.trend}`}>
           {stat.trend}
         </span>
       </div>
-      <p className="mt-3 text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
+      <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-zinc-400">
         {stat.label}
       </p>
-      <p className={`mt-0.5 text-2xl font-extrabold tracking-tight ${a.value}`}>{stat.value}</p>
+      <p className={`mt-0.5 text-xl font-bold tracking-tight ${a.value}`}>{stat.value}</p>
     </button>
   )
 }
@@ -167,7 +167,7 @@ function IntelligenceMap() {
           <div>
             <h3 className="flex items-center gap-2 font-bold text-zinc-900 dark:text-zinc-50">
               Intelligence Deployment
-              <span className="flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-600 dark:bg-red-500/10 dark:text-red-400">
+              <span className="flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-red-600 dark:bg-red-500/10 dark:text-red-400">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-500" />
@@ -187,8 +187,8 @@ function IntelligenceMap() {
               key={s.key}
               className={`rounded-lg px-2.5 py-1.5 text-center text-xs font-semibold ${s.tone}`}
             >
-              <span className="block text-sm font-extrabold leading-none">{s.value}</span>
-              <span className="text-[9px] font-bold uppercase tracking-wide opacity-80">{s.label}</span>
+              <span className="block text-sm font-bold leading-none">{s.value}</span>
+              <span className="text-xs font-bold uppercase tracking-wide opacity-80">{s.label}</span>
             </span>
           ))}
         </div>
@@ -218,7 +218,7 @@ function IntelligenceMap() {
             <p className="font-bold text-zinc-800 dark:text-zinc-100">
               Texas Corridor
             </p>
-            <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-amber-600">
+            <p className="mb-2 text-xs font-bold uppercase tracking-wide text-amber-600">
               Hot Zone
             </p>
             <div className="flex flex-col gap-1">
@@ -293,7 +293,7 @@ function ActiveSosAlarms({ onTrack }) {
                   <p className="truncate text-sm font-semibold text-zinc-900 dark:text-zinc-50">
                     {s.name}
                   </p>
-                  <span className="flex-shrink-0 text-[10px] text-zinc-400">{s.time}</span>
+                  <span className="flex-shrink-0 text-xs text-zinc-400">{s.time}</span>
                 </div>
                 <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">
                   {s.detail}
@@ -324,7 +324,7 @@ function EnforcementAlerts() {
           <div key={a.id} className="py-2.5 transition hover:pl-1">
             <div className="flex items-center justify-between gap-2">
               <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">{a.title}</p>
-              <span className="flex-shrink-0 text-[10px] text-zinc-400">{a.time}</span>
+              <span className="flex-shrink-0 text-xs text-zinc-400">{a.time}</span>
             </div>
             <p className="text-xs text-zinc-500 dark:text-zinc-400">{a.detail}</p>
           </div>
@@ -361,13 +361,13 @@ function LiveIntelligenceFeed() {
         <button
           onClick={() => setLastSynced(new Date())}
           title="Check for new items"
-          className="flex flex-shrink-0 items-center gap-1.5 rounded-full bg-zinc-100 px-2.5 py-1 text-[10px] font-semibold text-zinc-500 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
+          className="flex flex-shrink-0 items-center gap-1.5 rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-semibold text-zinc-500 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
           Synced {syncedLabel}
         </button>
       </div>
-      <p className="mt-1 text-xs text-zinc-400">National detention &amp; enforcement news · Vera, TRAC, ACLU, Reuters</p>
+      <p className="mt-1 text-sm text-zinc-400">National detention &amp; enforcement news · Vera, TRAC, ACLU, Reuters</p>
 
       <div className="mt-3 flex flex-wrap gap-1.5">
         {tags.map((t) => (
@@ -375,7 +375,7 @@ function LiveIntelligenceFeed() {
             key={t}
             onClick={() => setTagFilter(t)}
             className={
-              'rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide transition ' +
+              'rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wide transition ' +
               (tagFilter === t
                 ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
                 : 'bg-zinc-100 text-zinc-500 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700')
@@ -390,13 +390,13 @@ function LiveIntelligenceFeed() {
         {visible.map((n) => (
           <div key={n.head} className="py-2.5 transition hover:pl-1">
             <span
-              className="rounded px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide"
+              className="rounded px-1.5 py-0.5 text-xs font-bold uppercase tracking-wide"
               style={{ background: dwTagBg(n.tag), color: dwTagColor(n.tag) }}
             >
               {n.lbl}
             </span>
-            <p className="mt-1.5 text-sm leading-snug text-zinc-800 dark:text-zinc-100">{n.head}</p>
-            <div className="mt-1 flex justify-between text-[11px] text-zinc-400">
+            <p className="mt-1.5 text-base leading-snug text-zinc-800 dark:text-zinc-100">{n.head}</p>
+            <div className="mt-1 flex justify-between text-xs text-zinc-400">
               <span>{n.src}</span>
               <span>{n.time}</span>
             </div>
@@ -423,37 +423,6 @@ export default function SuperAdminDashboard() {
 
   return (
     <div className="flex flex-col gap-5">
-      {/* hero header */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand via-brand to-brand-dark p-6 text-white shadow-lg">
-        <div
-          className="pointer-events-none absolute inset-0 opacity-20"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle at 15% 20%, white 0, transparent 35%), radial-gradient(circle at 85% 80%, white 0, transparent 40%)',
-          }}
-        />
-        <div className="relative flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-4">
-            <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-2xl bg-white/15 backdrop-blur">
-              <Icon name="shield" size={24} />
-            </span>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight">Command Center</h1>
-              <p className="mt-0.5 text-sm text-white/80">
-                Platform-wide operational overview · {today}
-              </p>
-            </div>
-          </div>
-          <span className="flex items-center gap-2 rounded-full border border-white/25 bg-white/15 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-300 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-300" />
-            </span>
-            Live · Systems operational
-          </span>
-        </div>
-      </div>
-
       {/* stat tiles */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         {STATS.map((s) => (

@@ -4,11 +4,11 @@ export function PageHeader({ title, subtitle, actions }) {
   return (
     <header className="mb-6 flex items-start justify-between gap-4">
       <div>
-        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
+        <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
           {title}
         </h1>
         {subtitle && (
-          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="mt-1 text-base text-zinc-500 dark:text-zinc-400">
             {subtitle}
           </p>
         )}
@@ -21,10 +21,10 @@ export function PageHeader({ title, subtitle, actions }) {
 export function StatCard({ label, value, hint }) {
   return (
     <div className="flex flex-col gap-1.5 rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-800/40">
-      <span className="text-[13px] text-zinc-500 dark:text-zinc-400">
+      <span className="text-sm text-zinc-500 dark:text-zinc-400">
         {label}
       </span>
-      <span className="text-3xl font-semibold capitalize text-zinc-900 dark:text-zinc-50">
+      <span className="text-xl font-semibold capitalize text-zinc-900 dark:text-zinc-50">
         {value}
       </span>
       {hint && (

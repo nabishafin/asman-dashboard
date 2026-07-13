@@ -57,16 +57,6 @@ export default function FleetSettings() {
 
   return (
     <div className="flex flex-col gap-5">
-      <div>
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-          Account Settings
-        </h1>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          Manage your personal information, security preferences, and account
-          credentials.
-        </p>
-      </div>
-
       <div className="border-b border-zinc-100 pb-2 text-sm font-semibold text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
         Profile Information
       </div>
@@ -118,7 +108,7 @@ export default function FleetSettings() {
             <p className="text-xs font-semibold text-zinc-700 dark:text-zinc-200">
               Profile Photo
             </p>
-            <p className="text-center text-[11px] text-zinc-400">
+            <p className="text-center text-xs text-zinc-400">
               PNG, JPG up to 10MB
             </p>
           </div>

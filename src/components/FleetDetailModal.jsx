@@ -39,7 +39,7 @@ export default function FleetDetailModal({ open, onClose, fleet }) {
 
         <div className="mt-5 grid grid-cols-2 gap-3">
           <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+            <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
               Fleet Size
             </p>
             <p className="font-bold text-zinc-900 dark:text-zinc-50">
@@ -47,7 +47,7 @@ export default function FleetDetailModal({ open, onClose, fleet }) {
             </p>
           </div>
           <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+            <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
               Active Routes
             </p>
             <p className="font-bold text-zinc-900 dark:text-zinc-50">
@@ -55,7 +55,7 @@ export default function FleetDetailModal({ open, onClose, fleet }) {
             </p>
           </div>
           <div className="col-span-2 rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+            <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
               Managers
             </p>
             <p className="font-bold text-zinc-900 dark:text-zinc-50">
@@ -80,7 +80,7 @@ export default function FleetDetailModal({ open, onClose, fleet }) {
           </div>
         </div>
 
-        <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-zinc-900 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900">
+        <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-zinc-900 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-900">
           <Icon name="arrowUp" size={15} />
           Upgrade Subscription Plan
         </button>

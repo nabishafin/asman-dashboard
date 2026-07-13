@@ -83,14 +83,14 @@ function StatCard({ stat }) {
   return (
     <div className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
       <div className="flex items-start justify-between gap-2">
-        <p className="text-[11px] font-semibold uppercase leading-snug tracking-wide text-zinc-400">
+        <p className="text-xs font-semibold uppercase leading-snug tracking-wide text-zinc-400">
           {stat.label}
         </p>
         <span className="grid h-8 w-8 flex-shrink-0 place-items-center rounded-lg bg-brand/10 text-brand dark:text-brand-dark">
           <Icon name={stat.icon} size={15} />
         </span>
       </div>
-      <p className="mt-2 text-2xl font-bold text-zinc-900 dark:text-zinc-50">{stat.value}</p>
+      <p className="mt-2 text-xl font-bold text-zinc-900 dark:text-zinc-50">{stat.value}</p>
       <p className={`mt-1 text-xs font-semibold ${stat.changeTone}`}>{stat.change}</p>
     </div>
   )
@@ -101,15 +101,6 @@ export default function SuperAdminSubscription() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-          Subscription Management
-        </h1>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          Real-time revenue monitoring and subscriber governance.
-        </p>
-      </div>
-
       <div className="grid gap-4 sm:grid-cols-3">
         {STATS.map((s) => (
           <StatCard key={s.key} stat={s} />
@@ -118,7 +109,7 @@ export default function SuperAdminSubscription() {
 
       <div>
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-50">Active Tiers</h2>
+          <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-50">Active Tiers</h2>
           <button
             onClick={() => navigate('/subscription/plans')}
             className="text-sm font-semibold text-brand hover:underline dark:text-brand-dark"
@@ -126,7 +117,7 @@ export default function SuperAdminSubscription() {
             Configure Pricing Models
           </button>
         </div>
-        <p className="mt-1 max-w-2xl text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="mt-1 max-w-2xl text-base text-zinc-500 dark:text-zinc-400">
           Subscription Fees are billed in advance on a monthly or annual basis. Fees are
           non-refundable except as required by law.
         </p>
@@ -208,7 +199,7 @@ export default function SuperAdminSubscription() {
             <button className="rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-semibold text-zinc-500 transition hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800">
               Previous
             </button>
-            <button className="rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900">
+            <button className="rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-black dark:hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-900">
               Next
             </button>
           </div>

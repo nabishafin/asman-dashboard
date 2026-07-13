@@ -189,14 +189,13 @@ export default function SuperAdminSettings() {
         <span className="font-semibold text-zinc-600 dark:text-zinc-300">Account Settings</span>
       </div>
 
-      <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Account Settings</h1>
 
       {/* profile */}
       <div className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="relative flex-shrink-0">
-              <span className="grid h-16 w-16 place-items-center rounded-full bg-brand text-2xl font-bold text-white">
+              <span className="grid h-16 w-16 place-items-center rounded-full bg-brand text-xl font-bold text-white">
                 {initial}
               </span>
               <button
@@ -209,10 +208,10 @@ export default function SuperAdminSettings() {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <p className="text-lg font-bold text-zinc-900 dark:text-zinc-50">
+                <p className="text-base font-bold text-zinc-900 dark:text-zinc-50">
                   {profile.fullName}
                 </p>
-                <span className="rounded-full bg-brand-soft px-2 py-0.5 text-[11px] font-semibold text-brand">
+                <span className="rounded-full bg-brand-soft px-2 py-0.5 text-xs font-semibold text-brand">
                   {ROLE_LABELS[user.role]}
                 </span>
               </div>
@@ -308,7 +307,7 @@ export default function SuperAdminSettings() {
         className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900"
       >
         <h3 className="font-bold text-zinc-900 dark:text-zinc-50">Update Password</h3>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="mt-1 text-base text-zinc-500 dark:text-zinc-400">
           Ensure your account remains institutional-grade secure by using a complex, rotated
           passphrase.
         </p>
@@ -366,7 +365,7 @@ export default function SuperAdminSettings() {
           )}
           <button
             type="submit"
-            className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
+            className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-black dark:hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-900"
           >
             Save Password
           </button>
@@ -421,7 +420,7 @@ export default function SuperAdminSettings() {
           <ToggleSwitch checked={globalAlerts} onChange={setGlobalAlerts} accent />
         </div>
 
-        <p className="mt-5 border-t border-zinc-100 pt-5 text-[11px] font-bold uppercase tracking-wide text-zinc-400 dark:border-zinc-800">
+        <p className="mt-5 border-t border-zinc-100 pt-5 text-xs font-bold uppercase tracking-wide text-zinc-400 dark:border-zinc-800">
           Delivery Channels
         </p>
 
@@ -465,7 +464,7 @@ export default function SuperAdminSettings() {
                   <p className="flex items-center gap-2 text-sm font-semibold text-zinc-900 dark:text-zinc-50">
                     {s.device}
                     {s.current && (
-                      <span className="rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-green-700 dark:bg-green-500/15 dark:text-green-400">
+                      <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-green-700 dark:bg-green-500/15 dark:text-green-400">
                         This device
                       </span>
                     )}

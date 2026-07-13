@@ -3,7 +3,7 @@ import Icon from './Icon.jsx'
 
 const fieldLabel = 'block text-xs font-medium text-zinc-500 dark:text-zinc-400'
 const fieldInput =
-  'mt-1.5 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 outline-none placeholder:text-zinc-400 focus:border-brand focus:bg-white focus:ring-2 focus:ring-brand/30 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50'
+  'mt-1.5 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 outline-none placeholder:text-zinc-400 focus:border-brand focus:bg-white dark:focus:bg-zinc-900 focus:ring-2 focus:ring-brand/30 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50'
 
 export default function OnboardAttorneyModal({ open, onClose, onCreated }) {
   const [name, setName] = useState('')
@@ -35,10 +35,10 @@ export default function OnboardAttorneyModal({ open, onClose, onCreated }) {
       >
         <div className="flex items-start justify-between border-b border-zinc-100 p-6 pb-4 dark:border-zinc-800">
           <div>
-            <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-50">
+            <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-50">
               Onboard New Practitioner
             </h2>
-            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="mt-1 text-base text-zinc-500 dark:text-zinc-400">
               Initialize credentials for the ASMAN legal network.
             </p>
           </div>
@@ -161,7 +161,7 @@ export default function OnboardAttorneyModal({ open, onClose, onCreated }) {
           </button>
           <button
             type="submit"
-            className="rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
+            className="rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-900"
           >
             Add to Network
           </button>

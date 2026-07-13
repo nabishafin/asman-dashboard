@@ -30,7 +30,7 @@ function UploadBox({ label, hint }) {
 
 const fieldLabel = 'block text-xs font-medium text-zinc-500 dark:text-zinc-400'
 const fieldInput =
-  'mt-1.5 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 outline-none placeholder:text-zinc-400 focus:border-brand focus:bg-white focus:ring-2 focus:ring-brand/30 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50'
+  'mt-1.5 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 outline-none placeholder:text-zinc-400 focus:border-brand focus:bg-white dark:focus:bg-zinc-900 focus:ring-2 focus:ring-brand/30 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50'
 
 export default function NewDriverModal({ open, onClose }) {
   if (!open) return null
@@ -48,7 +48,7 @@ export default function NewDriverModal({ open, onClose }) {
       >
         {/* header */}
         <div className="flex items-center justify-between border-b border-zinc-100 p-6 pb-4 dark:border-zinc-800">
-          <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-50">
+          <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-50">
             New Driver Registration
           </h2>
           <button
@@ -155,7 +155,7 @@ export default function NewDriverModal({ open, onClose }) {
         <div className="flex items-center justify-end border-t border-zinc-100 p-6 pt-4 dark:border-zinc-800">
           <button
             type="submit"
-            className="flex items-center gap-2 rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
+            className="flex items-center gap-2 rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-900"
           >
             <Icon name="userPlus" size={16} /> Register
           </button>

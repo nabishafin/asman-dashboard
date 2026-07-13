@@ -40,9 +40,7 @@ export default function DetentionCenter() {
 
       {/* header */}
       <div>
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-          West Texas Detention Facility
-        </h1>
+
         <div className="mt-2 flex flex-wrap items-center gap-3">
           <span className="flex items-center gap-1.5 text-sm text-zinc-500 dark:text-zinc-400">
             <Icon name="pin" size={15} />
@@ -78,13 +76,13 @@ export default function DetentionCenter() {
 
           <div className="absolute bottom-4 left-4 flex gap-3">
             <div className="rounded-lg bg-white px-3 py-2 shadow-md">
-              <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
                 Queue Depth
               </p>
               <p className="text-sm font-bold text-zinc-900">14 Trucks</p>
             </div>
             <div className="rounded-lg bg-white px-3 py-2 shadow-md">
-              <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
                 Wait Time
               </p>
               <p className="text-sm font-bold text-zinc-900">1h 12m</p>
@@ -232,7 +230,7 @@ export default function DetentionCenter() {
 
               <div className="mt-4 grid w-full flex-1 grid-cols-2 gap-2 border-t border-zinc-100 pt-3 dark:border-zinc-800">
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
                     Success Rate
                   </p>
                   <p className="font-bold text-zinc-900 dark:text-zinc-50">
@@ -240,7 +238,7 @@ export default function DetentionCenter() {
                   </p>
                 </div>
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
                     Cases Won
                   </p>
                   <p className="font-bold text-zinc-900 dark:text-zinc-50">

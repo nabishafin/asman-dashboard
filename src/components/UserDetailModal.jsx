@@ -4,8 +4,8 @@ import GoogleMapView from './GoogleMapView.jsx'
 function InfoBox({ label, value }) {
   return (
     <div className="rounded-lg border border-zinc-200 p-3 dark:border-zinc-700">
-      <p className="text-[11px] font-medium text-zinc-400">{label}</p>
-      <p className="mt-1 text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+      <p className="text-xs font-medium text-zinc-400">{label}</p>
+      <p className="mt-1 text-base font-semibold text-zinc-900 dark:text-zinc-50">
         {value}
       </p>
     </div>
@@ -37,7 +37,7 @@ export default function UserDetailModal({ open, onClose, user, onSuspend }) {
             </span>
           </div>
           <div>
-            <p className="text-lg font-bold text-zinc-900 dark:text-zinc-50">
+            <p className="text-base font-bold text-zinc-900 dark:text-zinc-50">
               {user.name}
             </p>
             <p className="text-xs text-zinc-400">

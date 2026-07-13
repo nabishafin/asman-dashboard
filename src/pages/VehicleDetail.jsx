@@ -72,7 +72,7 @@ export default function VehicleDetail() {
             </p>
             <div className="flex flex-col gap-4">
               <div>
-                <p className="text-[11px] uppercase text-zinc-400">
+                <p className="text-xs uppercase text-zinc-400">
                   Total Miles (MTD)
                 </p>
                 <p className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
@@ -80,7 +80,7 @@ export default function VehicleDetail() {
                 </p>
               </div>
               <div>
-                <p className="text-[11px] uppercase text-zinc-400">
+                <p className="text-xs uppercase text-zinc-400">
                   On-Time Rate
                 </p>
                 <p className="text-xl font-bold text-green-600 dark:text-green-400">
@@ -135,7 +135,7 @@ export default function VehicleDetail() {
                 <Icon name="pin" size={15} />
               </span>
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+                <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
                   Origin
                 </p>
                 <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
@@ -149,7 +149,7 @@ export default function VehicleDetail() {
                 <Icon name="flag" size={15} />
               </span>
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+                <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
                   Destination
                 </p>
                 <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">

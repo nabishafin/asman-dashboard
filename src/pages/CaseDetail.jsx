@@ -53,11 +53,11 @@ export default function CaseDetail() {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <span
-            className={`inline-flex rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide ${LIFECYCLE_STYLES[c.lifecycleStatus]}`}
+            className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide ${LIFECYCLE_STYLES[c.lifecycleStatus]}`}
           >
             {c.lifecycleStatus}
           </span>
-          <h1 className="mt-2 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+          <h1 className="mt-2 text-xl font-bold text-zinc-900 dark:text-zinc-50">
             Case #{c.id}
           </h1>
         </div>
@@ -84,10 +84,10 @@ export default function CaseDetail() {
               {c.overview}
             </p>
             <div className="mt-4 rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
+              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
                 Court / Jurisdiction
               </p>
-              <p className="mt-1 text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+              <p className="mt-1 text-base font-semibold text-zinc-900 dark:text-zinc-50">
                 {c.jurisdiction}
               </p>
             </div>
@@ -131,7 +131,7 @@ export default function CaseDetail() {
                 Lead Attorney
                 <Icon name="briefcase" size={16} className="text-zinc-400" />
               </h3>
-              <p className="mt-0.5 text-[11px] text-zinc-400">
+              <p className="mt-0.5 text-xs text-zinc-400">
                 Handled offline by counsel · internal reference only, not visible to fleet managers
               </p>
               <div className="mt-3 flex items-center gap-3">
@@ -164,7 +164,7 @@ export default function CaseDetail() {
             <h3 className="font-bold text-zinc-900 dark:text-zinc-50">
               Document Vault
             </h3>
-            <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] font-semibold text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+            <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-semibold text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
               {c.documents.length} FILES
             </span>
           </div>

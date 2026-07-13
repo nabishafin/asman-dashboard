@@ -122,7 +122,7 @@ export default function NotificationsPanel({ open, onClose }) {
                   </p>
                   <span
                     className={
-                      'flex-shrink-0 whitespace-nowrap text-[11px] font-semibold ' +
+                      'flex-shrink-0 whitespace-nowrap text-xs font-semibold ' +
                       (n.tone === 'red' ? 'text-red-500' : 'text-zinc-400')
                     }
                   >

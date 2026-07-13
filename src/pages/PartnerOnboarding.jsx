@@ -18,7 +18,7 @@ function SectionLabel({ icon, children }) {
 
 const fieldLabel = 'block text-xs font-medium text-zinc-500 dark:text-zinc-400'
 const fieldInput =
-  'mt-1.5 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 outline-none placeholder:text-zinc-400 focus:border-brand focus:bg-white focus:ring-2 focus:ring-brand/30 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50'
+  'mt-1.5 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 outline-none placeholder:text-zinc-400 focus:border-brand focus:bg-white dark:focus:bg-zinc-900 focus:ring-2 focus:ring-brand/30 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50'
 
 // Pull a plain size value ("1,250") out of a stored display string like
 // "1,250 Vehicles" so the form input round-trips cleanly on edit.
@@ -105,17 +105,6 @@ export default function PartnerOnboarding() {
 
   return (
     <div className="flex flex-col gap-5">
-      <div>
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-          {isEdit ? 'Manage Partner' : 'Partner Onboarding'}
-        </h1>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          {isEdit
-            ? `Update institutional details for ${existing.name}.`
-            : 'Establish institutional logistics partnership.'}
-        </p>
-      </div>
-
       <form
         onSubmit={handleSubmit}
         className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900"
@@ -295,7 +284,7 @@ export default function PartnerOnboarding() {
           </button>
           <button
             type="submit"
-            className="rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
+            className="rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-900"
           >
             {isEdit ? 'Save Changes' : 'Approve'}
           </button>

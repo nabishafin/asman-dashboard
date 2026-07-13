@@ -61,7 +61,7 @@ function UnitRow({ unit, active, onClick }) {
 
       <div className="mt-2.5 flex items-end justify-between">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
             {unit.metricLabel}
           </p>
           {unit.fuelLevel !== undefined ? (
@@ -79,7 +79,7 @@ function UnitRow({ unit, active, onClick }) {
           )}
         </div>
         <div className="text-right">
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
             {unit.rightLabel}
           </p>
           <p
@@ -109,7 +109,7 @@ function ActiveUnitsPanel({ tab, setTab, selectedId, setSelectedId }) {
     <div className="flex h-full flex-col rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
       <div className="flex items-center justify-between px-1">
         <h3 className="font-bold text-zinc-900 dark:text-zinc-50">Active Units</h3>
-        <span className="rounded-full bg-brand/10 px-2.5 py-1 text-[11px] font-bold text-brand dark:text-brand-dark">
+        <span className="rounded-full bg-brand/10 px-2.5 py-1 text-xs font-bold text-brand dark:text-brand-dark">
           {onlineCount} ONLINE
         </span>
       </div>
@@ -232,7 +232,7 @@ function DriverPanel({ unit }) {
             style={{ width: `${unit.routeProgress}%` }}
           />
         </div>
-        <div className="mt-1.5 flex justify-between text-[11px] font-medium text-zinc-400">
+        <div className="mt-1.5 flex justify-between text-xs font-medium text-zinc-400">
           <span>{unit.origin}</span>
           <span>{unit.destination}</span>
         </div>
@@ -245,13 +245,13 @@ function DriverPanel({ unit }) {
         </p>
         <div className="mt-2 grid grid-cols-2 gap-2">
           <div>
-            <p className="text-[10px] uppercase text-zinc-400">Drive Time</p>
+            <p className="text-xs uppercase text-zinc-400">Drive Time</p>
             <p className="font-bold text-zinc-900 dark:text-zinc-50">
               {unit.hos.driveTime}
             </p>
           </div>
           <div>
-            <p className="text-[10px] uppercase text-zinc-400">Duty Left</p>
+            <p className="text-xs uppercase text-zinc-400">Duty Left</p>
             <p className="font-bold text-green-600 dark:text-green-400">
               {unit.hos.dutyLeft}
             </p>

@@ -70,7 +70,7 @@ export default function AdminDriverProfile() {
 
             <div className="mt-4 flex gap-8">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
+                <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
                   Experience
                 </p>
                 <p className="font-bold text-zinc-900 dark:text-zinc-50">
@@ -78,7 +78,7 @@ export default function AdminDriverProfile() {
                 </p>
               </div>
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
+                <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
                   License Expiration
                 </p>
                 <p className="font-bold text-zinc-900 dark:text-zinc-50">
@@ -97,20 +97,20 @@ export default function AdminDriverProfile() {
             Personnel Information
           </h3>
 
-          <p className="mt-4 text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
+          <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-zinc-400">
             CDL Number
           </p>
           <p className="mt-1 flex items-center gap-2">
             <span className="font-bold text-zinc-900 dark:text-zinc-50">
               {driver.cdlNumber}
             </span>
-            <span className="rounded-full bg-brand/10 px-2 py-0.5 text-[11px] font-semibold text-brand dark:text-brand-dark">
+            <span className="rounded-full bg-brand/10 px-2 py-0.5 text-xs font-semibold text-brand dark:text-brand-dark">
               {driver.cdlClass}
             </span>
           </p>
 
           <div className="mt-4 border-t border-zinc-100 pt-4 dark:border-zinc-800">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
+            <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
               Emergency Contact
             </p>
             <p className="mt-1 font-bold text-zinc-900 dark:text-zinc-50">
@@ -151,7 +151,7 @@ export default function AdminDriverProfile() {
             <label className="flex h-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-zinc-200 text-zinc-400 transition hover:border-brand/40 hover:text-brand dark:border-zinc-700">
               <input type="file" className="hidden" />
               <Icon name="image" size={18} />
-              <span className="text-[11px] font-semibold">Add New</span>
+              <span className="text-xs font-semibold">Add New</span>
             </label>
           </div>
         </div>

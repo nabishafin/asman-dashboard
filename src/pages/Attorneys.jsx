@@ -67,7 +67,7 @@ function AttorneyCard({ a, onRemove }) {
             {isPublic && (
               <span
                 title="Publicly documented (PACER/AILA/CLINIC) — not an ASMAN-managed profile"
-                className="flex-shrink-0 rounded-full bg-teal-500/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-teal-600 dark:text-teal-400"
+                className="flex-shrink-0 rounded-full bg-teal-500/10 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-teal-600 dark:text-teal-400"
               >
                 Public Record
               </span>
@@ -79,7 +79,7 @@ function AttorneyCard({ a, onRemove }) {
 
       <div className="mt-4 grid grid-cols-2 gap-3 border-t border-zinc-100 pt-3 dark:border-zinc-800">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
             Win Rate
           </p>
           <p className="font-bold text-zinc-900 dark:text-zinc-50">
@@ -87,7 +87,7 @@ function AttorneyCard({ a, onRemove }) {
           </p>
         </div>
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
             Cases
           </p>
           <p className="font-bold text-zinc-900 dark:text-zinc-50">
@@ -113,7 +113,7 @@ function AttorneyCard({ a, onRemove }) {
         ) : (
           <button
             onClick={() => navigate(`/attorneys/${a.id}`)}
-            className="flex-1 rounded-lg bg-zinc-900 py-2 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
+            className="flex-1 rounded-lg bg-zinc-900 py-2 text-sm font-semibold text-white transition hover:bg-black dark:hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-900"
           >
             View Profile
           </button>
@@ -150,18 +150,9 @@ export default function Attorneys() {
       </div>
 
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-            Attorney Network Administration
-          </h1>
-          <p className="mt-1.5 flex items-center gap-1.5 text-sm text-zinc-500 dark:text-zinc-400">
-            <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-            482 Verified Attorneys active across 12 federal circuits
-          </p>
-        </div>
         <button
           onClick={() => setModalOpen(true)}
-          className="flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:bg-zinc-100 dark:text-zinc-900"
+          className="flex items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-900"
         >
           <Icon name="userPlus" size={16} />
           Onboard Attorney
