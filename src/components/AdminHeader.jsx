@@ -74,10 +74,11 @@ export default function AdminHeader() {
 
         <button
           onClick={() => navigate('/intelligence')}
-          title="Back to Intelligence Hub"
-          className="flex-shrink-0 grid h-9 w-9 place-items-center rounded-lg text-zinc-500 transition hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+          title="Back to Hub"
+          className="flex h-9 flex-shrink-0 items-center gap-1.5 rounded-lg px-2.5 text-sm font-semibold text-zinc-500 transition hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
         >
-          <Icon name="arrowLeft" size={18} />
+          <Icon name="globe" size={18} />
+          <span className="hidden whitespace-nowrap sm:inline">Back to Hub</span>
         </button>
       </div>
     </header>
