@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useAuth } from '../auth/AuthContext.jsx'
 import Icon from './Icon.jsx'
 
 const ROUTE_TITLES = {
@@ -34,7 +33,6 @@ function getPageTitle(pathname) {
 }
 
 export default function AdminHeader() {
-  const { user } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
   const [query, setQuery] = useState('')
@@ -74,17 +72,13 @@ export default function AdminHeader() {
           <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-red-500" />
         </button>
 
-        <div className="flex flex-shrink-0 items-center gap-2.5">
-          <div className="grid h-9 w-9 place-items-center rounded-full bg-zinc-200 font-bold text-zinc-600 dark:bg-zinc-700 dark:text-zinc-300">
-            {user.name.charAt(0)}
-          </div>
-          <div className="hidden leading-tight sm:block">
-            <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-              Admin Console
-            </p>
-            <p className="text-xs text-zinc-400">{user.name}</p>
-          </div>
-        </div>
+        <button
+          onClick={() => navigate('/intelligence')}
+          title="Back to Intelligence Hub"
+          className="flex-shrink-0 grid h-9 w-9 place-items-center rounded-lg text-zinc-500 transition hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+        >
+          <Icon name="arrowLeft" size={18} />
+        </button>
       </div>
     </header>
   )

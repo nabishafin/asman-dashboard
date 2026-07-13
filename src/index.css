@@ -1,5 +1,17 @@
 @import 'tailwindcss';
 
+/* Enable `dark:` utilities both from the OS setting AND from an explicit
+   `.dark` class, so specific areas (e.g. the Intelligence Hub) can be forced
+   dark regardless of the viewer's system theme. */
+@custom-variant dark {
+  @media (prefers-color-scheme: dark) {
+    @slot;
+  }
+  &:where(.dark, .dark *) {
+    @slot;
+  }
+}
+
 /* Brand palette used via `brand`/`brand-dark` utility colors, e.g. bg-brand */
 @theme {
   --color-brand: #00668a;

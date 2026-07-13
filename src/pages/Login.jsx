@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext.jsx'
+import { ROLES } from '../auth/roles.js'
 import Icon from '../components/Icon.jsx'
 import AuthFooter from '../components/AuthFooter.jsx'
 
@@ -17,8 +18,12 @@ export default function Login() {
     e.preventDefault()
     setError('')
     const res = login(email, password)
-    if (res.ok) navigate('/', { replace: true })
-    else setError(res.error)
+    if (res.ok) {
+      // Super admins land on the Intelligence Hub (full-screen); everyone
+      // else lands on their dashboard.
+      const home = res.user?.role === ROLES.SUPER_ADMIN ? '/intelligence' : '/'
+      navigate(home, { replace: true })
+    } else setError(res.error)
   }
 
   const demo = (role, em, pw) => {

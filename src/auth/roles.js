@@ -22,7 +22,6 @@ export const NAV_BY_ROLE = {
     { path: '/attorneys', label: 'Attorneys', icon: 'briefcase' },
     { path: '/templates', label: 'Templates', icon: 'file' },
     { path: '/case-tracker', label: 'Case Tracker', icon: 'clipboard' },
-    { path: '/intelligence', label: 'Intelligence Hub', icon: 'globe' },
     { path: '/sos-incidents', label: 'SOS Incidents', icon: 'sos' },
     { path: '/subscription', label: 'Subscription', icon: 'shield' },
     { path: '/settings', label: 'Settings', icon: 'cog' },

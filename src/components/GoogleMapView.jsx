@@ -14,6 +14,10 @@ const MARKER_COLORS = {
   dark: { background: '#18181b', borderColor: '#000000', glyphColor: '#a1a1aa' },
   orange: { background: '#ea580c', borderColor: '#9a3412', glyphColor: '#fed7aa' },
   gold: { background: '#ca8a04', borderColor: '#854d0e', glyphColor: '#fef08a' },
+  teal: { background: '#0d9488', borderColor: '#115e59', glyphColor: '#99f6e4' },
+  pink: { background: '#db2777', borderColor: '#9d174d', glyphColor: '#fbcfe8' },
+  cyan: { background: '#06b6d4', borderColor: '#0e7490', glyphColor: '#cffafe' },
+  slate: { background: '#64748b', borderColor: '#334155', glyphColor: '#e2e8f0' },
 }
 
 // Filled car glyph used for badge-style map markers (reads clearly at small

@@ -50,7 +50,7 @@ export function AuthProvider({ children }) {
     const safeUser = { ...found }
     delete safeUser.password
     setUser(safeUser)
-    return { ok: true }
+    return { ok: true, user: safeUser }
   }
 
   const logout = () => setUser(null)

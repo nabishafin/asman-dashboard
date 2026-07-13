@@ -9,6 +9,8 @@ export default defineConfig({
     allowedHosts: [
       'actually-gently-correctly-goat.trycloudflare.com',
       'promising-lean-taxation-river.trycloudflare.com',
+      'zealand-represents-previous-registrar.trycloudflare.com',
+      'zum-scanned-west-contractors.trycloudflare.com',
     ],
   },
 })

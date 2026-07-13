@@ -4,8 +4,6 @@ import {
   DW_HC_CASES,
   DW_NEWS,
   DW_ATTORNEYS,
-  DW_JUDGES,
-  dwJudgeColor,
   dwTagBg,
   dwTagColor,
 } from '../data/detentionWatchData.js'
@@ -121,42 +119,7 @@ function TopAttorneys() {
   )
 }
 
-function ImmigrationJudges() {
-  return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-      <p className="flex items-center gap-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">
-        <span className="grid h-8 w-8 place-items-center rounded-lg bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400">
-          <Icon name="user" size={15} />
-        </span>
-        Immigration Judges Reference
-      </p>
-      <p className="mt-1 text-sm text-zinc-400">Grant/denial rates by court · TRAC Immigration (Syracuse)</p>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        {DW_JUDGES.map((j) => (
-          <div key={j.id} className="rounded-lg border border-zinc-100 p-3 dark:border-zinc-800">
-            <div className="flex items-center justify-between gap-2">
-              <p className="truncate text-sm font-semibold text-zinc-900 dark:text-zinc-50">{j.name}</p>
-              <span className="flex-shrink-0 text-xs font-bold" style={{ color: dwJudgeColor(j.approve) }}>
-                {j.approve}%
-              </span>
-            </div>
-            <p className="text-xs text-zinc-400">
-              {j.court} · {j.circuit} Circuit
-            </p>
-            <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
-              <div
-                className="h-full rounded-full"
-                style={{ width: `${j.approve}%`, background: dwJudgeColor(j.approve) }}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-export default function HabeasCorpusTracker() {
+export default function HabeasCorpusTracker({ embedded = false }) {
   const stats = [
     { value: '1,240', label: 'Total Filed', icon: 'clipboard', ring: 'from-brand/60 to-brand/10', tone: { icon: 'bg-brand/10 text-brand dark:bg-brand-dark/15 dark:text-brand-dark', value: 'text-zinc-900 dark:text-zinc-50' } },
     { value: '387', label: 'Granted', icon: 'check', ring: 'from-emerald-500/60 to-emerald-500/10', tone: { icon: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400', value: 'text-emerald-600 dark:text-emerald-400' } },
@@ -176,9 +139,9 @@ export default function HabeasCorpusTracker() {
       </div>
 
       {/* Main content */}
-      <div className="grid gap-5 lg:grid-cols-3 items-start">
-        {/* Table (Left, 2 cols) */}
-        <div className="lg:col-span-2 overflow-x-auto rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      <div className={`grid gap-5 items-start ${embedded ? '' : 'lg:grid-cols-3'}`}>
+        {/* Table — full width when embedded (feed lives in the hub's right rail) */}
+        <div className={`${embedded ? '' : 'lg:col-span-2'} overflow-x-auto rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900`}>
           <p className="mb-4 flex items-center gap-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">
             <span className="grid h-8 w-8 place-items-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
               <Icon name="list" size={15} />
@@ -229,16 +192,15 @@ export default function HabeasCorpusTracker() {
           </div>
         </div>
 
-        {/* Sidebar (Right, 1 col) */}
-        <div className="flex flex-col gap-5">
-          <LiveIntelligenceFeed />
-        </div>
+        {/* Sidebar (Right, 1 col) — hidden when embedded in the hub */}
+        {!embedded && (
+          <div className="flex flex-col gap-5">
+            <LiveIntelligenceFeed />
+          </div>
+        )}
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2 items-start">
-        <ImmigrationJudges />
-        <TopAttorneys />
-      </div>
+      <TopAttorneys />
     </div>
   )
 }

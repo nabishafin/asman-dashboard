@@ -5,21 +5,15 @@ import { legalCases, driverDirectory } from '../data/mockData.js'
 import Icon from '../components/Icon.jsx'
 import InitiateCaseModal from '../components/InitiateCaseModal.jsx'
 
-const STATUS_FILTERS = ['All', 'Filed', 'Pending', 'Decision']
+const STATUS_FILTERS = ['All', 'Active', 'Failed', 'Completed']
 
-const HC_OUTCOME_STYLES = {
-  granted: 'bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400',
-  denied: 'bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400',
-  pending: 'bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-400',
-  appealed: 'bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400',
+// Case lifecycle status (drives the filter tabs and the Status column badge).
+const STATUS_STYLES = {
+  active: 'bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300',
+  failed: 'bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400',
+  completed: 'bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-300',
 }
-
-const STAGE_STYLES = {
-  filed: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300',
-  pending: 'bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300',
-  decision: 'bg-pink-100 text-pink-700 dark:bg-pink-500/15 dark:text-pink-300',
-}
-const STAGE_LABELS = { filed: 'Filed', pending: 'Pending', decision: 'Decision' }
+const STATUS_LABELS = { active: 'Active', failed: 'Failed', completed: 'Completed' }
 
 function StatTile({ icon, tone, label, value }) {
   return (
@@ -48,7 +42,7 @@ export default function CaseTracker() {
   const visibleCases =
     statusFilter === 'All'
       ? cases
-      : cases.filter((c) => STAGE_LABELS[c.stage] === statusFilter)
+      : cases.filter((c) => STATUS_LABELS[c.lifecycleStatus || 'active'] === statusFilter)
 
   return (
     <div className="flex flex-col gap-5">
@@ -162,9 +156,9 @@ export default function CaseTracker() {
                   </td>
                   <td className="px-5 py-3.5">
                     <span
-                      className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${STAGE_STYLES[c.stage]}`}
+                      className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_STYLES[c.lifecycleStatus || 'active']}`}
                     >
-                      {STAGE_LABELS[c.stage]}
+                      {STATUS_LABELS[c.lifecycleStatus || 'active']}
                     </span>
                   </td>
                   <td className="px-5 py-3.5 text-zinc-600 dark:text-zinc-300">

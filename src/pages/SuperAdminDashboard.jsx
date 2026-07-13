@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import GoogleMapView from '../components/GoogleMapView.jsx'
-import { DW_FACILITIES, DW_NEWS, dwFacMarkerColor, dwTagColor, dwTagBg } from '../data/detentionWatchData.js'
+import { DW_FACILITIES, DW_NEWS, dwTagColor, dwTagBg } from '../data/detentionWatchData.js'
 
 /* ---------------- mock dashboard data ---------------- */
 const STATS = [
@@ -106,16 +106,41 @@ const REST_AREAS = [{ id: 1, coords: { lat: 30.6744, lng: -101.4849 } }] // I-10
 
 const TRUCK_STOPS = [{ id: 1, coords: { lat: 29.5738, lng: -98.2211 } }] // I-10 truck stop, Seguin, TX
 
+// Exact marker hex values (mirror GoogleMapView's MARKER_COLORS) so the
+// legend dots and the map markers are guaranteed to show the same color.
+const MARKER_HEX = {
+  red: '#dc2626',
+  purple: '#7c3aed',
+  gold: '#ca8a04',
+  blue: '#2563eb',
+  green: '#16a34a',
+  cyan: '#06b6d4',
+  slate: '#64748b',
+  dark: '#18181b',
+}
+
+// Each legend row maps to a distinct marker color (`tone`), also used for the
+// corresponding markers on the map. Red is the ONLY red-family color (reserved
+// for SOS); every other row is a clearly separate hue so none look alike.
 const MAP_LEGEND = [
-  { key: 'sos', label: 'SOS', color: 'bg-red-500' },
-  { key: 'critical', label: 'Detention — Critical (1,000+)', color: 'bg-red-600' },
-  { key: 'high', label: 'Detention — High (500–999)', color: 'bg-orange-500' },
-  { key: 'moderate', label: 'Detention — Moderate/Planned', color: 'bg-amber-500' },
-  { key: 'rest', label: 'Rest areas', color: 'bg-green-500' },
-  { key: 'drivers', label: "Driver's", color: 'bg-green-500' },
-  { key: 'truck', label: 'Truck stops', color: 'bg-purple-500' },
-  { key: 'police', label: 'Police alert points', color: 'bg-blue-500' },
+  { key: 'sos', label: 'SOS', tone: 'red' },
+  { key: 'critical', label: 'Detention — Critical (1,000+)', tone: 'purple' },
+  { key: 'high', label: 'Detention — High (500–999)', tone: 'gold' },
+  { key: 'moderate', label: 'Detention — Moderate/Planned', tone: 'blue' },
+  { key: 'drivers', label: 'Drivers', tone: 'green' },
+  { key: 'rest', label: 'Rest areas', tone: 'cyan' },
+  { key: 'truck', label: 'Truck stops', tone: 'slate' },
+  { key: 'police', label: 'Police alert points', tone: 'dark' },
 ]
+
+// Facility marker color by capacity tier — red stays reserved for SOS, so
+// critical detention uses purple (far from red on the color wheel).
+function facTone(pop, status) {
+  if (status === 'planned') return 'blue' // planned (grouped with moderate)
+  if (pop >= 1000) return 'purple' // critical
+  if (pop >= 500) return 'gold' // high
+  return 'blue' // moderate
+}
 
 /* ---------------- small pieces ---------------- */
 function StatTile({ stat, onClick }) {
@@ -199,18 +224,18 @@ function IntelligenceMap() {
         zoom={5}
         markers={[
           ...SOS_ALARMS.map((s) => ({ id: `sos-${s.id}`, ...s.coords, color: 'red', icon: 'warning', pulse: true })),
-          ...ENFORCEMENT_ALERTS.map((a) => ({ id: `alert-${a.id}`, ...a.coords, color: 'blue', icon: 'shield' })),
+          ...ENFORCEMENT_ALERTS.map((a) => ({ id: `alert-${a.id}`, ...a.coords, color: 'dark', icon: 'shield' })),
           ...DRIVER_POSITIONS.map((d) => ({ id: `driver-${d.id}`, ...d.coords, color: 'green', icon: 'car' })),
           ...DW_FACILITIES.map((f) => ({
             id: `fac-${f.id}`,
             lat: f.lat,
             lng: f.lng,
-            color: dwFacMarkerColor(f.pop, f.status),
+            color: facTone(f.pop, f.status),
             icon: 'building',
             pulse: f.pop >= 1000,
           })),
-          ...REST_AREAS.map((r) => ({ id: `rest-${r.id}`, ...r.coords, color: 'green', icon: 'pin' })),
-          ...TRUCK_STOPS.map((t) => ({ id: `truck-${t.id}`, ...t.coords, color: 'purple', icon: 'truck' })),
+          ...REST_AREAS.map((r) => ({ id: `rest-${r.id}`, ...r.coords, color: 'cyan', icon: 'pin' })),
+          ...TRUCK_STOPS.map((t) => ({ id: `truck-${t.id}`, ...t.coords, color: 'slate', icon: 'truck' })),
         ]}
       >
         {showLegend && (
@@ -227,7 +252,10 @@ function IntelligenceMap() {
                   key={l.key}
                   className="flex items-center gap-1.5 font-medium text-zinc-600 dark:text-zinc-300"
                 >
-                  <span className={`h-1.5 w-1.5 flex-shrink-0 rounded-full ${l.color}`} />
+                  <span
+                    className="h-2 w-2 flex-shrink-0 rounded-full"
+                    style={{ background: MARKER_HEX[l.tone] }}
+                  />
                   {l.label}
                 </span>
               ))}
