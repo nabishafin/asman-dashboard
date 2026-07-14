@@ -158,16 +158,7 @@ export default function Layout() {
         {/* Normal chrome: admin header hidden in full-screen mode */}
         {!isFullscreen && user.role === ROLES.SUPER_ADMIN && <AdminHeader />}
 
-        {/* Full-screen mode: floating button (top-right) to reveal navigation */}
-        {isFullscreen && (
-          <button
-            onClick={() => setDrawerOpen(true)}
-            title="Show navigation"
-            className="fixed right-5 top-5 z-30 grid h-11 w-11 place-items-center rounded-xl border border-zinc-200 bg-white text-zinc-700 shadow-lg transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
-          >
-            <Icon name="menu" size={22} />
-          </button>
-        )}
+        {/* Floating button removed as per user request */}
 
         <main className="flex-1 p-5 md:p-8">
           <Outlet />

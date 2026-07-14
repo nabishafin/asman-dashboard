@@ -1,146 +1,228 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import GoogleMapView from '../GoogleMapView.jsx'
 import {
   DW_FACILITIES,
   DW_CORPS,
   DW_JUDGES,
-  DW_COLORS,
+  DW_ATTORNEYS,
   dwFacColor,
-  dwFacRadius,
-  dwJudgeColor,
 } from '../../data/detentionWatchData.js'
 
-// Which layers are visible is controlled by the parent (the left panel in the
-// Intelligence Hub). Falls back to everything-on when rendered standalone.
 const DEFAULT_LAYERS = { detention: true, planned: true, corps: true, judges: true, attorneys: false }
 
-export default function IntelMap({ layers = DEFAULT_LAYERS }) {
-  const [hovered, setHovered] = useState(null)
+export default function IntelMap({ layers = DEFAULT_LAYERS, activeCapacities, onDataLoaded }) {
+  const [selectedId, setSelectedId] = useState(null)
+  const [hoveredId, setHoveredId] = useState(null)
 
-  const active = DW_FACILITIES.filter((f) => f.status === 'active')
-  const planned = DW_FACILITIES.filter((f) => f.status === 'planned')
+  useEffect(() => {
+    if (onDataLoaded) {
+      const activeCount = DW_FACILITIES.filter((f) => f.status === 'active').length
+      onDataLoaded(activeCount)
+    }
+  }, [onDataLoaded])
+
+  // Convert our data into GoogleMapView markers
+  const markers = []
+
+  if (layers.detention) {
+    const activeFacilities = DW_FACILITIES.filter((f) => f.status === 'active')
+    activeFacilities.forEach((f) => {
+      let bucket = 'low'
+      if (f.pop >= 1000) bucket = 'critical'
+      else if (f.pop >= 500) bucket = 'high'
+      else if (f.pop >= 150) bucket = 'moderate'
+      
+      if (!activeCapacities || activeCapacities[bucket]) {
+        if (f.lat && f.lng) {
+          markers.push({
+            id: f.id,
+            lat: f.lat,
+            lng: f.lng,
+            color: dwFacColor(f.pop, f.status),
+            icon: 'building',
+            iconStyle: 'glow',
+            title: f.name,
+            subtitle: `Pop: ${f.pop} / Cap: ${f.cap} · Op: ${f.op}`,
+            pop: f.pop,
+            cap: f.cap,
+            op: f.op,
+          })
+        }
+      }
+    })
+  }
+
+  if (layers.planned && (!activeCapacities || activeCapacities.planned)) {
+    const planned = DW_FACILITIES.filter((f) => f.status === 'planned')
+    planned.forEach((f) => {
+      markers.push({
+        id: f.id,
+        lat: f.lat,
+        lng: f.lng,
+        color: '#f59e0b', // Amber-500
+        icon: 'clock',
+        iconStyle: 'minimal',
+        title: f.name,
+        subtitle: `PLANNED — ${f.city}, ${f.state}`,
+      })
+    })
+  }
+
+
+
+
+  if (layers.corps && (!activeCapacities || activeCapacities.corps)) {
+    // Only map corporations that have lat/lng defined (DW_CORPS currently uses x/y for SVG)
+    // As a fallback for the Google Map, we can approximate HQ locations if they don't have lat/lng.
+    // For this example, we'll map them using known coordinates for these cities.
+    const corpLocations = {
+      'C1': { lat: 36.1627, lng: -86.7816 }, // Nashville, TN
+      'C2': { lat: 26.3587, lng: -80.0831 }, // Boca Raton, FL
+      'C3': { lat: 32.5232, lng: -92.6379 }, // Ruston, LA
+      'C4': { lat: 40.9180, lng: -111.8722 }, // Centerville, UT
+      'C5': { lat: 32.4065, lng: -97.2114 }, // Alvarado, TX
+    }
+    DW_CORPS.forEach((corp) => {
+      const loc = corpLocations[corp.id]
+      if (loc) {
+        markers.push({
+          id: corp.id,
+          lat: loc.lat,
+          lng: loc.lng,
+          color: '#8b5cf6', // Purple-500
+          icon: 'briefcase',
+          iconStyle: 'badge',
+          title: corp.name,
+          subtitle: `HQ: ${corp.hq} · Profit: ${corp.profit}`,
+        })
+      }
+    })
+  }
+
+  if (layers.judges) {
+    // Similar to corps, we approximate court locations if lat/lng are missing.
+    const courtLocations = {
+      'J1': { lat: 37.7749, lng: -122.4194 }, // SF
+      'J2': { lat: 42.3601, lng: -71.0589 }, // Boston
+      'J3': { lat: 33.7490, lng: -84.3880 }, // Atlanta
+      'J4': { lat: 29.7604, lng: -95.3698 }, // Houston
+      'J5': { lat: 40.7128, lng: -74.0060 }, // NYC
+      'J6': { lat: 41.8781, lng: -87.6298 }, // Chicago
+      'J7': { lat: 47.6062, lng: -122.3321 }, // Seattle
+      'J8': { lat: 32.7767, lng: -96.7970 }, // Dallas
+      'J9': { lat: 25.7617, lng: -80.1918 }, // Miami
+      'J10': { lat: 34.0522, lng: -118.2437 }, // LA
+      'J11': { lat: 39.9526, lng: -75.1652 }, // Philly
+      'J12': { lat: 29.4241, lng: -98.4936 }, // San Antonio
+    }
+    DW_JUDGES.forEach((j) => {
+      const loc = courtLocations[j.id]
+      if (loc) {
+        markers.push({
+          id: j.id,
+          lat: loc.lat,
+          lng: loc.lng,
+          color: '#3b82f6', // Blue-500
+          icon: 'balance-scale',
+          iconStyle: 'pin',
+          title: j.name,
+          subtitle: `${j.court} · Grant ${j.approve}% / Deny ${j.deny}%`,
+        })
+      }
+    })
+  }
+
+  if (layers.attorneys) {
+    const attorneyLocations = {
+      'A1': { lat: 40.7128, lng: -74.0060 }, // NY
+      'A2': { lat: 38.9072, lng: -77.0369 }, // DC
+      'A3': { lat: 33.6846, lng: -117.8265 }, // Irvine, CA
+      'A4': { lat: 38.8951, lng: -77.0364 }, // DC
+      'A5': { lat: 42.3601, lng: -71.0589 }, // MA
+      'A6': { lat: 34.0522, lng: -118.2437 }, // LA
+      'A7': { lat: 41.7658, lng: -72.6734 }, // CT
+      'A8': { lat: 40.0583, lng: -74.4057 }, // NJ
+      'A9': { lat: 37.7749, lng: -122.4194 }, // SF
+      'A10': { lat: 39.9526, lng: -75.1652 }, // PA
+    }
+    DW_ATTORNEYS.forEach((a) => {
+      const loc = attorneyLocations[a.id]
+      if (loc) {
+        markers.push({
+          id: a.id,
+          lat: loc.lat,
+          lng: loc.lng,
+          color: '#ec4899', // Pink-500
+          icon: 'briefcase',
+          iconStyle: 'glow',
+          title: a.name,
+          subtitle: `${a.firm} · ${a.circuit} Circuit`,
+        })
+      }
+    })
+  }
+
+  const activeMarkerId = hoveredId || selectedId
+  const activeMarker = markers.find(m => m.id === activeMarkerId)
 
   return (
-    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-zinc-800 bg-[#0B0E14] shadow-inner sm:aspect-[16/10]">
-      <svg viewBox="0 0 100 90" className="h-full w-full">
-        {/* US outline */}
-        <path
-          d="M10,20 L15,16 L22,14 L35,13 L50,12 L65,12 L75,14 L82,18 L85,22 L85,30 L88,35 L87,42 L84,48 L82,55 L78,62 L75,68 L72,72 L70,76 L68,80 L65,82 L60,83 L55,83 L52,80 L50,78 L47,80 L44,82 L40,83 L35,82 L30,80 L25,78 L20,74 L16,70 L12,64 L10,56 L8,48 L8,38 L9,28 Z"
-          fill="none"
-          stroke={DW_COLORS.border2}
-          strokeWidth="0.4"
-        />
-
-        {/* Grid */}
-        {[20, 30, 40, 50, 60, 70, 80].map((x) => (
-          <line key={x} x1={x} y1="12" x2={x} y2="84" stroke={DW_COLORS.border} strokeWidth="0.15" strokeDasharray="1,2" opacity="0.4" />
-        ))}
-        {[20, 30, 40, 50, 60, 70].map((y) => (
-          <line key={y} x1="8" y1={y} x2="90" y2={y} stroke={DW_COLORS.border} strokeWidth="0.15" strokeDasharray="1,2" opacity="0.4" />
-        ))}
-
-        {/* Corp → facility connection lines */}
-        {layers.corps &&
-          layers.detention &&
-          DW_CORPS.map((corp) =>
-            active
-              .filter((f) => f.op === corp.name)
-              .map((f) => (
-                <line key={corp.id + f.id} x1={corp.x} y1={corp.y} x2={f.x} y2={f.y} stroke={corp.col} strokeWidth="0.2" opacity="0.2" strokeDasharray="1,3" />
-              ))
+    <GoogleMapView
+      markers={markers}
+      selectedId={selectedId}
+      onMarkerClick={setSelectedId}
+      onMarkerHover={setHoveredId}
+      className="h-full w-full"
+    >
+      {/* Overlay for active (hovered or selected) marker info */}
+      {activeMarker && (
+        <div className="absolute bottom-4 left-4 z-10 w-72 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-900/95 p-4 shadow-xl backdrop-blur-sm transition-opacity animate-in fade-in zoom-in-95 duration-200">
+          {selectedId === activeMarker.id && (
+            <button 
+              onClick={() => setSelectedId(null)}
+              className="absolute top-2 right-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-white transition-colors"
+            >
+              ✕
+            </button>
           )}
-
-        {/* Active detention facilities — sized & colored by population */}
-        {layers.detention &&
-          active.map((f) => {
-            const col = dwFacColor(f.pop, f.status)
-            const r = dwFacRadius(f.pop)
-            return (
-              <g
-                key={f.id}
-                style={{ cursor: 'pointer' }}
-                onMouseEnter={() =>
-                  setHovered({
-                    label: f.name,
-                    sub: `${f.city}, ${f.state} · Pop ${f.pop.toLocaleString()} / ${f.cap.toLocaleString()}`,
-                    col,
-                    x: f.x,
-                    y: f.y,
-                  })
-                }
-                onMouseLeave={() => setHovered(null)}
-              >
-                <circle cx={f.x} cy={f.y} r={r + 2} fill={col} opacity="0.15" />
-                <circle cx={f.x} cy={f.y} r={r} fill={col} opacity="0.85" stroke={col} strokeWidth="0.3" />
-              </g>
-            )
-          })}
-
-        {/* Planned facilities — dashed squares */}
-        {layers.planned &&
-          planned.map((f) => (
-            <g
-              key={f.id}
-              style={{ cursor: 'pointer' }}
-              onMouseEnter={() => setHovered({ label: f.name, sub: `PLANNED — ${f.city}, ${f.state}`, col: DW_COLORS.blue, x: f.x, y: f.y })}
-              onMouseLeave={() => setHovered(null)}
-            >
-              <rect x={f.x - 3} y={f.y - 3} width={6} height={6} fill="none" stroke={DW_COLORS.blue} strokeWidth="0.5" strokeDasharray="1.5,1" opacity="0.8" transform={`rotate(45,${f.x},${f.y})`} />
-            </g>
-          ))}
-
-        {/* Corp HQ */}
-        {layers.corps &&
-          DW_CORPS.map((corp) => (
-            <g
-              key={corp.id}
-              style={{ cursor: 'pointer' }}
-              onMouseEnter={() => setHovered({ label: corp.name, sub: `${corp.hq} · 2025 Profit ${corp.profit} (${corp.chg})`, col: corp.col, x: corp.x, y: corp.y })}
-              onMouseLeave={() => setHovered(null)}
-            >
-              <rect x={corp.x - 4} y={corp.y - 4} width={8} height={8} fill={corp.col} opacity="0.9" rx="1.5" stroke="rgba(255,255,255,0.3)" strokeWidth="0.4" />
-              <text x={corp.x} y={corp.y + 1.2} textAnchor="middle" fontSize="3" fill={DW_COLORS.bg} fontWeight="bold">
-                HQ
-              </text>
-            </g>
-          ))}
-
-        {/* Immigration judges — colored by grant rate, with % callout */}
-        {layers.judges &&
-          DW_JUDGES.map((j) => {
-            const col = dwJudgeColor(j.approve)
-            return (
-              <g
-                key={j.id}
-                style={{ cursor: 'pointer' }}
-                onMouseEnter={() => setHovered({ label: j.name, sub: `${j.court} · Grant ${j.approve}% / Deny ${j.deny}%`, col, x: j.x, y: j.y })}
-                onMouseLeave={() => setHovered(null)}
-              >
-                <circle cx={j.x} cy={j.y} r={3} fill={col} opacity="0.85" stroke="rgba(255,255,255,0.3)" strokeWidth="0.3" />
-                <rect x={j.x + 3.5} y={j.y - 4} width={11} height={5} rx="1" fill="rgba(28,35,53,0.95)" stroke={col} strokeWidth="0.3" />
-                <text x={j.x + 9} y={j.y - 0.8} textAnchor="middle" fontSize="2.2" fill={col} fontWeight="bold">
-                  {j.approve}% ✓
-                </text>
-              </g>
-            )
-          })}
-
-        {/* Map label */}
-        <text x="50" y="88" textAnchor="middle" fontSize="2.5" fill={DW_COLORS.text3} fontFamily="monospace">
-          CONTINENTAL UNITED STATES — DETENTION INTELLIGENCE MAP 2026
-        </text>
-      </svg>
-
-      {hovered && (
-        <div
-          className="pointer-events-none absolute z-10 whitespace-nowrap rounded-md border px-3 py-2 shadow-xl backdrop-blur"
-          style={{ left: `${hovered.x}%`, top: `${hovered.y}%`, transform: 'translate(-50%, -120%)', borderColor: hovered.col, background: 'rgba(22,27,39,0.96)' }}
-        >
-          <div className="text-xs font-bold" style={{ color: hovered.col }}>
-            {hovered.label}
-          </div>
-          <div className="mt-0.5 text-[11px] font-medium text-zinc-300">{hovered.sub}</div>
+          <div className="font-semibold text-zinc-900 dark:text-white mb-2 pr-4">{activeMarker.title}</div>
+          
+          {activeMarker.pop !== undefined && activeMarker.cap !== undefined ? (
+            <div className="mt-3 flex flex-col gap-1.5">
+              <div className="flex justify-between items-end text-[10px] font-bold uppercase tracking-wider text-zinc-500">
+                <span>Capacity Usage</span>
+                <span style={{ color: activeMarker.color }}>
+                  {Math.round((activeMarker.pop / (activeMarker.cap || 1)) * 100)}%
+                </span>
+              </div>
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800 shadow-inner">
+                <div 
+                  className="h-full transition-all duration-500" 
+                  style={{ 
+                    width: `${Math.min((activeMarker.pop / (activeMarker.cap || 1)) * 100, 100)}%`,
+                    backgroundColor: activeMarker.color,
+                    boxShadow: `0 0 8px ${activeMarker.color}`
+                  }} 
+                />
+              </div>
+              <div className="mt-1 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
+                <div>
+                  Pop: <span className="font-medium text-zinc-700 dark:text-zinc-300">{activeMarker.pop}</span>
+                </div>
+                <div>
+                  Cap: <span className="font-medium text-zinc-700 dark:text-zinc-300">{activeMarker.cap}</span>
+                </div>
+              </div>
+              {activeMarker.op && (
+                <div className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-1 uppercase tracking-wide">
+                  Operator: {activeMarker.op}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">{activeMarker.subtitle}</div>
+          )}
         </div>
       )}
-    </div>
+    </GoogleMapView>
   )
 }
