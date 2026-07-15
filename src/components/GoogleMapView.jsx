@@ -261,7 +261,7 @@ export default function GoogleMapView({
   if (!GOOGLE_MAPS_API_KEY) {
     return (
       <div
-        className={`grid place-items-center rounded-xl border border-zinc-200 bg-[#e9ebee] p-6 text-center text-sm text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 ${sizeClasses} ${className}`}
+        className={`grid place-items-center rounded-xl border border-zinc-200 bg-map-bg p-6 text-center text-sm text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 ${sizeClasses} ${className}`}
       >
         Missing VITE_GOOGLE_MAPS_API_KEY — add it to .env.local to enable the live map.
       </div>

@@ -1,55 +1,11 @@
 import { useState } from 'react'
 import { legalCases } from '../data/mockData.js'
-import Icon from './Icon.jsx'
-
-const STAGES = ['filed', 'pending', 'decision']
-const STAGE_LABELS = { filed: 'Filed', pending: 'Pending', decision: 'Decision' }
+import Icon from './common/Icon.jsx'
+import { Button } from './ui/Button.jsx'
 
 const fieldLabel = 'block text-xs font-medium text-zinc-500 dark:text-zinc-400'
 const fieldInput =
   'mt-1.5 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 outline-none placeholder:text-zinc-400 focus:border-brand focus:bg-white dark:focus:bg-zinc-900 focus:ring-2 focus:ring-brand/30 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50'
-
-function StatusStepper({ stage, onChange }) {
-  const activeIndex = STAGES.indexOf(stage)
-  return (
-    <div className="flex items-center rounded-xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
-      {STAGES.map((s, i) => (
-        <div key={s} className="flex flex-1 items-center last:flex-none">
-          <button
-            type="button"
-            onClick={() => onChange(s)}
-            className="flex flex-col items-center gap-1.5"
-          >
-            <span
-              className={
-                'grid h-6 w-6 place-items-center rounded-full border-2 text-xs ' +
-                (i < activeIndex
-                  ? 'border-zinc-900 bg-zinc-900 text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-900'
-                  : i === activeIndex
-                    ? 'border-zinc-900 bg-white text-zinc-900 dark:border-zinc-100 dark:bg-zinc-900 dark:text-zinc-100'
-                    : 'border-zinc-300 bg-white text-zinc-300 dark:border-zinc-600 dark:bg-zinc-900')
-              }
-            >
-              {i < activeIndex && <Icon name="check" size={12} />}
-              {i === activeIndex && <span className="h-2 w-2 rounded-full bg-zinc-900 dark:bg-zinc-100" />}
-            </span>
-            <span className="text-xs font-medium text-zinc-600 dark:text-zinc-300">
-              {STAGE_LABELS[s]}
-            </span>
-          </button>
-          {i < STAGES.length - 1 && (
-            <span
-              className={
-                'mx-2 h-px flex-1 ' +
-                (i < activeIndex ? 'bg-zinc-900 dark:bg-zinc-100' : 'bg-zinc-300 dark:bg-zinc-600')
-              }
-            />
-          )}
-        </div>
-      ))}
-    </div>
-  )
-}
 
 export default function InitiateCaseModal({ open, onClose, onCreated }) {
   const [caseId, setCaseId] = useState('')
@@ -57,7 +13,7 @@ export default function InitiateCaseModal({ open, onClose, onCreated }) {
   const [attorneyId, setAttorneyId] = useState('')
   const [court, setCourt] = useState('')
   const [hearingDate, setHearingDate] = useState('')
-  const [stage, setStage] = useState('pending')
+  const [lifecycleStatus, setLifecycleStatus] = useState('active')
   const [overview, setOverview] = useState('')
 
   if (!open) return null
@@ -69,12 +25,19 @@ export default function InitiateCaseModal({ open, onClose, onCreated }) {
     const attorney = attorneyOptions.find((a) => a.name === attorneyId) ?? attorneyOptions[0]
     onCreated({
       id: caseId.trim().replace(/^#?ASM-?/i, '') || `${Date.now()}`.slice(-5),
-      stage,
-      lifecycleStatus: 'active',
+      lifecycleStatus,
       court: court.trim() || 'Unassigned',
       hearingDate: hearingDate || 'TBD',
       jurisdiction: court.trim() || 'Unassigned',
-      overview: overview.trim() || 'No summary provided yet.',
+      overview: overview.trim() || 'Initial case setup.',
+      timeline: [
+        {
+          id: `t-${Date.now()}`,
+          date: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+          status: lifecycleStatus,
+          summary: overview.trim() || 'Case initiated.',
+        }
+      ],
       documents: [],
       driver: {
         name: driverName.trim() || 'Unassigned Driver',
@@ -109,7 +72,7 @@ export default function InitiateCaseModal({ open, onClose, onCreated }) {
         <div className="flex items-start justify-between border-b border-zinc-100 p-6 pb-4 dark:border-zinc-800">
           <div>
             <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-50">
-              Initiate New Case
+              Add Case
             </h2>
             <p className="mt-1 text-base text-zinc-500 dark:text-zinc-400">
               Enroll a new legal or logistical safety case into the ASMAN network.
@@ -191,10 +154,19 @@ export default function InitiateCaseModal({ open, onClose, onCreated }) {
           </div>
 
           <div>
-            <label className={fieldLabel}>Case Status Tracker</label>
-            <div className="mt-1.5">
-              <StatusStepper stage={stage} onChange={setStage} />
-            </div>
+            <label className={fieldLabel}>Initial Case Status</label>
+            <select
+              value={lifecycleStatus}
+              onChange={(e) => setLifecycleStatus(e.target.value)}
+              className={fieldInput}
+            >
+              <option value="active">Active</option>
+              <option value="hearing">Hearing</option>
+              <option value="completed">Completed</option>
+              <option value="failed">Failed</option>
+              <option value="cancelled">Cancelled</option>
+              <option value="reopened">Re-opened</option>
+            </select>
           </div>
 
           <div>
@@ -235,20 +207,12 @@ export default function InitiateCaseModal({ open, onClose, onCreated }) {
             Encryption active for legal compliance
           </p>
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-3 py-2 text-sm font-semibold text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
-            >
+            <Button variant="ghost" onClick={onClose} type="button">
               Cancel
-            </button>
-            <button
-              type="submit"
-              className="flex items-center gap-1.5 rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-900"
-            >
-              Initiate Case
-              <Icon name="arrow" size={14} />
-            </button>
+            </Button>
+            <Button variant="primary" type="submit" rightIcon="arrow">
+              Add Case
+            </Button>
           </div>
         </div>
       </form>
