@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import Icon from './Icon.jsx'
+import Icon from './common/Icon.jsx'
+import { Button } from './ui/Button.jsx'
 
 const fieldLabel = 'block text-xs font-medium text-zinc-500 dark:text-zinc-400'
 const fieldInput =
@@ -18,7 +19,7 @@ export default function OnboardAttorneyModal({ open, onClose, onCreated }) {
       name: name.trim() || 'New Practitioner',
       photo: '/attorney-david.jpg',
       firm: firm.trim() || '—',
-      winRate: 0,
+      barLicenseNumber: 'Pending',
       cases: 0,
       languages: ['English'],
     })
@@ -36,7 +37,7 @@ export default function OnboardAttorneyModal({ open, onClose, onCreated }) {
         <div className="flex items-start justify-between border-b border-zinc-100 p-6 pb-4 dark:border-zinc-800">
           <div>
             <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-50">
-              Onboard New Practitioner
+              Add Attorney
             </h2>
             <p className="mt-1 text-base text-zinc-500 dark:text-zinc-400">
               Initialize credentials for the ASMAN legal network.
@@ -152,19 +153,12 @@ export default function OnboardAttorneyModal({ open, onClose, onCreated }) {
         </div>
 
         <div className="flex items-center justify-end gap-3 border-t border-zinc-100 p-6 pt-4 dark:border-zinc-800">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-3 py-2 text-sm font-semibold text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
-          >
+          <Button variant="ghost" onClick={onClose} type="button">
             Cancel
-          </button>
-          <button
-            type="submit"
-            className="rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-black dark:hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-900"
-          >
-            Add to Network
-          </button>
+          </Button>
+          <Button variant="primary" type="submit">
+            Add Attorney
+          </Button>
         </div>
       </form>
     </div>

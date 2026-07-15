@@ -1,4 +1,4 @@
-import Icon from './Icon.jsx'
+import Icon from './common/Icon.jsx'
 
 export default function TierCard({ tier, selected, onEdit }) {
   let cardTone = 'border-zinc-200 dark:border-zinc-800'

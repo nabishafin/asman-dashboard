@@ -1,4 +1,5 @@
-import Icon from './Icon.jsx'
+import Icon from './common/Icon.jsx'
+import { Button } from './ui/Button.jsx'
 import GoogleMapView from './GoogleMapView.jsx'
 
 function InfoBox({ label, value }) {
@@ -46,17 +47,6 @@ export default function UserDetailModal({ open, onClose, user, onSuspend }) {
           </div>
         </div>
 
-        {user.coords && (
-          <GoogleMapView
-            className="mt-4 h-40"
-            zoom={9}
-            markers={[{ id: user.id, ...user.coords, color: 'red' }]}
-          >
-            <span className="absolute right-3 top-3 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-zinc-700 shadow-md dark:bg-zinc-900/95 dark:text-zinc-200">
-              {user.address}
-            </span>
-          </GoogleMapView>
-        )}
 
         <div className="mt-5">
           <p className="mb-2 text-xs font-bold uppercase tracking-wide text-zinc-400">
@@ -80,12 +70,13 @@ export default function UserDetailModal({ open, onClose, user, onSuspend }) {
           </div>
         </div>
 
-        <button
+        <Button
+          variant="danger"
+          className="mt-6 w-full"
           onClick={() => onSuspend?.(user)}
-          className="mt-6 w-full rounded-lg border border-red-200 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50 dark:border-red-500/30 dark:hover:bg-red-500/10"
         >
           Suspend Institutional Access
-        </button>
+        </Button>
       </div>
     </div>
   )

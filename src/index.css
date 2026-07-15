@@ -7,6 +7,7 @@
   @media (prefers-color-scheme: dark) {
     @slot;
   }
+
   &:where(.dark, .dark *) {
     @slot;
   }
@@ -14,10 +15,31 @@
 
 /* Brand palette used via `brand`/`brand-dark` utility colors, e.g. bg-brand */
 @theme {
-  --color-brand: #00668a;
-  --color-brand-dark: #004761;
-  --color-brand-light: #2a95bf;
-  --color-brand-soft: rgba(0, 102, 138, 0.1);
+  /* Theme: Dark Neumorphic with Neon Accents */
+  --color-zinc-950: #0B0C10; /* Deep Black Canvas */
+  --color-zinc-900: #1A1B23; /* Cards & Panels */
+  --color-zinc-800: #292A33; /* Borders & Hover */
+  --color-zinc-700: #393A45;
+  --color-zinc-600: #5C5D6B;
+  --color-zinc-500: #9CA3AF; /* Muted Text */
+  --color-zinc-400: #D1D5DB;
+  --color-zinc-300: #E5E7EB;
+
+  --color-brand: #00E5FF; /* Neon Cyan Hero */
+  --color-brand-dark: #00B4CC;
+  --color-brand-light: #66EEFF;
+  --color-brand-soft: rgba(0, 229, 255, 0.1);
+  
+  /* Custom App Tokens */
+  --color-btn-bg: #001D49;
+  --color-btn-text: #D5FBFF;
+  --color-map-bg: #e9ebee;
+  
+  --text-micro: 10px;
+  --text-tiny: 13px;
+  
+  --spacing-sidebar: 248px;
+  --spacing-sidebar-collapsed: 88px;
   --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
     sans-serif;
 
@@ -40,6 +62,17 @@ body,
   min-height: 100vh;
 }
 
+/* Hide white scrollbars globally */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  display: none;
+}
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
 body {
   font-family: var(--font-sans);
 }
@@ -50,16 +83,60 @@ body {
     transform: translateY(12px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
   }
 }
+
+.animate-slide-up {
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* =========================================
+   NEW NEON NEUMORPHIC THEME CLASSES
+   ========================================= */
+
+/* Glass Panels / Cards */
+.glass-panel {
+  @apply bg-zinc-900 border border-zinc-800/50 shadow-lg relative overflow-hidden;
+  /* Soft inner glow */
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05),
+              0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Neon Text Glow */
+.glow-text {
+  text-shadow: 0 0 10px var(--color-brand-soft), 0 0 20px var(--color-brand);
+}
+.glow-text-orange {
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.2), 0 0 20px rgba(245, 158, 11, 0.8);
+}
+.glow-text-green {
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.2), 0 0 20px rgba(16, 185, 129, 0.8);
+}
+
+/* Glowing Border effect for Active state */
+.glow-border {
+  position: relative;
+}
+.glow-border::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 10px var(--color-brand-soft), inset 0 0 5px var(--color-brand-soft);
+  pointer-events: none;
+}
+
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.35;
   }

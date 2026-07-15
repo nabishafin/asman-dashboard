@@ -662,6 +662,14 @@ export const legalCases = [
       { id: 'doc4', name: 'Driver_Statement.pdf', type: 'pdf', date: 'Oct 03', size: '640 KB' },
       { id: 'doc5', name: 'Court_Filing_Receipt.pdf', type: 'pdf', date: 'Oct 01', size: '210 KB' },
     ],
+    timeline: [
+      {
+        id: 't1',
+        date: 'Oct 01, 2023',
+        status: 'active',
+        summary: 'High-stakes detention appeal involving a logistics safety bond of $250,000. The case involves an expedited judicial review for a critical fleet logistics personnel held at the Laredo North Port Terminal. Compliance verification requires real-time coordination between legal counsel, logistics dispatchers, and judicial oversight.',
+      }
+    ],
     // Attorney info is internal to the Super Admin (client team) view only —
     // fleet managers never see this per the offline-attorney-handling model.
     attorney: {
@@ -687,6 +695,14 @@ export const legalCases = [
       { id: 'doc2', name: 'Checkpoint_Log.pdf', type: 'pdf', date: 'Oct 18', size: '780 KB' },
       { id: 'doc3', name: 'Cargo_Inspection_Photos.zip', type: 'zip', date: 'Oct 18', size: '22.6 MB' },
     ],
+    timeline: [
+      {
+        id: 't1',
+        date: 'Oct 18, 2023',
+        status: 'completed',
+        summary: 'Routine safety-compliance review escalated after a checkpoint inspection flagged an expired cargo manifest. Counsel is petitioning for an expedited administrative hearing to avoid extended cargo detention and downstream delivery penalties.',
+      }
+    ],
     attorney: {
       name: 'Julius Wright',
       photo: '/attorney-david.jpg',
@@ -709,6 +725,14 @@ export const legalCases = [
       { id: 'doc1', name: 'Closing_Argument_Brief.pdf', type: 'pdf', date: 'Oct 14', size: '3.0 MB' },
       { id: 'doc2', name: 'Impoundment_Record.pdf', type: 'pdf', date: 'Oct 08', size: '900 KB' },
     ],
+    timeline: [
+      {
+        id: 't1',
+        date: 'Oct 08, 2023',
+        status: 'failed',
+        summary: 'Final ruling pending on a contested enforcement stop that resulted in a multi-day vehicle impoundment. Counsel has submitted closing arguments and is awaiting the presiding judge’s written decision.',
+      }
+    ],
     attorney: {
       name: 'Elena Vance, Esq.',
       photo: '/attorney-eleanor.jpg',
@@ -724,3 +748,56 @@ export const legalCases = [
 // sync, just a lookup against the same records the Case Tracker reads.
 export const caseStatusForDriver = (driverId) =>
   legalCases.filter((c) => c.driverId === driverId)
+
+// Generate procedural dummy cases to match overview stats
+const generateCases = (count, status, startId) => {
+  const newCases = []
+  const drivers = ['dd7', 'dd4', 'dd3', 'dd1', 'dd2']
+  const attorneys = [
+    { name: 'Elena Vance, Esq.', photo: '/attorney-david.jpg', firm: 'Vance & Partners Legal' },
+    { name: 'Julius Wright', photo: '/attorney-julian.jpg', firm: 'Wright Border Counsel' },
+  ]
+  const courts = ['Federal District 9', 'Laredo North Port', 'El Paso Central', 'Houston Immigration Court', 'San Antonio Sector', 'Austin Appeals Court']
+  const jurisdictions = ['US-TX South Border Sector', 'US-TX Laredo Port of Entry', 'US-TX El Paso Sector', 'National ICE Division', 'US-TX Central Sector']
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  
+  for (let i = 0; i < count; i++) {
+    const dId = drivers[i % drivers.length]
+    const atty = attorneys[i % attorneys.length]
+    const court = courts[Math.floor(Math.random() * courts.length)]
+    const jurisdiction = jurisdictions[Math.floor(Math.random() * jurisdictions.length)]
+    
+    // Generate a random date between Jan 1, 2023 and Dec 31, 2024
+    const month = months[Math.floor(Math.random() * months.length)]
+    const day = Math.floor(Math.random() * 28) + 1
+    const year = Math.random() > 0.5 ? 2023 : 2024
+    const hearingDate = `${month} ${day < 10 ? '0' + day : day}, ${year}`
+
+    newCases.push({
+      id: `ASM-${startId + i}`,
+      driverId: dId,
+      stage: status === 'completed' ? 'decision' : 'pending',
+      lifecycleStatus: status,
+      court: court,
+      hearingDate: hearingDate,
+      jurisdiction: jurisdiction,
+      overview: 'Generated dummy case overview for statistical display.',
+      documents: [],
+      timeline: [
+        {
+          id: 't1',
+          date: hearingDate,
+          status: status,
+          summary: 'Generated dummy case overview for statistical display.',
+        }
+      ],
+      attorney: atty,
+    })
+  }
+  return newCases
+}
+
+// Push 149 active and 2044 completed to reach exactly 150 active and 2045 completed.
+legalCases.push(...generateCases(149, 'active', 100000))
+legalCases.push(...generateCases(2044, 'completed', 200000))
+legalCases.push(...generateCases(49, 'failed', 300000))
